@@ -307,9 +307,25 @@ keine Auslassung.
 
 ### 4.2 Kandidaten
 
+> **Nachtrag Phase 2 (03.08.2026): Entschieden wurde Paarung D, Vollkorn + Work Sans.**
+> Paarung A (Fraunces) wurde verworfen: Der Lead-Skill `design-taste-frontend` führt Fraunces
+> zusammen mit Instrument Serif als die beiden Serifenschriften, zu denen Sprachmodelle
+> reflexhaft greifen, und verbietet sie als Standardwahl. Der Einwand ist berechtigt.
+> **Vollkorn** ist die bessere Wahl und nicht nur eine Ausweichlösung: kräftige
+> Renaissance-Antiqua mit dem Skelett der Logo-Wortmarke, hält großen Grad aus, kein
+> Standardgriff, und der Name passt zu einem Betrieb, der Getreide vermälzt.
+> Vollständige Begründung: `DESIGN.md` Abschnitt 4.
+>
+> | Rolle | Schrift | Paket | Lizenz | Achsen |
+> |---|---|---|---|---|
+> | Display | **Vollkorn** | `@fontsource-variable/vollkorn` v5.3.0 | OFL-1.1 | `wght` 400–900, normal + kursiv |
+> | Text | **Work Sans** | `@fontsource-variable/work-sans` v5.3.0 | OFL-1.1 | `wght` 100–900, normal + kursiv |
+>
+> Die folgenden Kandidaten bleiben als Dokumentation des Abwägungswegs stehen.
+
 Alle drei Paarungen wurden auf npm gegen die Fontsource-Registry geprüft und sind verfügbar.
 
-#### Paarung A — Fraunces + Work Sans  ← **Empfehlung**
+#### Paarung A — Fraunces + Work Sans  ← *verworfen in Phase 2*
 
 | | Schrift | Paket | Achsen |
 |---|---|---|---|
@@ -352,7 +368,8 @@ verliert das Logo seine Sonderstellung; und Bitter hat auf großen Flächen weni
 (der Brauseminar-Text hätte das Zeug dazu).
 **Dagegen:** Newsreader ist eine Zeitungsschrift. Sie riecht nach Redaktion, nicht nach Scheune.
 
-**Entscheidung fällt in Phase 2.** Bis dahin gilt A.
+**Entscheidung gefallen in Phase 2: keine dieser drei, sondern Vollkorn + Work Sans.**
+Siehe Kasten oben und `DESIGN.md` Abschnitt 4.
 
 ### 4.3 Größenskala
 
@@ -617,13 +634,21 @@ ortsfeste Brauerei könnte ihn nicht verwenden, ohne zu lügen. Das ist das Krit
 
 ---
 
-## 10 · Was Phase 2 entscheidet
+## 10 · Was Phase 2 entschieden hat
 
-1. **Schriftpaarung** endgültig festlegen (Empfehlung: A — Fraunces + Work Sans).
-2. **Tailwind v4 oder natives CSS** mit diesen Tokens (PROJEKT.md §2 lässt beides zu).
-3. **Layoutsystem**: Raster, Abstandsskala, Abschnittsrhythmus.
-4. **Signature-Element** bestätigen und im Detail ausarbeiten.
-5. ASCII-Wireframes je Seitentyp.
+Erledigt am 03.08.2026, ausgeführt in `DESIGN.md`:
+
+1. **Schriftpaarung:** Vollkorn + Work Sans (nicht Fraunces, Begründung oben).
+2. **Stack:** natives CSS mit diesen Tokens, kein Tailwind (`DESIGN.md` Abschnitt 3).
+3. **Layoutsystem:** 12 Spalten, Container 72 rem, acht Abschnittsfamilien
+   (`DESIGN.md` Abschnitt 6).
+4. **Signature-Element:** der Wagen plus Wegstrecke, mit Einsatzregeln
+   (`DESIGN.md` Abschnitt 7).
+5. **Wireframes:** zwölf Seitentypen inklusive Kopfzeile, Fußzeile und Altersabfrage
+   (`DESIGN.md` Abschnitt 8).
+
+Zusätzlich ergänzt: die dritte Token-Ebene (Komponentenwerte) in `src/styles/tokens.css`,
+68 Werte.
 
 **Offen aus Phase 1 und blockierend für den Livegang:**
 

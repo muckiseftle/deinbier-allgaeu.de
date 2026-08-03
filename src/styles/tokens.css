@@ -107,19 +107,27 @@
 
   /* ===========================================================================
      3 · SCHRIFT
-     Paarung A (Empfehlung Phase 1): Fraunces + Work Sans.
-     Endgueltige Festlegung in Phase 2 — dann werden nur diese zwei Werte
-     getauscht, sonst nichts.
+     Festgelegt in Phase 2 (DESIGN.md Abschnitt 4):
+       Display  Vollkorn Variable   @fontsource-variable/vollkorn   OFL-1.1
+       Text     Work Sans Variable  @fontsource-variable/work-sans  OFL-1.1
+
+     Vollkorn statt des in Phase 1 vorgeschlagenen Fraunces: kraeftige
+     Renaissance-Antiqua mit dem Skelett der Logo-Wortmarke, haelt grossen Grad
+     aus, und der Name passt zu einem Betrieb, der Getreide vermaelzt.
+     Vollkorn ist KEINE Fliesstextschrift. Sie bekommt Ueberschriften,
+     Vorspaenne, Zitate, Zahlenauszeichnungen und die Signaturzeile.
      =========================================================================== */
 
-  --db-font-display: "Fraunces Variable", "Fraunces", Georgia, "Times New Roman", serif;
+  --db-font-display: "Vollkorn Variable", "Vollkorn", Georgia, "Times New Roman", serif;
   --db-font-text: "Work Sans Variable", "Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* Fraunces-Achsen. WONK bleibt 0 — die schraegen Formen waeren Effekthascherei.
-     SOFT 30 nimmt die Haerte aus den Ecken: der Unterschied zwischen
-     Brauerei und Anwaltskanzlei. */
-  --db-display-soft: 30;
-  --db-display-wonk: 0;
+  /* Vollkorn hat wght 400-900, normal und kursiv. Keine duennen Schnitte.
+     Genutzt werden 600 und 700 fuer Ueberschriften, 400 kursiv fuer Zitate. */
+
+  /* Kursive Unterlaengen (g j p q y) werden in Displaygraden sonst abgeschnitten.
+     Diese zwei Werte sind Pflicht an jedem Element mit kursivem Displaytext. */
+  --db-kursiv-leading: 1.12;
+  --db-kursiv-reserve: 0.08em;
 
   /* --- Groessenskala: mobil Faktor 1,25 → Desktop 1,333, stufenlos ueber clamp.
          Basis 17 px, damit Fliesstext auf dem Handy nicht zu klein wird. */
@@ -263,6 +271,120 @@
   --db-ebene-dialog: 300;      /* Altersabfrage */
   --db-ebene-korn: 400;        /* liegt ueber allem, faengt keine Klicks */
   --db-ebene-sprungmarke: 500; /* "Zum Inhalt springen" immer ganz oben */
+
+  /* ===========================================================================
+     11 · KOMPONENTENWERTE (dritte Ebene)
+     Grundwert -> Semantik -> Komponente.
+     Komponenten greifen AUSSCHLIESSLICH auf diese Werte zu. Kein Hexwert und
+     keine px-Angabe steht ausserhalb dieser Datei.
+     Zustandstabellen und Kontrastnachweise: DESIGN.md Abschnitt 9.
+     =========================================================================== */
+
+  /* --- Knopf, primaer  (Kontrast Text/Flaeche 10,13:1) */
+  --knopf-primaer-flaeche: var(--db-aktion-flaeche);
+  --knopf-primaer-flaeche-hover: var(--db-aktion-flaeche-hover);
+  --knopf-primaer-text: var(--db-aktion-text);
+  --knopf-primaer-radius: var(--db-radius-md);
+  --knopf-primaer-polster: 0.75rem 1.5rem;
+  --knopf-primaer-schatten: var(--db-schatten-xs);
+  --knopf-primaer-schatten-hover: var(--db-schatten-md);
+
+  /* --- Knopf, Bier-Aktion  (Kontrast 4,97:1 - heller Text faellt durch) */
+  --knopf-bier-flaeche: var(--db-aktion-bier-flaeche);
+  --knopf-bier-flaeche-hover: var(--db-aktion-bier-flaeche-hover);
+  --knopf-bier-text: var(--db-aktion-bier-text);
+
+  /* --- Knopf, still */
+  --knopf-still-rahmen: var(--db-aktion-still-rahmen);
+  --knopf-still-rahmen-hover: var(--db-malz-700);
+  --knopf-still-text: var(--db-aktion-still-text);
+  --knopf-still-flaeche-hover: var(--db-aktion-still-flaeche-hover);
+
+  /* --- Knopf, gemeinsam */
+  --knopf-hub: -1px;              /* translateY bei Hover */
+  --knopf-druck: 0.98;            /* scale bei :active */
+  --knopf-dauer: var(--db-dauer-schnell);
+
+  /* --- Textlink: Farbe bleibt beim Hover, nur der Unterstrich reagiert */
+  --link-farbe: var(--db-text-link);
+  --link-abstand: 0.18em;
+  --link-abstand-hover: 0.12em;
+  --link-staerke: 1px;
+  --link-staerke-hover: 2px;
+
+  /* --- Etikettenrahmen: verschachtelte Fassung, konzentrische Rundung.
+         Innenradius = Aussenradius minus Innenabstand. */
+  --etikett-schale-flaeche: var(--db-sand-200);
+  --etikett-schale-linie: rgb(124 104 68 / 0.32);
+  --etikett-schale-radius: var(--db-radius-lg);   /* 14px */
+  --etikett-schale-polster: 6px;
+  --etikett-kern-flaeche: var(--db-creme-50);
+  --etikett-kern-radius: var(--db-radius-md);     /* 8px = 14 minus 6 */
+  --etikett-kern-glanz: var(--db-schatten-innen);
+
+  /* --- Karte (News, Verkaufsstellen, Leihinventar): flach, ohne Etikettenrahmen */
+  --karte-flaeche: var(--db-creme-100);
+  --karte-radius: var(--db-radius-lg);
+  --karte-polster: var(--db-space-md);
+  --karte-linie: var(--db-linie);
+  --karte-schatten: var(--db-schatten-sm);
+  --karte-schatten-hover: var(--db-schatten-md);
+
+  /* --- Bierkarte: das Bild skaliert, die Karte bleibt stehen (sonst zittert
+         das Raster) */
+  --bierkarte-bild-skalierung-hover: 1.03;
+  --bierkarte-bild-radius: var(--db-radius-md);
+
+  /* --- Kopfzeile: nicht dauerhaft klebend, kommt beim Aufwaertsscrollen zurueck.
+         Der Weichzeichner liegt auf einem festen Element, nie auf scrollendem
+         Inhalt (GPU-Kosten). */
+  --kopf-hoehe: 72px;
+  --kopf-flaeche: rgb(251 247 236 / 0.92);
+  --kopf-weichzeichner: blur(12px);
+  --kopf-linie: var(--db-linie);
+  --kopf-logo: 64px;
+  --kopf-logo-mobil: 44px;
+  --kopf-umbruch: 1100px;         /* darunter Menueknopf: deutsche Labels sind lang */
+  --kopf-aktiv-linie: var(--db-hopfen-700);
+
+  /* --- Fusszeile */
+  --fuss-flaeche: var(--db-flaeche-dunkel);
+  --fuss-text: var(--db-text-invers);
+  --fuss-text-leise: var(--db-text-invers-leise);
+  --fuss-link: var(--db-text-invers-link);
+  --fuss-linie: var(--db-linie-invers);
+
+  /* --- Zitatband: der einzige dunkle Abschnitt im Seitenfluss */
+  --zitat-flaeche: var(--db-flaeche-dunkel);
+  --zitat-text: var(--db-text-invers-akzent);
+  --zitat-quelle: var(--db-text-invers-leise);
+
+  /* --- Wegstrecke und Wagen (Signature-Element, DESIGN.md Abschnitt 7).
+         Genau dreimal auf der Startseite, nicht zwischen jedem Abschnitt. */
+  --weg-linie: var(--db-sand-300);
+  --weg-staerke: 1px;
+  --wagen-farbe: var(--db-malz-700);
+  --wagen-breite: 56px;
+  --wagen-einfahrt-dauer: var(--db-dauer-lang);
+  --wagen-einfahrt-kurve: var(--db-easing-feder);
+  --wagen-einfahrt-weg: -120px;   /* Startversatz links */
+
+  /* --- Altersabfrage. Inhalt steht vollstaendig im HTML darunter; der Dialog
+         legt sich nur darueber. Kein Einblenden, damit nichts flackert, wenn
+         die Antwort bereits in localStorage liegt. */
+  --alter-schleier: rgb(36 24 9 / 0.96);
+  --alter-flaeche: var(--db-creme-50);
+  --alter-radius: var(--db-radius-lg);
+  --alter-logo: 96px;
+
+  /* --- Sprungmarke "Zum Inhalt springen": erstes fokussierbares Element */
+  --sprung-flaeche: var(--db-malz-700);
+  --sprung-text: var(--db-creme-50);
+
+  /* --- Platzhalter fuer fehlendes Bildmaterial: getoente Flaeche mit
+         Hopfen-Signet, nie ein hochskaliertes unscharfes Foto */
+  --platzhalter-flaeche: var(--db-sand-200);
+  --platzhalter-zeichen: var(--db-holz-400);
 }
 
 /* =============================================================================
