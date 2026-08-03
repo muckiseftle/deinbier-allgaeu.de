@@ -1115,11 +1115,15 @@ Die Prüfliste des Lead-Skills, auf das Konzept angewandt.
 
 ## 14 · Entscheidungen für den Betreiber
 
-### 14.1 Stack: natives CSS statt Tailwind
+### 14.1 ✅ Stack: **natives CSS mit Tokens** (entschieden 03.08.2026)
 
-Meine Empfehlung mit fünf Gründen steht in Abschnitt 3. **Braucht ein Ja.**
-Falls jemand die Seite später übernimmt, der Tailwind gewohnt ist, wäre das das einzige
-Gegenargument.
+Kein Tailwind, keine Utility-Bibliothek. Begründung in Abschnitt 3.
+
+Das einzige Gegenargument war die spätere Übergabe an eine Agentur, für die Tailwind die
+verbreitetere Sprache wäre. Der Betreiber hat entschieden, dass die Seite bei ihm und beim
+Betreuer bleibt. Damit gilt die Klassenbenennung aus Abschnitt 3: **deutsche, sprechende
+Klassennamen** (`hero-titel`, `bierkarte`, `wegstrecke`), damit der Code auch in zwei Jahren
+noch von jemandem gelesen werden kann, der nur Grundkenntnisse hat.
 
 ### 14.2 ✅ Dunkles Farbschema: **nein** (entschieden 03.08.2026)
 
@@ -1147,11 +1151,15 @@ Grob geschätzt ein Viertel mehr Aufwand in Phase 4 und 8.
 
 **Wenn Ihr es wollt**, baue ich es sauber. Dann bitte jetzt sagen, nicht später.
 
-### 14.3 Schriftpaarung: Vollkorn und Work Sans
+### 14.3 ✅ Schriftpaarung: **Vollkorn + Work Sans** (entschieden 03.08.2026)
 
-Abschnitt 4. Die Abkehr von Fraunces ist begründet. **Braucht ein Ja.**
-Falls Ihr die Schriften sehen wollt, bevor Ihr entscheidet: Phase 4 baut zuerst die Startseite,
-dort ist es nach einer Stunde sichtbar und ein Wechsel kostet zwei Zeilen in `tokens.css`.
+Vollkorn für Überschriften, Vorspänne, Zitate und Zahlen. Work Sans für alles zum Lesen.
+Begründung in Abschnitt 4.
+
+**Vorbehalt, ausdrücklich zugesagt:** Phase 4 baut zuerst die Startseite. Dort sieht der
+Betreiber die Schriften an echtem Text. Gefallen sie dann nicht, kostet der Wechsel **zwei
+Zeilen** in `tokens.css` (`--db-font-display` und `--db-font-text`) plus den Austausch der
+Schriftdateien. Genau dafür liegen die Schriftnamen in Tokens und nirgends sonst.
 
 ### 14.4 ✅ Der Wagen als Leitmotiv: **ja** (entschieden 03.08.2026)
 
