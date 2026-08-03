@@ -1,0 +1,265 @@
+---
+import Themenseite from '../layouts/Themenseite.astro';
+import Abschnitt from '../komponenten/basis/Abschnitt.astro';
+import Bild from '../komponenten/basis/Bild.astro';
+import Knopf from '../komponenten/basis/Knopf.astro';
+import Wagen from '../komponenten/marke/Wagen.astro';
+import Etikettenrahmen from '../komponenten/marke/Etikettenrahmen.astro';
+import Zitatband from '../komponenten/marke/Zitatband.astro';
+import Terminliste from '../komponenten/karten/Terminliste.astro';
+import { anfrageLink } from '../daten/anfragen';
+
+import leitbild from '../bilder/brauseminar-gruppe.jpg';
+import inBrauerei from '../bilder/brauseminar-runde.jpg';
+import mobil from '../bilder/brauen-auswaerts-2.jpg';
+import maischen from '../bilder/malzschrot-maischen.jpg';
+import ablaeutern from '../bilder/ablaeutern.jpg';
+import hopfenfee from '../bilder/hopfenfee.jpg';
+import treber from '../bilder/treber.jpg';
+import etikettBartaxt from '../bilder/etikett-bartaxt.jpg';
+import etikettKraftstoff from '../bilder/etikett-kraftstoff.jpg';
+import etikettPhysio from '../bilder/etikett-physio.jpg';
+
+const ABLAUF = [
+  {
+    bild: maischen,
+    alt: 'Malzschrot wird im Maischebottich mit Wasser vermischt',
+    titel: 'Theorie und Maische',
+    text: 'Zu Beginn ein kleiner Ausflug in die Braugeschichte, dazu Wissenswertes über Rohstoffe und Brauprozesse. Dann wird das Malzschrot im Maischebottich mit Wasser vermischt und alles erhitzt.',
+  },
+  {
+    bild: ablaeutern,
+    alt: 'Das Abläutern: die groben Bestandteile der Maische werden abgefiltert',
+    titel: 'Brotzeit und Abläutern',
+    text: 'Zwischendurch gibt es eine deftige Brotzeit und frisch gezapftes Bier. Danach wird abgeläutert. Im gläsernen Durchfluss sieht man, wie klar die Maische gefiltert wird. Da schaut jeder genau hin.',
+  },
+  {
+    bild: hopfenfee,
+    alt: 'Die erste Hopfengabe in die gefüllte Sudpfanne',
+    titel: 'Die Hopfenfee',
+    text: 'Ist die Sudpfanne fast voll, wird es Zeit für die erste Hopfengabe. Die übernimmt die Hopfenfee. Meist knabbert dabei jemand eines der Pellets. Es ist der einzige Moment des Tages, an dem sich die Gesichter verfinstern.',
+  },
+  {
+    bild: treber,
+    alt: 'Der Trebermeister schaufelt den Treber aus dem Läuterbottich',
+    titel: 'Austrebern',
+    text: 'Der Trebermeister schaufelt von Hand den schweren Treber in die Wanne, unter heiterer Anteilnahme aller. Später wird der Sud abgekühlt und Hefe zugegeben. Dann beginnt die Gärung.',
+  },
+];
+---
+
+<Themenseite
+  titel="Brauseminare"
+  beschreibung="Selber brauen mit den Profis. In der Brauscheune in Hausen oder mit der mobilen Anlage bei Euch zu Hause. Mit eigenem Etikett auf Wunsch."
+  ueberschrift="Eure Gäste werden Brauer."
+  vorspann="Fünf bis sechs Stunden, mindestens fünf Leute, Brotzeit inklusive. Jeder bekommt eine Aufgabe."
+  leitbild={leitbild}
+  leitbildAlt="Eine Gruppe beim gemeinsamen Bierbrauen in der Brauscheune"
+  abschlussTitel="Klingt gut?"
+  abschlussAnfrage="seminar"
+  abschlussKnopf="Seminar anfragen"
+>
+  {/* ---------- Zwei Wege ---------- */}
+  <Abschnitt titel="Bei uns oder bei Euch">
+    <div class="wege">
+      <article class="wege-halb einblenden">
+        <Bild quelle={inBrauerei} alt="Teilnehmer beim Brauseminar in der Brauscheune" />
+        <h3>In der Brauerei</h3>
+        <p>
+          In der Brauscheune in Hausen. Ihr kommt an, wir haben alles
+          vorbereitet, und am Ende habt Ihr Euer eigenes Bier angesetzt.
+        </p>
+        <ul class="wege-liste">
+          <li>Beginn 11&nbsp;Uhr</li>
+          <li>5 bis 6&nbsp;Stunden</li>
+          <li>mindestens 5&nbsp;Personen</li>
+          <li>Getränke und Brotzeit inklusive</li>
+          <li>Euer Bier holt Ihr nach 5 bis 6&nbsp;Wochen ab</li>
+        </ul>
+      </article>
+
+      <div class="wege-weiche" aria-hidden="true"><Wagen breite={96} /></div>
+
+      <article class="wege-halb einblenden" style="--index: 1">
+        <Bild quelle={mobil} alt="Brauseminar mit der mobilen Anlage bei einem Kunden zu Hause" />
+        <h3>Oder bei Euch daheim</h3>
+        <p>
+          Die Brauerei passt auf einen Anhänger. Wir kommen zu Eurem
+          Firmenfest, Vereinsabend oder Geburtstag und bauen vor Ort auf.
+        </p>
+        <ul class="wege-liste">
+          <li>32&nbsp;Ampere Kraftstrom</li>
+          <li>Wasseranschluss und Abfluss</li>
+          <li>rund 15&nbsp;m² ebene Stellfläche</li>
+          <li>drinnen oder draußen, wetterabhängig</li>
+          <li>den Rest bringen wir mit</li>
+        </ul>
+      </article>
+    </div>
+  </Abschnitt>
+
+  {/* ---------- Ablauf ---------- */}
+  <Abschnitt titel="Wie so ein Tag abläuft">
+    <div class="ablauf">
+      {
+        ABLAUF.map((schritt, i) => (
+          <article class="ablauf-schritt einblenden" style={`--index: ${i}`}>
+            <Bild quelle={schritt.bild} alt={schritt.alt} />
+            <h3>{schritt.titel}</h3>
+            <p>{schritt.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </Abschnitt>
+
+  <Zitatband
+    zitat="Man sieht, was drinsteckt. An Grundstoffen und an Arbeit."
+    quelle="Ein Teilnehmer beim Brauseminar"
+  />
+
+  {/* ---------- Etiketten ---------- */}
+  <Abschnitt
+    titel="Euer Bier, Euer Etikett"
+    vorspann="Für Hochzeiten, Geburtstage, Vereine und Firmen. Als Werbeartikel, Geschenk oder Mitbringsel für Messen."
+  >
+    <div class="etiketten">
+      <div class="einblenden">
+        <Etikettenrahmen>
+          <Bild quelle={etikettBartaxt} alt="Ein individuell gestaltetes Bieretikett" />
+        </Etikettenrahmen>
+      </div>
+      <div class="einblenden" style="--index: 1">
+        <Etikettenrahmen>
+          <Bild quelle={etikettKraftstoff} alt="Ein individuell gestaltetes Bieretikett" />
+        </Etikettenrahmen>
+      </div>
+      <div class="einblenden" style="--index: 2">
+        <Etikettenrahmen>
+          <Bild quelle={etikettPhysio} alt="Ein individuell gestaltetes Bieretikett" />
+        </Etikettenrahmen>
+      </div>
+    </div>
+
+    <p class="etiketten-text textspalte">
+      Eigenes Bier ganz nach Euren Wünschen ist auch möglich. Wir entwickeln mit
+      Euch das Rezept und brauen nach Euren Geschmacksvorstellungen.
+    </p>
+  </Abschnitt>
+
+  {/* ---------- Termine ---------- */}
+  <Abschnitt
+    titel="Öffentliche Termine"
+    vorspann="Ihr seid weniger als fünf Personen? Dann schließt Euch einem öffentlichen Seminar an."
+    id="termine"
+  >
+    <Terminliste art="brauseminar" />
+
+    <p class="termine-nachsatz">
+      Anmeldung per Telefon oder E-Mail, bis spätestens drei Tage vor dem
+      Termin.
+    </p>
+    <p>
+      <Knopf href={anfrageLink('seminar')}>Seminar anfragen</Knopf>
+    </p>
+  </Abschnitt>
+</Themenseite>
+
+<style>
+  .wege {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--db-space-lg);
+    align-items: start;
+  }
+
+  .wege-halb h3 {
+    margin-top: var(--db-space-md);
+  }
+
+  .wege-halb p {
+    margin-top: var(--db-space-2xs);
+  }
+
+  .wege-liste {
+    list-style: none;
+    margin: var(--db-space-md) 0 0;
+    display: grid;
+    gap: var(--db-space-3xs);
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+  }
+
+  .wege-liste li {
+    padding-left: var(--db-space-sm);
+    position: relative;
+  }
+
+  .wege-liste li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--db-linie-zier);
+  }
+
+  .wege-weiche {
+    align-self: center;
+    color: var(--wagen-farbe);
+    opacity: 0.55;
+  }
+
+  @media (max-width: 767px) {
+    .wege {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .wege-weiche {
+      display: none;
+    }
+  }
+
+  .ablauf {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--db-space-xl);
+  }
+
+  .ablauf-schritt h3 {
+    margin-top: var(--db-space-md);
+    font-size: var(--db-text-xl);
+  }
+
+  .ablauf-schritt p {
+    margin-top: var(--db-space-2xs);
+  }
+
+  @media (max-width: 767px) {
+    .ablauf {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .etiketten {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--db-space-lg);
+  }
+
+  @media (max-width: 599px) {
+    .etiketten {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .etiketten-text {
+    margin-top: var(--db-space-lg);
+  }
+
+  .termine-nachsatz {
+    margin-top: var(--db-space-md);
+    color: var(--db-text-leise);
+  }
+</style>

@@ -1,9 +1,9 @@
 ---
-name: Faltpavillon
-gruppe: Überdachung
+name: "Faltpavillon"
+gruppe: "Überdachung"
 masse:
   - 3 × 3 m
-bildAlt: Ein weißer Faltpavillon
+bildAlt: "Ein weißer Faltpavillon"
 reihenfolge: 2
 ---
 

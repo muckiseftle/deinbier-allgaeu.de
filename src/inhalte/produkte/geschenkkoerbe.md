@@ -1,8 +1,8 @@
 ---
-name: Geschenkkörbe
-kurz: Nach Euren Wünschen aus unserem Sortiment zusammengestellt.
+name: "Geschenkkörbe"
+kurz: "Nach Euren Wünschen aus unserem Sortiment zusammengestellt."
 bild: ../../bilder/geschenkkorb.png
-bildAlt: Ein Geschenkkorb mit Bier, Likör und Malzgelee
+bildAlt: "Ein Geschenkkorb mit Bier, Likör und Malzgelee"
 reihenfolge: 4
 ---
 

@@ -1,8 +1,8 @@
 ---
-name: Bierlikör
-kurz: Aus unserem Festbier, mit edlen Zutaten vollendet. Warm ein Gedicht.
+name: "Bierlikör"
+kurz: "Aus unserem Festbier, mit edlen Zutaten vollendet. Warm ein Gedicht."
 bild: ../../bilder/bierlikoer.png
-bildAlt: Eine Flasche DEIN BIER Bierlikör
+bildAlt: "Eine Flasche DEIN BIER Bierlikör"
 reihenfolge: 1
 abAchtzehn: true
 ---

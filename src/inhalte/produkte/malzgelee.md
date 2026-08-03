@@ -1,8 +1,8 @@
 ---
-name: Malzgelee
-kurz: Aus warmer ungehopfter Bierwürze. Natur, Chili, Zimt oder Orange.
+name: "Malzgelee"
+kurz: "Aus warmer ungehopfter Bierwürze. Natur, Chili, Zimt oder Orange."
 bild: ../../bilder/malzgelee.png
-bildAlt: Ein Glas DEIN BIER Malzgelee
+bildAlt: "Ein Glas DEIN BIER Malzgelee"
 reihenfolge: 3
 ---
 

@@ -1,0 +1,50 @@
+---
+import { WEITERLEITUNGEN } from '../daten/weiterleitungen';
+
+/**
+ * Weiterleitungen alter Adressen.
+ *
+ * Eine Catch-all-Route an der Wurzel erzeugt die alten Pfade direkt an der
+ * richtigen Stelle im Build. Der Plan sah urspruenglich einen Unterordner
+ * /weiterleitung/ vor, dessen Inhalt beim Ausliefern haette hochgezogen
+ * werden muessen. Das ist damit hinfaellig.
+ *
+ * Astro bevorzugt konkrete und spezifischere Routen gegenueber dieser
+ * Sammelroute, sie kann den uebrigen Seiten also nicht in die Quere kommen.
+ */
+export function getStaticPaths() {
+  return WEITERLEITUNGEN.map((w) => ({
+    params: { altpfad: w.alt.replace(/^\/|\/$/g, '') },
+    props: { neu: w.neu },
+  }));
+}
+
+interface Props {
+  neu: string;
+}
+
+const { neu } = Astro.props;
+const ziel = new URL(neu, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="refresh" content={`0; url=${ziel}`} />
+    <link rel="canonical" href={ziel} />
+    <meta name="robots" content="noindex, follow" />
+    <title>Diese Seite ist umgezogen</title>
+  </head>
+  <body>
+    <p>
+      Diese Seite ist umgezogen. <a href={ziel}>Hier geht es weiter.</a>
+    </p>
+    <script is:inline define:vars={{ ziel }}>
+      // Ersetzt den Eintrag im Verlauf, damit der Zurueck-Knopf nicht in
+      // einer Schleife landet.
+      window.location.replace(ziel);
+    </script>
+  </body>
+</html>

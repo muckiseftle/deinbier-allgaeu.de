@@ -1,6 +1,6 @@
 ---
-name: Helles
-kurz: Der Klassiker. Goldgelb, malzaromatisch, dreimal gehopft.
+name: "Helles"
+kurz: "Der Klassiker. Goldgelb, malzaromatisch, dreimal gehopft."
 saison: ganzjaehrig
 gebinde:
   - 16er Holzträger
@@ -8,7 +8,7 @@ gebinde:
   - Fass 10, 20, 30 und 50 l
   - 5-l-Dose „Das kleine Fässchen“
 bild: ../../bilder/rund-helles.png
-bildAlt: Das runde Etikett des DEIN BIER Helles
+bildAlt: "Das runde Etikett des DEIN BIER Helles"
 reihenfolge: 1
 ---
 

@@ -1,0 +1,190 @@
+---
+import Basis from '../layouts/Basis.astro';
+import { BETRIEB } from '../daten/betrieb';
+
+/**
+ * GERUEST. Der endgueltige Text entsteht in Phase 7. Dort wird per Recherche
+ * geprueft, ob GitHub aktuell unter dem EU-U.S. Data Privacy Framework
+ * zertifiziert ist, und die Quellen werden hier als Kommentar vermerkt.
+ *
+ * Rechtstexte sind ein fundierter Entwurf und keine Rechtsberatung.
+ */
+
+const ABSCHNITTE = [
+  { id: 'verantwortlicher', titel: 'Verantwortlicher' },
+  { id: 'hosting', titel: 'Hosting auf GitHub Pages' },
+  { id: 'keine-cookies', titel: 'Keine Cookies, kein Tracking' },
+  { id: 'altersabfrage', titel: 'Altersabfrage' },
+  { id: 'kontakt', titel: 'Kontaktaufnahme' },
+  { id: 'links', titel: 'Externe Links' },
+  { id: 'rechte', titel: 'Ihre Rechte' },
+  { id: 'tls', titel: 'Verschlüsselung' },
+];
+---
+
+<Basis
+  titel="Datenschutz"
+  beschreibung="Datenschutzerklärung der Brauerei DEIN BIER: keine Cookies, kein Tracking, keine externen Dienste."
+>
+  <section class="abschnitt container">
+    <div class="rechtstext textspalte">
+      <h1>Datenschutzerklärung</h1>
+
+      <nav class="inhalt" aria-label="Inhaltsverzeichnis">
+        <p class="inhalt-titel">Inhalt</p>
+        <ol>
+          {ABSCHNITTE.map((a) => <li><a href={`#${a.id}`}>{a.titel}</a></li>)}
+        </ol>
+      </nav>
+
+      <h2 id="verantwortlicher">Verantwortlicher</h2>
+      <p>
+        {BETRIEB.name}<br />
+        {BETRIEB.inhaber}<br />
+        {BETRIEB.strasse}<br />
+        {BETRIEB.plz} {BETRIEB.ort}<br />
+        <a href={`mailto:${BETRIEB.email}`}>{BETRIEB.email}</a><br />
+        <a href={`tel:${BETRIEB.telefon}`}>{BETRIEB.telefonAnzeige}</a>
+      </p>
+
+      <h2 id="hosting">Hosting auf GitHub Pages</h2>
+      <p class="platzhalter">
+        [PLATZHALTER: Wird in Phase 7 ausformuliert. Inhalt: Server-Logfiles
+        inklusive IP-Adresse durch GitHub, Inc., Rechtsgrundlage Art. 6 Abs. 1
+        lit. f DSGVO, Drittlandübermittlung USA. Der aktuelle
+        Zertifizierungsstatus von GitHub unter dem EU-U.S. Data Privacy
+        Framework muss vorher geprüft werden.]
+      </p>
+
+      <h2 id="keine-cookies">Keine Cookies, kein Tracking</h2>
+      <p>
+        Diese Website setzt keine Cookies. Es findet keine Analyse Ihres
+        Verhaltens statt, es sind keine Werbenetzwerke eingebunden, und es
+        werden keine Inhalte von Drittanbietern nachgeladen. Schriften, Bilder
+        und Skripte liegen ausschließlich auf unserem eigenen Server.
+      </p>
+      <p>
+        Deshalb brauchen Sie hier auch kein Einwilligungsbanner wegzuklicken.
+      </p>
+
+      <h2 id="altersabfrage">Altersabfrage</h2>
+      <p>
+        Beim ersten Aufruf fragen wir, ob Sie mindestens 16&nbsp;Jahre alt sind.
+        Ihre Antwort speichern wir ausschließlich lokal in Ihrem Browser
+        (<code>localStorage</code>), damit die Frage nicht bei jedem Seitenaufruf
+        erneut erscheint.
+      </p>
+      <p>
+        Dabei wird kein Cookie gesetzt, nichts an uns oder an Dritte übertragen
+        und keine personenbezogene Auswertung vorgenommen. Gespeichert wird
+        lediglich, dass die Frage beantwortet wurde. Sie können den Eintrag
+        jederzeit über die Einstellungen Ihres Browsers löschen.
+      </p>
+
+      <h2 id="kontakt">Kontaktaufnahme</h2>
+      <p class="platzhalter">
+        [PLATZHALTER: Wird in Phase 7 ausformuliert. Inhalt: Verarbeitung zur
+        Bearbeitung der Anfrage nach Art. 6 Abs. 1 lit. b bzw. f DSGVO,
+        Speicherdauer. Die Speicherdauer muss noch bestätigt werden, siehe
+        OFFENE-FRAGEN Nr. 5.]
+      </p>
+      <p>
+        Auf dieser Website gibt es kein Kontaktformular. Anfragen erreichen uns
+        direkt per E-Mail oder Telefon, ohne Umweg über einen Dienstleister.
+      </p>
+
+      <h2 id="links">Externe Links</h2>
+      <p>
+        Wir verlinken auf Websites unserer Verkaufsstellen, auf soziale
+        Netzwerke und auf einen Routenplaner. Diese Inhalte sind nicht in
+        unsere Seite eingebettet; es wird also erst beim Klick eine Verbindung
+        aufgebaut. Ab dann gelten die Datenschutzbestimmungen der jeweiligen
+        Anbieter.
+      </p>
+
+      <h2 id="rechte">Ihre Rechte</h2>
+      <p class="platzhalter">
+        [PLATZHALTER: Wird in Phase 7 ausformuliert. Inhalt: Auskunft,
+        Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit,
+        Widerspruch sowie Beschwerderecht bei der zuständigen Aufsichtsbehörde,
+        dem Bayerischen Landesamt für Datenschutzaufsicht in Ansbach.]
+      </p>
+
+      <h2 id="tls">Verschlüsselung</h2>
+      <p>
+        Diese Website wird ausschließlich verschlüsselt über HTTPS
+        ausgeliefert. Sie erkennen das am Schlosssymbol in der Adresszeile
+        Ihres Browsers.
+      </p>
+
+      <div class="hinweis-entwurf">
+        <p>
+          <strong>Diese Datenschutzerklärung ist noch nicht vollständig.</strong>
+          Die markierten Abschnitte werden in Phase 7 ergänzt. Vor dem Livegang
+          muss der Text von einer Fachperson geprüft werden.
+        </p>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .rechtstext h1 {
+    margin-bottom: var(--db-space-lg);
+  }
+
+  .rechtstext h2 {
+    font-size: var(--db-text-xl);
+    margin-top: var(--db-space-xl);
+    scroll-margin-top: calc(var(--kopf-hoehe) + var(--db-space-md));
+  }
+
+  .rechtstext p {
+    margin-top: var(--db-space-sm);
+  }
+
+  .rechtstext code {
+    background: var(--db-flaeche-ruhig);
+    border-radius: var(--db-radius-sm);
+    padding: 0.1em 0.35em;
+    font-size: 0.92em;
+  }
+
+  .inhalt {
+    background: var(--db-flaeche-ruhig);
+    border-radius: var(--karte-radius);
+    padding: var(--db-space-md) var(--db-space-lg);
+  }
+
+  .inhalt-titel {
+    margin-top: 0 !important;
+    font-weight: var(--db-weight-semibold);
+  }
+
+  .inhalt ol {
+    margin: var(--db-space-2xs) 0 0;
+    padding-left: var(--db-space-md);
+    display: grid;
+    gap: var(--db-space-3xs);
+    font-size: var(--db-text-sm);
+  }
+
+  .platzhalter {
+    background: var(--db-flaeche-ruhig);
+    border-left: 3px solid var(--db-linie-zier);
+    padding: var(--db-space-sm) var(--db-space-md);
+    color: var(--db-text-hinweis);
+    font-size: var(--db-text-sm);
+  }
+
+  .hinweis-entwurf {
+    margin-top: var(--db-space-2xl);
+    padding: var(--db-space-lg);
+    background: var(--db-flaeche-hopfen);
+    border-radius: var(--karte-radius);
+  }
+
+  .hinweis-entwurf p {
+    margin-top: 0;
+  }
+</style>

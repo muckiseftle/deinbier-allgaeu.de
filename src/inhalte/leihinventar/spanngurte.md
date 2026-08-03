@@ -1,8 +1,8 @@
 ---
-name: Spanngurte
-gruppe: Ausschank und Küche
+name: "Spanngurte"
+gruppe: "Ausschank und Küche"
 masse: []
-bildAlt: Spanngurte zum Sichern von Zelt und Schirmen
+bildAlt: "Spanngurte zum Sichern von Zelt und Schirmen"
 reihenfolge: 26
 ---
 

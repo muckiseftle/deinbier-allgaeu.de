@@ -1,0 +1,306 @@
+---
+import { getCollection, render } from 'astro:content';
+
+import Themenseite from '../layouts/Themenseite.astro';
+import Abschnitt from '../komponenten/basis/Abschnitt.astro';
+import Bild from '../komponenten/basis/Bild.astro';
+import Knopf from '../komponenten/basis/Knopf.astro';
+import Etikettenrahmen from '../komponenten/marke/Etikettenrahmen.astro';
+import { BETRIEB } from '../daten/betrieb';
+
+import leitbild from '../bilder/bierkruege.jpg';
+import trennbild from '../bilder/gaertanks.jpg';
+
+const biereRoh = (await getCollection('biere')).sort(
+  (a, b) => a.data.reihenfolge - b.data.reihenfolge,
+);
+
+/* Der Fliesstext jedes Biers steht im Markdown-Rumpf der Inhaltsdatei.
+   render() muss vorab aufgeloest werden, weil es innerhalb der Ausgabe
+   nicht abgewartet werden kann. */
+const biere = await Promise.all(
+  biereRoh.map(async (eintrag) => ({
+    ...eintrag,
+    Inhalt: (await render(eintrag)).Content,
+  })),
+);
+
+const produkte = (await getCollection('produkte')).sort(
+  (a, b) => a.data.reihenfolge - b.data.reihenfolge,
+);
+
+const SAISON_TEXT: Record<string, string> = {
+  ganzjaehrig: 'Das ganze Jahr',
+  sommer: 'Nur im Sommer',
+  winter: 'Nur im Winter',
+  fruehjahr: 'Nur im Frühjahr',
+  herbst: 'Nur im Herbst',
+};
+
+/* JSON-LD je Bier. Bewusst ohne Preisangabe: es stehen keine Preise auf der
+   Seite, und ein erfundener Preis im strukturierten Markup waere schlimmer
+   als gar keiner. */
+const produktMarkup = biere.map((bier) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: `${BETRIEB.kurzname} ${bier.data.name}`,
+  description: bier.data.kurz,
+  category: 'Bier',
+  brand: { '@type': 'Brand', name: BETRIEB.kurzname },
+  manufacturer: { '@id': `${BETRIEB.domain}/#brauerei` },
+}));
+---
+
+<Themenseite
+  titel="Unsere Biere"
+  beschreibung="Fünf Biere aus Hausen im Ostallgäu: Helles, Klosterkeller, Weizen, Bock und Festbier. Dazu Bierbrand, Bierlikör und Malzgelee."
+  vorspann="Fünf Sorten, gebraut nach dem Reinheitsgebot. Dazu Bierbrand, Likör und Malzgelee aus eigener Herstellung."
+  leitbild={leitbild}
+  leitbildAlt="Gefüllte Bierkrüge auf einem Tisch"
+  abschlussTitel="Wo gibt es das Bier?"
+  jsonLdZusatz={produktMarkup}
+>
+  {
+    biere.map((bier, i) => (
+      <>
+        <section class="bier">
+          <div class="container raster bier-raster">
+            <div
+              class:list={[
+                'bier-bild einblenden',
+                i % 2 === 0 ? 'spalte-5 bier-bild-links' : 'spalte-5 bier-bild-rechts',
+              ]}
+            >
+              <Etikettenrahmen>
+                <Bild
+                  quelle={bier.data.bild}
+                  alt={bier.data.bildAlt}
+                  hinweis="Produktfoto folgt"
+                  verhaeltnis="1 / 1"
+                  sizes="(max-width: 767px) 100vw, 35vw"
+                />
+              </Etikettenrahmen>
+            </div>
+
+            <div
+              class:list={[
+                'bier-text einblenden',
+                i % 2 === 0 ? 'spalte-7 bier-text-rechts' : 'spalte-7 bier-text-links',
+              ]}
+              style="--index: 1"
+            >
+              <h2>{bier.data.name}</h2>
+              {bier.data.besonderheit && (
+                <p class="bier-besonderheit">{bier.data.besonderheit}</p>
+              )}
+              <div class="bier-beschreibung">
+                <bier.Inhalt />
+              </div>
+
+              <p class="bier-saison">{SAISON_TEXT[bier.data.saison]}</p>
+
+              <div class="gebinde">
+                <p class="gebinde-titel">Gebinde</p>
+                <ul>
+                  {bier.data.gebinde.map((g) => (
+                    <li>{g}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Nach dem dritten Bier bricht ein vollbreites Foto die
+            Wechselstrecke auf, damit sie nicht zum Zickzack-Teppich wird. */}
+        {i === 2 && (
+          <section class="trenner">
+            <div class="container-weit">
+              <Bild
+                quelle={trennbild}
+                alt="Die Gär- und Lagertanks in der Brauscheune"
+                sizes="100vw"
+                breiten={[800, 1200, 1600, 1920]}
+              />
+            </div>
+          </section>
+        )}
+      </>
+    ))
+  }
+
+  {/* ---------- Weitere Produkte ---------- */}
+  <Abschnitt
+    titel="Weitere Produkte"
+    vorspann="Was sonst noch aus unserer Produktion kommt."
+  >
+    <div class="produkte">
+      {
+        produkte.map((p, i) => (
+          <article class="produkt einblenden" style={`--index: ${i}`}>
+            <Bild
+              quelle={p.data.bild}
+              alt={p.data.bildAlt}
+              hinweis="Produktfoto folgt"
+              verhaeltnis="3 / 4"
+              sizes="(max-width: 599px) 100vw, (max-width: 999px) 50vw, 30vw"
+            />
+            <h3>{p.data.name}</h3>
+            <p>{p.data.kurz}</p>
+            {p.data.abAchtzehn && <p class="produkt-hinweis">Abgabe erst ab 18&nbsp;Jahren</p>}
+          </article>
+        ))
+      }
+    </div>
+  </Abschnitt>
+
+  {/* ---------- Hinweis statt Preisen ---------- */}
+  <Abschnitt>
+    <div class="hinweiskasten">
+      <h2>Preise im Brauereiverkauf</h2>
+      <p>
+        {BETRIEB.strasse}, {BETRIEB.plz} {BETRIEB.ort}. {BETRIEB.verkaufszeiten}.
+        {' '}{BETRIEB.verkaufszusatz}
+      </p>
+      <p class="hinweiskasten-knoepfe">
+        <Knopf href="/verkaufsstellen/">Alle Verkaufsstellen</Knopf>
+        <Knopf href={`tel:${BETRIEB.telefon}`} art="still">{BETRIEB.telefonAnzeige}</Knopf>
+      </p>
+    </div>
+  </Abschnitt>
+</Themenseite>
+
+<style>
+  .bier {
+    padding-block: var(--db-space-2xl);
+  }
+
+  .bier-raster {
+    align-items: center;
+  }
+
+  /* Wechselnde Teilung 5/7 und 7/5. Die Umkehrung laeuft ueber die
+     Spaltenposition, damit die Lesereihenfolge im Quelltext gleich bleibt. */
+  .bier-bild-rechts {
+    grid-column: 8 / span 5;
+    grid-row: 1;
+  }
+
+  .bier-text-links {
+    grid-column: 1 / span 7;
+    grid-row: 1;
+  }
+
+  .bier-besonderheit {
+    margin-top: var(--db-space-2xs);
+    color: var(--db-text-hinweis);
+    font-weight: var(--db-weight-medium);
+  }
+
+  .bier-beschreibung {
+    margin-top: var(--db-space-sm);
+    max-width: var(--db-mass-text);
+  }
+
+  .bier-saison {
+    margin-top: var(--db-space-sm);
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+  }
+
+  .gebinde {
+    margin-top: var(--db-space-lg);
+  }
+
+  .gebinde-titel {
+    font-size: var(--db-text-sm);
+    font-weight: var(--db-weight-medium);
+    letter-spacing: var(--db-tracking-weit);
+    text-transform: uppercase;
+    color: var(--db-text-leise);
+  }
+
+  .gebinde ul {
+    list-style: none;
+    margin: var(--db-space-2xs) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--db-space-2xs);
+  }
+
+  .gebinde li {
+    background: var(--db-flaeche-ruhig);
+    border-radius: var(--db-radius-md);
+    padding: 0.25rem 0.7rem;
+    font-size: var(--db-text-sm);
+  }
+
+  .trenner {
+    padding-block: var(--db-space-lg);
+  }
+
+  @media (max-width: 767px) {
+    .bier-bild-rechts,
+    .bier-text-links {
+      grid-column: 1 / -1;
+    }
+    .bier-bild-rechts {
+      grid-row: auto;
+    }
+    .bier-text-links {
+      grid-row: auto;
+    }
+  }
+
+  .produkte {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--db-space-xl);
+  }
+
+  .produkt h3 {
+    margin-top: var(--db-space-sm);
+    font-size: var(--db-text-xl);
+  }
+
+  .produkt p {
+    margin-top: var(--db-space-3xs);
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+  }
+
+  .produkt-hinweis {
+    color: var(--db-text-hinweis) !important;
+    font-weight: var(--db-weight-medium);
+  }
+
+  @media (max-width: 999px) {
+    .produkte {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 599px) {
+    .produkte {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .hinweiskasten {
+    background: var(--db-flaeche-hopfen);
+    border-radius: var(--karte-radius);
+    padding: var(--db-space-xl);
+    max-width: var(--db-breite-eng);
+  }
+
+  .hinweiskasten p {
+    margin-top: var(--db-space-sm);
+  }
+
+  .hinweiskasten-knoepfe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--db-space-sm);
+    margin-top: var(--db-space-md) !important;
+  }
+</style>

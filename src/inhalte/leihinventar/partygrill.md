@@ -1,9 +1,9 @@
 ---
-name: Partygrill
-gruppe: Ausschank und Küche
+name: "Partygrill"
+gruppe: "Ausschank und Küche"
 masse:
   - Rienza Feuerschalengrill
-bildAlt: Ein Feuerschalengrill
+bildAlt: "Ein Feuerschalengrill"
 reihenfolge: 21
 ---
 

@@ -1,0 +1,285 @@
+---
+import Basis from '../layouts/Basis.astro';
+import Abschnitt from '../komponenten/basis/Abschnitt.astro';
+import Knopf from '../komponenten/basis/Knopf.astro';
+import Anfahrtskarte from '../komponenten/marke/Anfahrtskarte.astro';
+import { Icon } from 'astro-icon/components';
+import { BETRIEB } from '../daten/betrieb';
+import { anfrageLink } from '../daten/anfragen';
+
+const routeUrl = `https://www.openstreetmap.org/search?query=${encodeURIComponent(
+  `${BETRIEB.strasse}, ${BETRIEB.plz} ${BETRIEB.ort}`,
+)}`;
+
+const ANFRAGEN = [
+  {
+    art: 'verleih' as const,
+    titel: 'Verleih anfragen',
+    text: 'Zelt, Garnituren, Zapfanlage, Grill oder Gläser für Euer Fest.',
+  },
+  {
+    art: 'feier' as const,
+    titel: 'Feier anfragen',
+    text: 'Brauereigarten oder Festraum für Euren Anlass.',
+  },
+  {
+    art: 'seminar' as const,
+    titel: 'Seminar anfragen',
+    text: 'Brauseminar bei uns in der Scheune oder mobil bei Euch.',
+  },
+  {
+    art: 'ferienwohnung' as const,
+    titel: 'Ferienwohnung anfragen',
+    text: 'Landhof Eselblick, drei Schlafzimmer, Balkon mit Alpenblick.',
+  },
+];
+---
+
+<Basis
+  titel="Kontakt"
+  beschreibung="So erreicht Ihr die Brauerei DEIN BIER in Hausen bei Mauerstetten: Telefon, E-Mail, Anfahrt und Öffnungszeiten des Brauereiverkaufs."
+>
+  <section class="seitenkopf">
+    <div class="container raster kopf-raster">
+      <div class="spalte-7">
+        <h1>Ruft an oder schreibt.</h1>
+        <p class="vorspann">Wir melden uns zurück.</p>
+
+        <dl class="kontaktdaten">
+          <dt>
+            <Icon name="ph:phone" width="20" height="20" aria-hidden="true" />
+            Telefon
+          </dt>
+          <dd><a href={`tel:${BETRIEB.telefon}`}>{BETRIEB.telefonAnzeige}</a></dd>
+
+          <dt>
+            <Icon name="ph:envelope-simple" width="20" height="20" aria-hidden="true" />
+            E-Mail
+          </dt>
+          <dd><a href={`mailto:${BETRIEB.email}`}>{BETRIEB.email}</a></dd>
+
+          <dt>
+            <Icon name="ph:map-pin" width="20" height="20" aria-hidden="true" />
+            Anschrift
+          </dt>
+          <dd>
+            <address>
+              {BETRIEB.name}<br />
+              {BETRIEB.strasse}<br />
+              {BETRIEB.plz} {BETRIEB.ort}
+            </address>
+          </dd>
+
+          <dt>
+            <Icon name="ph:clock" width="20" height="20" aria-hidden="true" />
+            Brauereiverkauf
+          </dt>
+          <dd>
+            {BETRIEB.verkaufszeiten}<br />
+            <span class="leise">{BETRIEB.verkaufszusatz}</span>
+          </dd>
+        </dl>
+      </div>
+
+      <div class="spalte-5 kopf-karte">
+        <Anfahrtskarte />
+        <p class="kopf-route">
+          <Knopf href={routeUrl} extern={true}>Route planen</Knopf>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* ---------- Anfragen nach Thema ---------- */}
+  <Abschnitt
+    titel="Anfrage nach Thema"
+    vorspann="Jede Karte öffnet Euer Mailprogramm mit passendem Betreff und vorbereitetem Text. Ihr füllt nur noch die Lücken aus."
+  >
+    <div class="anfragen">
+      {
+        ANFRAGEN.map((a, i) => (
+          <a class="anfrage einblenden" href={anfrageLink(a.art)} style={`--index: ${i}`}>
+            <span class="anfrage-titel">{a.titel}</span>
+            <span class="anfrage-text">{a.text}</span>
+            <span class="anfrage-pfeil" aria-hidden="true">
+              <Icon name="ph:arrow-right" width="20" height="20" />
+            </span>
+          </a>
+        ))
+      }
+    </div>
+
+    {/* Ehrlicher Hinweis statt eines Formulars, das nichts tut. Die Seite
+        hat kein Backend; ein Eingabefeld ohne Empfaenger waere eine Luege. */}
+    <p class="anfragen-hinweis">
+      Wir arbeiten ohne Kontaktformular. Eure Anfrage geht direkt als E-Mail an
+      uns, ohne Umweg über einen Dienstleister. Wenn kein Mailprogramm
+      eingerichtet ist, schreibt einfach an
+      <a href={`mailto:${BETRIEB.email}`}>{BETRIEB.email}</a>.
+    </p>
+  </Abschnitt>
+
+  {/* ---------- Social ---------- */}
+  <Abschnitt titel="Wir sind auch hier">
+    <p class="social">
+      <a href={BETRIEB.social.facebook} rel="noopener noreferrer" target="_blank">
+        Facebook <span aria-hidden="true">↗</span>
+        <span class="sr-only">(öffnet in neuem Tab)</span>
+      </a>
+      <a href={BETRIEB.social.instagram} rel="noopener noreferrer" target="_blank">
+        Instagram <span aria-hidden="true">↗</span>
+        <span class="sr-only">(öffnet in neuem Tab)</span>
+      </a>
+    </p>
+    <p class="leise social-hinweis">
+      Beim Klick gelten die Datenschutzbestimmungen der jeweiligen Seite. Auf
+      unserer Seite selbst sind keine Inhalte dieser Dienste eingebunden.
+    </p>
+  </Abschnitt>
+</Basis>
+
+<style>
+  .seitenkopf {
+    padding-block: var(--db-space-2xl) var(--db-space-xl);
+  }
+
+  .kopf-raster {
+    align-items: start;
+  }
+
+  .kontaktdaten {
+    margin-top: var(--db-space-xl);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--db-space-sm) var(--db-space-lg);
+    align-items: baseline;
+  }
+
+  .kontaktdaten dt {
+    display: flex;
+    align-items: center;
+    gap: var(--db-space-2xs);
+    font-size: var(--db-text-sm);
+    font-weight: var(--db-weight-medium);
+    color: var(--db-text-leise);
+    white-space: nowrap;
+  }
+
+  .kontaktdaten :global(svg) {
+    color: var(--db-linie-zier);
+  }
+
+  .kontaktdaten dd {
+    margin: 0;
+  }
+
+  .kontaktdaten address {
+    font-style: normal;
+  }
+
+  @media (max-width: 599px) {
+    .kontaktdaten {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--db-space-3xs);
+    }
+    .kontaktdaten dd {
+      margin-bottom: var(--db-space-sm);
+    }
+  }
+
+  .kopf-karte {
+    margin-top: var(--db-space-md);
+  }
+
+  .kopf-route {
+    margin-top: var(--db-space-md);
+  }
+
+  .anfragen {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--db-space-md);
+  }
+
+  .anfrage {
+    display: grid;
+    gap: var(--db-space-3xs);
+    background: var(--karte-flaeche);
+    border: 1px solid var(--db-linie);
+    border-radius: var(--karte-radius);
+    padding: var(--db-space-lg);
+    text-decoration: none;
+    color: var(--db-text);
+    position: relative;
+    transition:
+      transform var(--db-dauer-schnell) var(--db-easing-standard),
+      border-color var(--db-dauer-schnell) var(--db-easing-standard),
+      box-shadow var(--db-dauer-schnell) var(--db-easing-standard);
+  }
+
+  .anfrage-titel {
+    font-family: var(--db-font-display);
+    font-size: var(--db-text-xl);
+    font-weight: var(--db-weight-semibold);
+    color: var(--db-text-ueberschrift);
+  }
+
+  .anfrage-text {
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+    max-width: 34ch;
+  }
+
+  .anfrage-pfeil {
+    position: absolute;
+    top: var(--db-space-lg);
+    right: var(--db-space-lg);
+    color: var(--db-linie-zier);
+    transition: transform var(--db-dauer-schnell) var(--db-easing-standard);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .anfrage:hover {
+      transform: translateY(-2px);
+      border-color: var(--knopf-still-rahmen);
+      box-shadow: var(--karte-schatten-hover);
+    }
+    .anfrage:hover .anfrage-pfeil {
+      transform: translateX(3px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anfrage,
+    .anfrage-pfeil {
+      transition: none;
+    }
+    .anfrage:hover {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .anfragen {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .anfragen-hinweis {
+    margin-top: var(--db-space-lg);
+    max-width: var(--db-mass-text);
+    color: var(--db-text-leise);
+    font-size: var(--db-text-sm);
+  }
+
+  .social {
+    display: flex;
+    gap: var(--db-space-lg);
+    flex-wrap: wrap;
+  }
+
+  .social-hinweis {
+    margin-top: var(--db-space-sm);
+    max-width: var(--db-mass-text);
+  }
+</style>

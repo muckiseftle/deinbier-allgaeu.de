@@ -1,0 +1,239 @@
+---
+import Themenseite from '../layouts/Themenseite.astro';
+import Abschnitt from '../komponenten/basis/Abschnitt.astro';
+import Bild from '../komponenten/basis/Bild.astro';
+import Zahlenband from '../komponenten/marke/Zahlenband.astro';
+import Zitatband from '../komponenten/marke/Zitatband.astro';
+
+import leitbild from '../bilder/brauerei-anlieferung.jpg';
+import macher from '../bilder/michael-und-marlene-rink.jpg';
+import malzsack from '../bilder/malzsack-hoch.jpg';
+import malzOffen from '../bilder/malz-geschrotet.jpg';
+import brausud from '../bilder/brausud.jpg';
+import hopfen from '../bilder/hopfengabe.jpg';
+import tanks from '../bilder/lagertanks.jpg';
+
+const ZAHLEN = [
+  { zahl: '2016', text: 'Brauereigebäude eröffnet' },
+  { zahl: '9–11 °C', text: 'Gärtemperatur' },
+  { zahl: '4 Wochen', text: 'Lagerung, mindestens' },
+  { zahl: '1516', text: 'Reinheitsgebot' },
+];
+---
+
+<Themenseite
+  titel="Die Brauerei"
+  beschreibung="Kleine Brauerei in einer umgebauten Scheune in Hausen bei Mauerstetten. Diplom-Braumeister Michael Rink braut seit 2016 nach dem Reinheitsgebot."
+  vorspann="Eine umgebaute Scheune, große Edelstahlbottiche und ein Braumeister, der von Hand rührt. Seit 2016."
+  leitbild={leitbild}
+  leitbildAlt="Die Anlieferung der Brauanlage bei der Einrichtung der Brauerei"
+  abschlussTitel="Kommt vorbei."
+  abschlussAnfrage="seminar"
+  abschlussKnopf="Seminar anfragen"
+>
+  {/* ---------- Historie ---------- */}
+  <Abschnitt>
+    <div class="textspalte">
+      <h2>Wie das angefangen hat</h2>
+      <p class="mit-initiale">
+        Als gelernter Brauer und Braumeister hat sich bei mir beruflich schon
+        immer alles um das Thema Bier gedreht. Aber da war immer schon der
+        Gedanke an das eigene Bier und die eigene Brauerei. Der Wunsch, den
+        Menschen das Handwerk Bierbrauen näherzubringen, sie sogar selbst zu
+        Brauern zu machen, wo auch immer sie wollen.
+      </p>
+      <p>
+        Also starteten wir die ersten Brauversuche in der heimischen Küche und
+        im Garten. Beim ersten Sud wurde die Maische in einem großen Kochtopf
+        angesetzt, anschließend diente die Bohrmaschine als Rührer. Durch die
+        hohe Drehzahl wurde die Küche allerdings etwas mit Maische ausgekleidet.
+        Zum großen Leidwesen der Hausfrau.
+      </p>
+      <p>
+        Zum Abkühlen kam der Sud raus in den Hof, in den Schnee. Im Büro sollte
+        anschließend die Gärung stattfinden. Während dieser Zeit duftete es dort
+        nach Kohlendioxid, und das ständige Gerumpel des Durchlaufkühlers machte
+        anderes Arbeiten fast unmöglich.
+      </p>
+      <p>
+        Diese Zeiten sind zum Glück vorbei. Heute wird in der Brauscheune
+        gebraut, in der große Edelstahlbottiche stehen, wo früher Stall und
+        Maschinenunterstand waren. Viel Schweiß und viele Arbeitsstunden später
+        konnte das Brauereigebäude im September&nbsp;2016 eröffnet werden.
+      </p>
+      <p>
+        Im Dezember&nbsp;2021 schied Mitgründer Julius Brzoska aus persönlichen
+        Gründen aus dem Unternehmen aus. DEIN BIER wird seitdem von der Familie
+        Rink allein weitergeführt.
+      </p>
+    </div>
+  </Abschnitt>
+
+  {/* ---------- Die Macher ---------- */}
+  <Abschnitt titel="Die Macher">
+    <div class="raster macher">
+      <div class="spalte-5 einblenden">
+        <Bild quelle={macher} alt="Marlene und Michael Rink vor der Brauerei" />
+      </div>
+      <div class="spalte-7 einblenden" style="--index: 1">
+        <h3>Michael Rink</h3>
+        <p>
+          Diplom-Braumeister. Berufserfahrung in verschiedenen Brauereien, dazu
+          reichlich Laborluft an der Technischen Universität München in
+          Weihenstephan. Lange Zeit freier Dienstleister in der
+          Brauereiwirtschaft, mit Produktentwicklung und Qualitätskontrolle als
+          Einsatzgebieten.
+        </p>
+
+        <h3 class="macher-zweiter">Marlene Rink</h3>
+        <p>
+          Der ruhende Pol, die im Hintergrund den Laden zusammenhält. Sie ist
+          außerdem für die Kreationen der Malzgelees zuständig. Bei Festen und
+          anderen Aktivitäten ist Marlene mit den drei Kindern immer dabei.
+        </p>
+      </div>
+    </div>
+  </Abschnitt>
+
+  {/* ---------- Zutaten ---------- */}
+  <Abschnitt titel="Reine Zutaten">
+    <div class="raster zutaten">
+      <div class="spalte-7 einblenden">
+        <p>
+          Getreu dem Reinheitsgebot von 1516 kommen in den Braukessel nur
+          ausgesuchte Zutaten: Allgäuer Wasser, hochwertiges Malz aus einer
+          Memminger Mälzerei, Hopfen aus der Hallertau und ober- oder
+          untergärige Hefen.
+        </p>
+        <p>
+          Dem Braumeister ist es wichtig, mit hochwertigen Rohstoffen zu
+          arbeiten. „Man schmeckt einfach den Unterschied.“ Trotzdem werden
+          keine Experimente gescheut, wenn es um besondere Kundenwünsche geht.
+          Es wurde auch schon ein Bier mit Hopfen aus dem Garten des Kunden
+          gebraut.
+        </p>
+      </div>
+      <div class="spalte-5 einblenden" style="--index: 1">
+        <Bild quelle={malzsack} alt="Blick in einen offenen Malzsack" />
+      </div>
+    </div>
+  </Abschnitt>
+
+  {/* ---------- Zahlen ---------- */}
+  <Abschnitt>
+    <Zahlenband eintraege={ZAHLEN} />
+  </Abschnitt>
+
+  {/* ---------- Arbeitsweise ---------- */}
+  <Abschnitt titel="Wie wir arbeiten">
+    <div class="textspalte">
+      <p>
+        Der Grundprozess des Bierbrauens, der in mittelalterlichen
+        Klosterküchen seinen Anfang nahm, hat sich kaum geändert. Natürlich
+        wird heute mit moderner Technik gebraut, aber das Handwerkszeug bleibt
+        dasselbe.
+      </p>
+      <p>
+        In der DEIN BIER Brauerei wird in einer elektrisch beheizbaren
+        Sudpfanne gebraut. Der Strom dafür kommt vom Dach der eigenen
+        Photovoltaikanlage. Während des Maischens wird fleißig von Hand
+        gerührt.
+      </p>
+      <p>
+        Gärung und Reifung finden in zylindrokonischen Edelstahltanks statt.
+        Die klassische Gärung bei 9 bis 11&nbsp;°C dauert etwa 7 bis
+        10&nbsp;Tage. Bier braucht Ruhe, um sein bestes Aroma zu entwickeln.
+        Deshalb folgt eine mindestens vierwöchige Lagerung, bevor abgefüllt
+        wird. Fassbiere füllen wir direkt vor Ort ab, die Flaschenabfüllung
+        findet in einer externen Brauerei statt.
+      </p>
+    </div>
+
+    <div class="bildreihe">
+      <figure class="bildreihe-1 einblenden">
+        <Bild quelle={malzOffen} alt="Geschrotetes Malz, bevor der Brausud angesetzt wird" />
+        <figcaption>Vor dem Sud wird das Malz geschrotet.</figcaption>
+      </figure>
+      <figure class="bildreihe-2 einblenden" style="--index: 1">
+        <Bild quelle={brausud} alt="Der angesetzte Brausud kocht in der Sudpfanne" />
+        <figcaption>Der Sud kocht mehrere Stunden.</figcaption>
+      </figure>
+      <figure class="bildreihe-3 einblenden" style="--index: 2">
+        <Bild quelle={hopfen} alt="Die Hopfengabe in die gefüllte Sudpfanne" />
+        <figcaption>Dann kommt der Hopfen dazu.</figcaption>
+      </figure>
+    </div>
+  </Abschnitt>
+
+  <Zitatband
+    zitat="Bier braucht Ruhe, um sein bestes Aroma zu entwickeln."
+    quelle="Michael Rink, Diplom-Braumeister"
+  />
+
+  <Abschnitt titel="Die Brauscheune">
+    <Bild
+      quelle={tanks}
+      alt="Die Gär- und Lagertanks in der Brauscheune"
+      sizes="100vw"
+      breiten={[800, 1200, 1600, 1920]}
+    />
+  </Abschnitt>
+</Themenseite>
+
+<style>
+  /* Kupfer-Initiale. Genau einmal je Seite: ein gestalterisches Ereignis,
+     nicht mehr. */
+  .mit-initiale::first-letter {
+    float: left;
+    font-family: var(--db-font-display);
+    font-size: 3.4em;
+    line-height: 0.82;
+    font-weight: var(--db-weight-bold);
+    color: var(--db-linie-zier);
+    padding-right: 0.08em;
+    padding-top: 0.06em;
+  }
+
+  .macher-zweiter {
+    margin-top: var(--db-space-lg);
+  }
+
+  .macher p,
+  .zutaten p {
+    margin-top: var(--db-space-2xs);
+  }
+
+  /* Versetzte Hoehen und verschiedene Seitenverhaeltnisse statt drei
+     gleicher Kacheln. */
+  .bildreihe {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--db-space-lg);
+    align-items: start;
+    margin-top: var(--db-space-2xl);
+  }
+
+  .bildreihe-2 {
+    margin-top: var(--db-space-2xl);
+  }
+
+  .bildreihe-3 {
+    margin-top: var(--db-space-sm);
+  }
+
+  .bildreihe figcaption {
+    margin-top: var(--db-space-2xs);
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+  }
+
+  @media (max-width: 767px) {
+    .bildreihe {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .bildreihe-2,
+    .bildreihe-3 {
+      margin-top: 0;
+    }
+  }
+</style>

@@ -1,9 +1,9 @@
 ---
-name: Kleine Sonnenschirme
-gruppe: Überdachung
+name: "Kleine Sonnenschirme"
+gruppe: "Überdachung"
 masse:
   - 2 × 1,30 m Seitenlänge
-bildAlt: Ein kleiner Sonnenschirm an einer Bierzeltgarnitur
+bildAlt: "Ein kleiner Sonnenschirm an einer Bierzeltgarnitur"
 reihenfolge: 4
 ---
 

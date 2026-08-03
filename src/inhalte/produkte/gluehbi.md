@@ -1,8 +1,8 @@
 ---
-name: Glühbi
-kurz: Märzenbier mit Kirschsaft und Weihnachtsgewürzen. Heiß zu genießen.
+name: "Glühbi"
+kurz: "Märzenbier mit Kirschsaft und Weihnachtsgewürzen. Heiß zu genießen."
 bild: ../../bilder/gluehbi.png
-bildAlt: Eine Flasche Glühbi
+bildAlt: "Eine Flasche Glühbi"
 reihenfolge: 6
 ---
 

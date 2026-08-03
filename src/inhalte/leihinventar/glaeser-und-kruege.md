@@ -1,8 +1,8 @@
 ---
-name: Gläser und Krüge
-gruppe: Ausschank und Küche
+name: "Gläser und Krüge"
+gruppe: "Ausschank und Küche"
 masse: []
-bildAlt: Bierkrüge und Gläser
+bildAlt: "Bierkrüge und Gläser"
 reihenfolge: 24
 ---
 

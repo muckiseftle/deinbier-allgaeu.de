@@ -1,8 +1,8 @@
 ---
-name: Tischschürzen
-gruppe: Ausschank und Küche
+name: "Tischschürzen"
+gruppe: "Ausschank und Küche"
 masse: []
-bildAlt: Eine Tischschürze an einem Garniturentisch
+bildAlt: "Eine Tischschürze an einem Garniturentisch"
 reihenfolge: 25
 ---
 

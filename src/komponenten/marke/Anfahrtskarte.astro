@@ -1,0 +1,104 @@
+---
+import Wagen from './Wagen.astro';
+
+/**
+ * Gezeichnete Umgebungskarte statt eines Google-Maps-Einbaus.
+ *
+ * Ein Maps-Einbau wuerde beim Seitenaufruf Daten an Google in die USA
+ * uebertragen und damit eine Einwilligung erfordern. Genau das soll die
+ * neue Seite nicht mehr brauchen. Der Routenplaner wird stattdessen als
+ * externer Link angeboten, der erst auf Klick etwas tut.
+ *
+ * Die Lage der Orte ist schematisch, nicht massstabsgetreu. Sie dient der
+ * Orientierung, nicht der Navigation.
+ */
+---
+
+<figure class="anfahrt">
+  <svg viewBox="0 0 600 380" role="img" aria-labelledby="karte-titel" class="anfahrt-karte">
+    <title id="karte-titel">
+      Schematische Umgebungskarte: Hausen liegt südlich von Kaufbeuren, östlich
+      von Mauerstetten.
+    </title>
+
+    <rect x="0" y="0" width="600" height="380" fill="var(--db-flaeche-ruhig)" rx="14" />
+
+    <!-- Waldflaechen -->
+    <path
+      d="M40 250 q40 -30 90 -10 t80 20 q20 40 -20 60 t-110 10 q-50 -30 -40 -80 Z"
+      fill="var(--db-hopfen-100)"
+      opacity="0.85"
+    />
+    <path
+      d="M420 60 q50 -20 100 10 t40 70 q-30 40 -90 30 t-60 -60 Z"
+      fill="var(--db-hopfen-100)"
+      opacity="0.85"
+    />
+
+    <!-- Strassen -->
+    <g stroke="var(--db-holz-400)" fill="none" stroke-linecap="round">
+      <path d="M0 120 C 120 110, 220 150, 300 170 S 480 200, 600 190" stroke-width="7" />
+      <path d="M300 0 C 290 80, 300 130, 300 170 S 320 300, 310 380" stroke-width="5" />
+      <path d="M300 170 C 360 180, 410 220, 470 260" stroke-width="3" stroke-dasharray="8 7" />
+      <path d="M150 135 C 140 200, 130 260, 120 330" stroke-width="3" stroke-dasharray="8 7" />
+    </g>
+
+    <!-- Orte -->
+    <g fill="var(--db-text-leise)" font-size="15" font-family="var(--db-font-text)">
+      <circle cx="150" cy="132" r="6" fill="var(--db-holz-500)" />
+      <text x="150" y="112" text-anchor="middle">Kaufbeuren</text>
+
+      <circle cx="300" cy="170" r="6" fill="var(--db-holz-500)" />
+      <text x="268" y="162" text-anchor="end">Mauerstetten</text>
+
+      <circle cx="470" cy="260" r="6" fill="var(--db-holz-500)" />
+      <text x="470" y="292" text-anchor="middle">Waal</text>
+
+      <circle cx="120" cy="330" r="6" fill="var(--db-holz-500)" />
+      <text x="120" y="356" text-anchor="middle">Stöttwang</text>
+    </g>
+
+    <!-- Hausen: das Ziel -->
+    <g>
+      <circle cx="378" cy="212" r="30" fill="var(--db-bernstein-300)" opacity="0.42" />
+      <circle cx="378" cy="212" r="9" fill="var(--db-malz-700)" />
+      <text
+        x="378"
+        y="192"
+        text-anchor="middle"
+        font-size="18"
+        font-weight="700"
+        fill="var(--db-text-ueberschrift)"
+        font-family="var(--db-font-display)">Hausen</text
+      >
+    </g>
+
+    <!-- Der Wagen steht auf Hausen -->
+    <g transform="translate(398 218)">
+      <Wagen breite={64} />
+    </g>
+  </svg>
+
+  <figcaption>
+    Schematische Darstellung zur Orientierung. Für die Navigation nutzt bitte
+    den Routenplaner.
+  </figcaption>
+</figure>
+
+<style>
+  .anfahrt {
+    margin: 0;
+  }
+
+  .anfahrt-karte {
+    width: 100%;
+    height: auto;
+    border-radius: var(--db-radius-lg);
+  }
+
+  .anfahrt figcaption {
+    margin-top: var(--db-space-2xs);
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+  }
+</style>

@@ -1,9 +1,9 @@
 ---
-name: Partyfässer
-gruppe: Ausschank und Küche
+name: "Partyfässer"
+gruppe: "Ausschank und Küche"
 masse:
   - 10 und 20 l
-bildAlt: Ein Partyfass mit Zapfhahn
+bildAlt: "Ein Partyfass mit Zapfhahn"
 reihenfolge: 23
 ---
 

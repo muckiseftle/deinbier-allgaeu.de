@@ -1,0 +1,109 @@
+---
+import Basis from './Basis.astro';
+import Bild from '../komponenten/basis/Bild.astro';
+import Knopf from '../komponenten/basis/Knopf.astro';
+import { BETRIEB } from '../daten/betrieb';
+import { anfrageLink, type AnfrageArt } from '../daten/anfragen';
+
+interface Props {
+  titel: string;
+  beschreibung: string;
+  /** Ueberschrift auf der Seite, falls sie vom Seitentitel abweicht. */
+  ueberschrift?: string;
+  vorspann?: string;
+  leitbild?: ImageMetadata;
+  leitbildAlt?: string;
+  /** Abschlussaufforderung am Seitenende. */
+  abschlussTitel?: string;
+  abschlussAnfrage?: AnfrageArt;
+  abschlussKnopf?: string;
+  jsonLdZusatz?: Record<string, unknown>[];
+}
+
+const {
+  titel,
+  beschreibung,
+  ueberschrift,
+  vorspann,
+  leitbild,
+  leitbildAlt,
+  abschlussTitel = 'Fragen? Ruft an.',
+  abschlussAnfrage,
+  abschlussKnopf,
+  jsonLdZusatz,
+} = Astro.props;
+---
+
+<Basis titel={titel} beschreibung={beschreibung} jsonLdZusatz={jsonLdZusatz}>
+  <section class="seitenkopf">
+    <div class="container raster seitenkopf-raster">
+      <div class="spalte-7">
+        <h1>{ueberschrift ?? titel}</h1>
+        {vorspann && <p class="vorspann seitenkopf-vorspann">{vorspann}</p>}
+      </div>
+      {
+        (leitbild || leitbildAlt) && (
+          <div class="spalte-5 seitenkopf-bild">
+            <Bild
+              quelle={leitbild}
+              alt={leitbildAlt ?? ''}
+              hinweis="Foto folgt"
+              verhaeltnis="4 / 3"
+              laden="eager"
+              sizes="(max-width: 767px) 100vw, 40vw"
+            />
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <slot />
+
+  <section class="abschluss">
+    <div class="container">
+      <h2>{abschlussTitel}</h2>
+      <div class="abschluss-knoepfe">
+        <Knopf href={`tel:${BETRIEB.telefon}`} art="still">{BETRIEB.telefonAnzeige}</Knopf>
+        {
+          abschlussAnfrage && abschlussKnopf && (
+            <Knopf href={anfrageLink(abschlussAnfrage)}>{abschlussKnopf}</Knopf>
+          )
+        }
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .seitenkopf {
+    padding-block: var(--db-space-2xl) var(--db-space-xl);
+  }
+
+  .seitenkopf-raster {
+    align-items: center;
+  }
+
+  .seitenkopf-vorspann {
+    margin-top: var(--db-space-md);
+  }
+
+  @media (max-width: 767px) {
+    .seitenkopf-bild {
+      margin-top: var(--db-space-lg);
+    }
+  }
+
+  .abschluss {
+    background: var(--db-flaeche-ruhig);
+    padding-block: var(--db-space-2xl);
+    margin-top: var(--db-space-2xl);
+  }
+
+  .abschluss-knoepfe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--db-space-sm);
+    margin-top: var(--db-space-md);
+  }
+</style>

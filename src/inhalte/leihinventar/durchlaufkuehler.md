@@ -1,9 +1,9 @@
 ---
-name: Durchlaufkühler
-gruppe: Ausschank und Küche
+name: "Durchlaufkühler"
+gruppe: "Ausschank und Küche"
 masse:
   - ein- oder zweileitig
-bildAlt: Ein Durchlaufkühler für den Bierausschank
+bildAlt: "Ein Durchlaufkühler für den Bierausschank"
 reihenfolge: 20
 ---
 

@@ -1,0 +1,111 @@
+---
+import Basis from '../layouts/Basis.astro';
+import { BETRIEB } from '../daten/betrieb';
+
+/**
+ * GERUEST. Der endgueltige Text entsteht in Phase 7 nach Recherche zum
+ * aktuellen Stand von DDG und MStV und nach Klaerung der offenen Punkte
+ * 1 bis 3 in OFFENE-FRAGEN.md.
+ *
+ * Rechtstexte sind ein fundierter Entwurf und keine Rechtsberatung. Vor
+ * dem Livegang von einer Fachperson pruefen lassen.
+ *
+ * Anrede hier "Sie", ueberall sonst "Ihr". Das entspricht der Konvention
+ * bei Rechtstexten.
+ */
+---
+
+<Basis
+  titel="Impressum"
+  beschreibung="Impressum und Anbieterkennzeichnung der Brauerei DEIN BIER M. Rink in Hausen bei Mauerstetten."
+>
+  <section class="abschnitt container">
+    <div class="rechtstext textspalte">
+      <h1>Impressum</h1>
+
+      <h2>Angaben gemäß § 5 DDG</h2>
+      <p>
+        {BETRIEB.name}<br />
+        Inhaber: {BETRIEB.inhaber}<br />
+        {BETRIEB.strasse}<br />
+        {BETRIEB.plz} {BETRIEB.ort}<br />
+        Deutschland
+      </p>
+
+      <h2>Kontakt</h2>
+      <p>
+        Telefon: <a href={`tel:${BETRIEB.telefon}`}>{BETRIEB.telefonAnzeige}</a><br />
+        E-Mail: <a href={`mailto:${BETRIEB.email}`}>{BETRIEB.email}</a>
+      </p>
+
+      <h2>Rechtsform</h2>
+      <p class="platzhalter">
+        [PLATZHALTER: Rechtsform bestätigen. Die Angaben der Altseite deuten auf
+        ein Einzelunternehmen hin. Bei Eintragung im Handelsregister zusätzlich
+        Registergericht und Registernummer angeben.]
+      </p>
+
+      <h2>Umsatzsteuer-Identifikationsnummer</h2>
+      <p class="platzhalter">
+        [PLATZHALTER: USt-IdNr. nach § 27a UStG angeben, falls vorhanden.
+        Andernfalls entfällt dieser Abschnitt.]
+      </p>
+
+      <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+      <p>
+        {BETRIEB.inhaber}<br />
+        {BETRIEB.strasse}<br />
+        {BETRIEB.plz} {BETRIEB.ort}
+      </p>
+
+      <h2>Verbraucherstreitbeilegung</h2>
+      <p class="platzhalter">
+        [PLATZHALTER: Erklärung nach § 36 VSBG bestätigen. Üblich ist: nicht
+        bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer
+        Verbraucherschlichtungsstelle teilzunehmen.]
+      </p>
+
+      <div class="hinweis-entwurf">
+        <p>
+          <strong>Dieses Impressum ist noch nicht vollständig.</strong> Die
+          markierten Angaben fehlen und werden in Phase 7 ergänzt. Vor dem
+          Livegang muss der Text von einer Fachperson geprüft werden.
+        </p>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .rechtstext h1 {
+    margin-bottom: var(--db-space-lg);
+  }
+
+  .rechtstext h2 {
+    font-size: var(--db-text-xl);
+    margin-top: var(--db-space-xl);
+  }
+
+  .rechtstext p {
+    margin-top: var(--db-space-sm);
+  }
+
+  .platzhalter {
+    background: var(--db-flaeche-ruhig);
+    border-left: 3px solid var(--db-linie-zier);
+    padding: var(--db-space-sm) var(--db-space-md);
+    color: var(--db-text-hinweis);
+    font-size: var(--db-text-sm);
+  }
+
+  .hinweis-entwurf {
+    margin-top: var(--db-space-2xl);
+    padding: var(--db-space-lg);
+    background: var(--db-flaeche-hopfen);
+    border-radius: var(--karte-radius);
+  }
+
+  .hinweis-entwurf p {
+    margin-top: 0;
+  }
+</style>

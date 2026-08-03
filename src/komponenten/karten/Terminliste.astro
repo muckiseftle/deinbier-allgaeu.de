@@ -1,0 +1,118 @@
+---
+import { getCollection } from 'astro:content';
+import { formatDatum, isoDatum } from '../../lib/datum';
+import { BETRIEB } from '../../daten/betrieb';
+import Knopf from '../basis/Knopf.astro';
+
+interface Props {
+  art?: 'brauseminar' | 'biergarten' | 'fest' | 'markt';
+}
+
+const { art } = Astro.props;
+
+const heute = new Date().toISOString().slice(0, 10);
+const alle = await getCollection('termine');
+const kommende = alle
+  .filter((t) => t.data.datum >= heute)
+  .filter((t) => (art ? t.data.art === art : true))
+  .sort((a, b) => a.data.datum.localeCompare(b.data.datum));
+---
+
+{
+  kommende.length > 0 ? (
+    <ul class="terminliste">
+      {kommende.map((t) => (
+        <li class:list={['termin', { 'termin-abgesagt': t.data.abgesagt }]}>
+          <time datetime={isoDatum(t.data.datum)} class="termin-datum zahl">
+            {formatDatum(t.data.datum)}
+          </time>
+          <div class="termin-text">
+            <p class="termin-titel">{t.data.titel}</p>
+            {t.data.uhrzeit && <p class="termin-zeit">ab {t.data.uhrzeit}</p>}
+            {t.data.hinweis && <p class="termin-hinweis">{t.data.hinweis}</p>}
+            {t.data.abgesagt && <p class="termin-abgesagt-text">Fällt aus</p>}
+          </div>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    /* Der Leerzustand ist hier der Regelfall, nicht die Ausnahme. Die
+       Altseite zeigt an dieser Stelle "Keine Veranstaltungen vorhanden"
+       plus einen Countdown, der auf null steht. Das soll nicht
+       wiederkehren. */
+    <div class="termine-leer">
+      <p class="termine-leer-titel">Die nächsten Termine stehen noch nicht fest.</p>
+      <p>Ruft an, wir finden einen.</p>
+      <p class="termine-leer-knopf">
+        <Knopf href={`tel:${BETRIEB.telefon}`}>{BETRIEB.telefonAnzeige}</Knopf>
+      </p>
+    </div>
+  )
+}
+
+<style>
+  .terminliste {
+    list-style: none;
+    margin: 0;
+    display: grid;
+    gap: var(--db-space-md);
+  }
+
+  .termin {
+    display: grid;
+    grid-template-columns: 12rem 1fr;
+    gap: var(--db-space-md);
+    padding-top: var(--db-space-sm);
+    border-top: 1px solid var(--db-linie);
+  }
+
+  @media (max-width: 599px) {
+    .termin {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--db-space-3xs);
+    }
+  }
+
+  .termin-datum {
+    font-family: var(--db-font-display);
+    font-weight: var(--db-weight-semibold);
+    color: var(--db-text-ueberschrift);
+  }
+
+  .termin-titel {
+    font-weight: var(--db-weight-medium);
+  }
+
+  .termin-zeit,
+  .termin-hinweis {
+    color: var(--db-text-leise);
+    font-size: var(--db-text-sm);
+  }
+
+  .termin-abgesagt .termin-titel {
+    text-decoration: line-through;
+  }
+
+  .termin-abgesagt-text {
+    color: var(--db-text-fehler);
+    font-weight: var(--db-weight-medium);
+  }
+
+  .termine-leer {
+    background: var(--db-flaeche-hopfen);
+    border-radius: var(--karte-radius);
+    padding: var(--db-space-lg);
+    max-width: var(--db-mass-text);
+  }
+
+  .termine-leer-titel {
+    font-family: var(--db-font-display);
+    font-size: var(--db-text-xl);
+    font-weight: var(--db-weight-semibold);
+    color: var(--db-text-ueberschrift);
+  }
+
+  .termine-leer-knopf {
+    margin-top: var(--db-space-md);
+  }
+</style>

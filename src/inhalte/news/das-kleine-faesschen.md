@@ -1,9 +1,9 @@
 ---
-titel: Das kleine Fässchen
+titel: "Das kleine Fässchen"
 datum: "2026-06-17"
-anriss: Passend zum Sommer gibt es das Helles wieder in der 5-Liter-Dose.
+anriss: "Passend zum Sommer gibt es das Helles wieder in der 5-Liter-Dose."
 bild: ../../bilder/kleines-faesschen.jpg
-bildAlt: Die 5-Liter-Dose Helles
+bildAlt: "Die 5-Liter-Dose Helles"
 veraltet: false
 ---
 

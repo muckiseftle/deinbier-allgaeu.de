@@ -1,0 +1,87 @@
+---
+import Basis from '../layouts/Basis.astro';
+import Knopf from '../komponenten/basis/Knopf.astro';
+import Wagen from '../komponenten/marke/Wagen.astro';
+---
+
+<Basis
+  titel="Seite nicht gefunden"
+  beschreibung="Diese Seite gibt es nicht mehr oder sie hieß schon immer anders."
+  nichtIndexieren={true}
+>
+  {/* Der einzige zentrierte Aufbau der ganzen Seite. Bei einer Fehlerseite
+      ist die Botschaft die Gestaltung, deshalb greift hier die Ausnahme von
+      der Regel gegen zentrierte Anordnungen. */}
+  <section class="fehlerseite">
+    <div class="container">
+      <div class="fehlerseite-wagen" aria-hidden="true">
+        <Wagen breite={200} klasse="wagen-leer" />
+      </div>
+      <div class="fehlerseite-weg" aria-hidden="true"></div>
+
+      <h1>Hier ist nix.</h1>
+      <p class="vorspann">Das Fass ist woanders.</p>
+
+      <p class="fehlerseite-text">
+        Die Seite gibt es nicht mehr, oder sie hieß schon immer anders. Beides
+        kommt vor, wenn eine Website umzieht.
+      </p>
+
+      <div class="fehlerseite-knoepfe">
+        <Knopf href="/">Zur Startseite</Knopf>
+        <Knopf href="/biere/" art="still">Unsere Biere</Knopf>
+        <Knopf href="/kontakt/" art="still">Kontakt</Knopf>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .fehlerseite {
+    padding-block: var(--db-space-4xl);
+    text-align: center;
+  }
+
+  .fehlerseite-wagen {
+    display: flex;
+    justify-content: center;
+    color: var(--wagen-farbe);
+  }
+
+  /* Leere Ladeflaeche: das Fass wird ausgeblendet. Das ist der Witz. */
+  .fehlerseite-wagen :global(ellipse),
+  .fehlerseite-wagen :global(path[opacity='0.92']),
+  .fehlerseite-wagen :global(path[fill='var(--db-flaeche)']) {
+    display: none;
+  }
+
+  .fehlerseite-weg {
+    width: min(320px, 70%);
+    height: 1px;
+    background: var(--weg-linie);
+    margin: var(--db-space-sm) auto var(--db-space-2xl);
+  }
+
+  .fehlerseite h1 {
+    font-size: var(--db-text-5xl);
+  }
+
+  .fehlerseite .vorspann {
+    margin-inline: auto;
+    margin-top: var(--db-space-2xs);
+  }
+
+  .fehlerseite-text {
+    margin: var(--db-space-lg) auto 0;
+    max-width: 44ch;
+    color: var(--db-text-leise);
+  }
+
+  .fehlerseite-knoepfe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--db-space-sm);
+    justify-content: center;
+    margin-top: var(--db-space-xl);
+  }
+</style>

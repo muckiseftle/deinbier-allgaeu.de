@@ -1,9 +1,9 @@
 ---
-titel: Bock auf Bock?
+titel: "Bock auf Bock?"
 datum: "2026-02-27"
-anriss: Das Bockbier ist frisch aus der Füllerei zurück. Nur solange der Vorrat reicht.
+anriss: "Das Bockbier ist frisch aus der Füllerei zurück. Nur solange der Vorrat reicht."
 bild: ../../bilder/kiste-bock.png
-bildAlt: Ein Holzträger DEIN BIER Bock
+bildAlt: "Ein Holzträger DEIN BIER Bock"
 veraltet: true
 ---
 

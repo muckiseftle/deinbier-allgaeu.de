@@ -1,0 +1,327 @@
+---
+import Themenseite from '../layouts/Themenseite.astro';
+import Abschnitt from '../komponenten/basis/Abschnitt.astro';
+import Bild from '../komponenten/basis/Bild.astro';
+import Knopf from '../komponenten/basis/Knopf.astro';
+import { anfrageLink } from '../daten/anfragen';
+import { BETRIEB } from '../daten/betrieb';
+
+import leitbild from '../bilder/fewo-balkon.jpg';
+import wohnraum from '../bilder/fewo-wohnraum.jpg';
+import kueche from '../bilder/fewo-kueche.jpg';
+import schlafzimmer from '../bilder/fewo-schlafzimmer.jpg';
+import bad from '../bilder/fewo-bad.jpg';
+import esszimmer from '../bilder/fewo-esszimmer.jpg';
+import hof from '../bilder/fewo-hof.jpg';
+
+const AUSSTATTUNG = [
+  {
+    titel: 'Wohnen',
+    punkte: [
+      'Drei Schlafzimmer unter dem Sichtdachstuhl',
+      'Große Balkonterrasse mit Blick in die Allgäuer Alpen',
+      'Pelletkaminofen',
+      'Dachfenster über den Betten',
+      'WLAN und Fernseher',
+    ],
+  },
+  {
+    titel: 'Küche und Wäsche',
+    punkte: [
+      'Kühlschrank, Elektroherd, Mikrowelle',
+      'Geschirrspülmaschine',
+      'Grundausstattung zum Kochen, Geschirr, Gläser, Besteck',
+      'Waschmaschine und Trockner in der Anlage, kostenlos',
+    ],
+  },
+  {
+    titel: 'Hof und Umgebung',
+    punkte: [
+      'Esel, Zwergzebus, Hühner, Hund und Katzen',
+      'Spielplatz',
+      'Wassertretbecken',
+      'Kostenloser Parkplatz auf dem Grundstück',
+      'Privater Eingang und Innenhof',
+      'Haustiere erlaubt',
+    ],
+  },
+];
+
+const AUSZEICHNUNGEN = [
+  {
+    name: 'Blauer Gockel',
+    text: 'Das offizielle Markenzeichen für Bauernhof- und Landurlaub in Bayern.',
+    url: 'https://www.blauergockel.de/',
+  },
+  {
+    name: 'Allgäuer GenussMacher',
+    text: 'Eine Initiative, die die Vielfalt des Genusses im Allgäu erlebbar macht.',
+    url: 'https://www.xn--allguer-genussmacher-ezb.de/de/index.html',
+  },
+];
+
+/* Kein LodgingBusiness-Markup mit Preisangabe: es stehen keine Preise auf
+   der Seite (Entscheidung des Betreibers), und ein erfundener Preis waere
+   schlimmer als keiner. */
+const unterkunft = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LodgingBusiness',
+    name: 'Ferienwohnung Landhof Eselblick',
+    description:
+      'Ferienwohnung über der Kleinbrauerei DEIN BIER in Hausen bei Mauerstetten, drei Schlafzimmer, Balkon mit Alpenblick.',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: BETRIEB.strasse,
+      postalCode: BETRIEB.plz,
+      addressLocality: BETRIEB.ort,
+      addressCountry: BETRIEB.land,
+    },
+    telephone: BETRIEB.telefon,
+    email: BETRIEB.email,
+    petsAllowed: true,
+  },
+];
+---
+
+<Themenseite
+  titel="Ferienwohnung"
+  beschreibung="Ferienwohnung Landhof Eselblick über der Brauerei in Hausen bei Mauerstetten. Drei Schlafzimmer, Balkon mit Alpenblick, Esel im Hof."
+  ueberschrift="Schlafen über der Brauerei."
+  vorspann="Landhof Eselblick. Abseits vom Massentourismus, mitten im Ostallgäu, mit Eseln vor der Tür."
+  leitbild={leitbild}
+  leitbildAlt="Der Balkon der Ferienwohnung mit Blick über die Ostallgäuer Landschaft"
+  abschlussTitel="Wann möchtet Ihr kommen?"
+  abschlussAnfrage="ferienwohnung"
+  abschlussKnopf="Ferienwohnung anfragen"
+  jsonLdZusatz={unterkunft}
+>
+  {/* ---------- Gastgeber ---------- */}
+  <Abschnitt titel="Eure Gastgeber">
+    <div class="raster gastgeber">
+      <div class="spalte-7 einblenden">
+        <p>
+          Griaß Euch auf unserem Landhof Eselblick. Wir sind Marlene und
+          Michael. Gemeinsam betreiben wir den Hof und die Kleinbrauerei DEIN
+          BIER. Wir haben drei Kinder, die alle noch daheim wohnen.
+        </p>
+        <p>
+          Auf dem Hof kümmern wir uns um unsere Esel, Zwergzebus, Hühner,
+          Katzen und den Hund. Milchkühe haben wir selbst keine, aber unsere
+          direkten Nachbarn haben jede Menge davon.
+        </p>
+        <p>Wir freuen uns auf Euch.</p>
+        <p class="leise">Wir sprechen Deutsch und Englisch.</p>
+      </div>
+      <div class="spalte-5 einblenden" style="--index: 1">
+        <Bild quelle={hof} alt="Der Landhof Eselblick mit den Stallungen" />
+      </div>
+    </div>
+  </Abschnitt>
+
+  {/* ---------- Die Wohnung ---------- */}
+  <Abschnitt titel="Die Wohnung">
+    <div class="textspalte">
+      <p>
+        Eure Wohnung liegt direkt über der Kleinbrauerei. Der erhaltene
+        Sichtdachstuhl mit seinen zum Teil noch gehauenen Balken gibt ihr ein
+        besonderes Flair. Der große Balkon lädt zum Verweilen ein: Sonnenuntergang
+        und Blick in die Allgäuer Alpen inklusive.
+      </p>
+      <p>
+        In der großzügig ausgestatteten Küche lassen sich viele Menüs zaubern.
+        Nach dem Essen entspannt Ihr auf der Wohnlandschaft und schaut den
+        Eseln beim Grasen zu. Bei Schmuddelwetter sorgt der Pelletkaminofen für
+        Wärme. Noch ein Blick in den Sternenhimmel vor dem Einschlafen? Die
+        Betten liegen direkt unter der Dachschräge mit Dachfenstern.
+      </p>
+    </div>
+
+    <div class="galerie">
+      <figure class="galerie-gross einblenden">
+        <Bild quelle={wohnraum} alt="Der Wohnraum der Ferienwohnung mit Sichtdachstuhl" />
+      </figure>
+      <figure class="einblenden" style="--index: 1">
+        <Bild quelle={kueche} alt="Die Küche der Ferienwohnung" />
+      </figure>
+      <figure class="einblenden" style="--index: 2">
+        <Bild quelle={schlafzimmer} alt="Ein Schlafzimmer unter der Dachschräge" />
+      </figure>
+      <figure class="einblenden" style="--index: 3">
+        <Bild quelle={esszimmer} alt="Der Essbereich der Ferienwohnung" />
+      </figure>
+      <figure class="einblenden" style="--index: 4">
+        <Bild quelle={bad} alt="Das Badezimmer der Ferienwohnung" />
+      </figure>
+    </div>
+  </Abschnitt>
+
+  {/* ---------- Ausstattung ---------- */}
+  <Abschnitt titel="Was dabei ist">
+    <div class="ausstattung">
+      {
+        AUSSTATTUNG.map((block, i) => (
+          <div class="ausstattung-block einblenden" style={`--index: ${i}`}>
+            <h3>{block.titel}</h3>
+            <ul>
+              {block.punkte.map((p) => (
+                <li>{p}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </Abschnitt>
+
+  {/* ---------- Umgebung ---------- */}
+  <Abschnitt titel="Was Ihr hier machen könnt">
+    <div class="textspalte">
+      <p>
+        Direkt vor Ort lassen wir Euch in der Brauerei in die Geheimnisse der
+        Braukunst einweihen: Brauseminare, Brauereiführung und Bierverkostung.
+        Gerne machen wir mit Euch auch eine Eselwanderung, zum Beispiel im
+        nahen Reutwald. Für Kinder ist das eine besondere Erfahrung.
+      </p>
+      <p>
+        Wir haben keine riesigen modernen Traktoren. Bei uns wird das meiste
+        noch von Hand erledigt. Dafür haben wir einen Oldtimer-Traktor der
+        Marke Güldner. Allein das Motorgeräusch macht Freude. Und mitfahren
+        darf man auch mal.
+      </p>
+      <p>
+        Die Königsschlösser, die Wieskirche sowie München, Lindau, Augsburg und
+        Kempten erreicht Ihr in etwa einer Stunde. Skyline-Park und Märchenwald
+        liegen unter 30&nbsp;Minuten entfernt, die Thermen in Schwangau und Bad
+        Wörishofen ebenfalls in der Nähe. Das Corona Kinoplex ist fünf Minuten
+        weg. Rad- und Wanderwege beginnen praktisch vor der Tür, darunter der
+        Crescentia-Pilgerweg.
+      </p>
+    </div>
+
+    <aside class="ehrlich">
+      <p class="ehrlich-titel">Zwei Dinge, die Ihr wissen solltet</p>
+      <p>
+        Wenn in der Brauerei gebraut wird, hört man das in der Wohnung
+        teilweise. Und unsere Esel geben ab und an durch ihr Iaaaa ein
+        Lebenszeichen.
+      </p>
+    </aside>
+  </Abschnitt>
+
+  {/* ---------- Auszeichnungen ---------- */}
+  <Abschnitt titel="Ausgezeichnet">
+    <div class="auszeichnungen">
+      {
+        AUSZEICHNUNGEN.map((a, i) => (
+          <article class="auszeichnung einblenden" style={`--index: ${i}`}>
+            <h3>{a.name}</h3>
+            <p>{a.text}</p>
+            <p>
+              <a href={a.url} rel="noopener noreferrer" target="_blank">
+                {a.name} <span aria-hidden="true">↗</span>
+                <span class="sr-only">(öffnet in neuem Tab)</span>
+              </a>
+            </p>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="buchung">
+      <Knopf href={anfrageLink('ferienwohnung')}>Ferienwohnung anfragen</Knopf>
+    </p>
+  </Abschnitt>
+</Themenseite>
+
+<style>
+  .gastgeber p {
+    margin-top: var(--db-space-sm);
+  }
+
+  .gastgeber p:first-child {
+    margin-top: 0;
+  }
+
+  /* Erstes Bild gross, die uebrigen vier daneben. Keine Reihe aus
+     fuenf gleichen Kacheln. */
+  .galerie {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--db-space-md);
+    margin-top: var(--db-space-xl);
+  }
+
+  .galerie-gross {
+    grid-column: span 4;
+  }
+
+  @media (max-width: 767px) {
+    .galerie {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .galerie-gross {
+      grid-column: span 2;
+    }
+  }
+
+  .ausstattung {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--db-space-xl);
+  }
+
+  .ausstattung-block h3 {
+    font-size: var(--db-text-lg);
+    padding-bottom: var(--db-space-2xs);
+    border-bottom: 1px solid var(--db-linie);
+  }
+
+  .ausstattung-block ul {
+    list-style: none;
+    margin: var(--db-space-sm) 0 0;
+    display: grid;
+    gap: var(--db-space-3xs);
+    font-size: var(--db-text-sm);
+  }
+
+  @media (max-width: 767px) {
+    .ausstattung {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--db-space-lg);
+    }
+  }
+
+  .ehrlich {
+    background: var(--db-flaeche-ruhig);
+    border-radius: var(--karte-radius);
+    padding: var(--db-space-lg);
+    margin-top: var(--db-space-xl);
+    max-width: var(--db-breite-eng);
+  }
+
+  .ehrlich-titel {
+    font-weight: var(--db-weight-semibold);
+    margin-bottom: var(--db-space-2xs);
+  }
+
+  .auszeichnungen {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--db-space-lg);
+  }
+
+  .auszeichnung p {
+    margin-top: var(--db-space-2xs);
+  }
+
+  @media (max-width: 767px) {
+    .auszeichnungen {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .buchung {
+    margin-top: var(--db-space-xl);
+  }
+</style>

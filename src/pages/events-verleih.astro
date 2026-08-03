@@ -1,0 +1,250 @@
+---
+import { getCollection } from 'astro:content';
+
+import Themenseite from '../layouts/Themenseite.astro';
+import Abschnitt from '../komponenten/basis/Abschnitt.astro';
+import Bild from '../komponenten/basis/Bild.astro';
+import Knopf from '../komponenten/basis/Knopf.astro';
+import { Icon } from 'astro-icon/components';
+import { nachSchluessel } from '../lib/gruppieren';
+import { anfrageLink } from '../daten/anfragen';
+
+import leitbild from '../bilder/brauereigarten-festzelt.jpg';
+import festraum from '../bilder/festraum.jpg';
+import garten from '../bilder/feier-brauereigarten.jpg';
+import zeltGross from '../bilder/zirkuszelt.png';
+
+/* Bilder je Inventargegenstand. Nicht alle haben eines; wo keines vorliegt,
+   greift der gestaltete Platzhalter aus Bild.astro. */
+import bildPavillon from '../bilder/pavillon.jpg';
+import bildGarnitur from '../bilder/biertischgarnitur.png';
+import bildStehtisch from '../bilder/stehtisch.jpg';
+import bildKuehler from '../bilder/durchlaufkuehler.jpg';
+import bildGrill from '../bilder/feuerschalengrill.jpg';
+import bildKruege from '../bilder/bierkruege.jpg';
+
+const BILDER: Record<string, ImageMetadata> = {
+  zirkuszelt: zeltGross,
+  pavillon: bildPavillon,
+  festzeltgarnituren: bildGarnitur,
+  stehtische: bildStehtisch,
+  durchlaufkuehler: bildKuehler,
+  partygrill: bildGrill,
+  'glaeser-und-kruege': bildKruege,
+};
+
+const inventar = (await getCollection('leihinventar')).sort(
+  (a, b) => a.data.reihenfolge - b.data.reihenfolge,
+);
+
+const GRUPPEN = ['Überdachung', 'Sitzen und Stehen', 'Ausschank und Küche'];
+const gruppen = nachSchluessel(inventar, (i) => i.data.gruppe, GRUPPEN);
+---
+
+<Themenseite
+  titel="Events & Verleih"
+  beschreibung="Zelt, Garnituren, Zapfanlage und Grill zum Leihen. Oder feiert gleich bei uns im Brauereigarten oder im Festraum."
+  ueberschrift="Ihr feiert. Wir liefern."
+  vorspann="Vom Zirkuszelt bis zum Bierkrug. Und wenn Ihr keinen Platz habt, feiert Ihr einfach bei uns."
+  leitbild={leitbild}
+  leitbildAlt="Der Brauereigarten mit aufgebautem Festzelt"
+  abschlussTitel="Was braucht Ihr?"
+  abschlussAnfrage="verleih"
+  abschlussKnopf="Verleih anfragen"
+>
+  {/* ---------- Feiern in der Brauerei ---------- */}
+  <Abschnitt
+    titel="Feiern in der Brauerei"
+    vorspann="Runder Geburtstag, Vereinsausflug, Firmenfeier. Brauereigarten bei schönem Wetter, Festraum bei jedem anderen."
+  >
+    <div class="orte">
+      <figure class="einblenden">
+        <Bild quelle={garten} alt="Gäste im Brauereigarten" />
+        <figcaption>Der Brauereigarten</figcaption>
+      </figure>
+      <figure class="einblenden" style="--index: 1">
+        <Bild quelle={festraum} alt="Der Festraum der Brauerei mit gedeckten Tischen" />
+        <figcaption>Der Festraum</figcaption>
+      </figure>
+    </div>
+
+    <p class="orte-text textspalte">
+      Externes Catering ist möglich. Sagt uns, was Ihr vorhabt, dann finden wir
+      heraus, ob es passt.
+    </p>
+    <p class="orte-knopf">
+      <Knopf href={anfrageLink('feier')}>Feier anfragen</Knopf>
+    </p>
+  </Abschnitt>
+
+  {/* ---------- Leihinventar ---------- */}
+  <Abschnitt
+    titel="Leihinventar"
+    vorspann="Wir bringen alles vorbei und holen es wieder ab."
+  >
+    {
+      gruppen.map((gruppe) => (
+        <div class="inventar-gruppe">
+          <h3 class="inventar-gruppentitel">{gruppe.name}</h3>
+          <div class="inventar">
+            {gruppe.eintraege.map((stueck, i) => (
+              <article class="inventar-karte einblenden" style={`--index: ${i}`}>
+                <Bild
+                  quelle={BILDER[stueck.id]}
+                  alt={stueck.data.bildAlt}
+                  hinweis="Foto folgt"
+                  verhaeltnis="3 / 2"
+                  sizes="(max-width: 599px) 100vw, (max-width: 999px) 50vw, 30vw"
+                />
+                <div class="inventar-text">
+                  <h4>{stueck.data.name}</h4>
+                  {stueck.data.masse.length > 0 && (
+                    <ul class="inventar-masse">
+                      {stueck.data.masse.map((m) => (
+                        <li>{m}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+
+    {/* Sicherheitshinweis. Bewusst kein roter Alarmkasten: das ist ein
+        Hinweis, keine Fehlermeldung. */}
+    <aside class="sicherheitshinweis">
+      <Icon name="ph:warning-circle" width="24" height="24" aria-hidden="true" />
+      <div>
+        <p class="sicherheitshinweis-titel">Bei Sturm und Starkregen</p>
+        <p>
+          Die Sonnenschirme sind umgehend zu schließen und zu verzurren. Die
+          Standgewichte allein schützen nicht ausreichend, wenn eine Windböe
+          den Schirm erfasst.
+        </p>
+      </div>
+    </aside>
+
+    <p class="inventar-knopf">
+      <Knopf href={anfrageLink('verleih')}>Verleih anfragen</Knopf>
+    </p>
+  </Abschnitt>
+</Themenseite>
+
+<style>
+  .orte {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--db-space-lg);
+  }
+
+  .orte figcaption {
+    margin-top: var(--db-space-2xs);
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+  }
+
+  .orte-text {
+    margin-top: var(--db-space-lg);
+  }
+
+  .orte-knopf {
+    margin-top: var(--db-space-md);
+  }
+
+  @media (max-width: 767px) {
+    .orte {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* Drei benannte Gruppen statt einer Liste mit dreizehn Zeilen und einer
+     Haarlinie unter jeder davon. */
+  .inventar-gruppe + .inventar-gruppe {
+    margin-top: var(--db-space-2xl);
+  }
+
+  .inventar-gruppentitel {
+    font-size: var(--db-text-lg);
+    letter-spacing: var(--db-tracking-weit);
+    text-transform: uppercase;
+    color: var(--db-text-leise);
+    font-family: var(--db-font-text);
+    font-weight: var(--db-weight-medium);
+    padding-bottom: var(--db-space-2xs);
+    border-bottom: 1px solid var(--db-linie);
+  }
+
+  .inventar {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--db-space-lg);
+    margin-top: var(--db-space-lg);
+  }
+
+  .inventar-karte {
+    background: var(--karte-flaeche);
+    border-radius: var(--karte-radius);
+    overflow: hidden;
+  }
+
+  .inventar-karte :global(.bild),
+  .inventar-karte :global(.bild-platzhalter) {
+    border-radius: 0;
+  }
+
+  .inventar-text {
+    padding: var(--db-space-md);
+  }
+
+  .inventar-text h4 {
+    font-size: var(--db-text-lg);
+  }
+
+  .inventar-masse {
+    list-style: none;
+    margin: var(--db-space-2xs) 0 0;
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+    display: grid;
+    gap: 2px;
+  }
+
+  @media (max-width: 999px) {
+    .inventar {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 599px) {
+    .inventar {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .sicherheitshinweis {
+    display: flex;
+    gap: var(--db-space-sm);
+    background: var(--db-flaeche-hopfen);
+    border-radius: var(--karte-radius);
+    padding: var(--db-space-lg);
+    margin-top: var(--db-space-2xl);
+    max-width: var(--db-breite-eng);
+    color: var(--db-text);
+  }
+
+  .sicherheitshinweis :global(svg) {
+    flex-shrink: 0;
+    color: var(--db-text-hinweis);
+  }
+
+  .sicherheitshinweis-titel {
+    font-weight: var(--db-weight-semibold);
+  }
+
+  .inventar-knopf {
+    margin-top: var(--db-space-lg);
+  }
+</style>

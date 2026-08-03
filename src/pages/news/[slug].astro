@@ -1,0 +1,228 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+
+import Basis from '../../layouts/Basis.astro';
+import Bild from '../../komponenten/basis/Bild.astro';
+import { Icon } from 'astro-icon/components';
+import { formatDatum, isoDatum } from '../../lib/datum';
+import { BETRIEB } from '../../daten/betrieb';
+
+export async function getStaticPaths() {
+  const alle = (await getCollection('news')).sort((a, b) =>
+    b.data.datum.localeCompare(a.data.datum),
+  );
+
+  return alle.map((eintrag, i) => ({
+    params: { slug: eintrag.id },
+    props: {
+      eintrag,
+      // Neuer heisst: weiter oben in der absteigend sortierten Liste.
+      neuer: i > 0 ? alle[i - 1] : undefined,
+      aelter: i < alle.length - 1 ? alle[i + 1] : undefined,
+    },
+  }));
+}
+
+interface Props {
+  eintrag: CollectionEntry<'news'>;
+  neuer?: CollectionEntry<'news'>;
+  aelter?: CollectionEntry<'news'>;
+}
+
+const { eintrag, neuer, aelter } = Astro.props;
+const { Content } = await render(eintrag);
+
+const artikelMarkup = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: eintrag.data.titel,
+    description: eintrag.data.anriss,
+    datePublished: isoDatum(eintrag.data.datum),
+    inLanguage: 'de-DE',
+    author: { '@id': `${BETRIEB.domain}/#brauerei` },
+    publisher: { '@id': `${BETRIEB.domain}/#brauerei` },
+    mainEntityOfPage: `${BETRIEB.domain}/news/${eintrag.id}/`,
+  },
+];
+---
+
+<Basis
+  titel={eintrag.data.titel}
+  beschreibung={eintrag.data.anriss}
+  jsonLdZusatz={artikelMarkup}
+>
+  <article class="beitrag">
+    <header class="container beitrag-kopf">
+      <p class="beitrag-zurueck">
+        <a href="/news/">
+          <Icon name="ph:caret-left" width="16" height="16" aria-hidden="true" />
+          Alle News
+        </a>
+      </p>
+      <time datetime={isoDatum(eintrag.data.datum)} class="beitrag-datum">
+        {formatDatum(eintrag.data.datum)}
+      </time>
+      <h1>{eintrag.data.titel}</h1>
+    </header>
+
+    {
+      eintrag.data.bild && (
+        <div class="container beitrag-bild">
+          <Bild
+            quelle={eintrag.data.bild}
+            alt={eintrag.data.bildAlt ?? ''}
+            laden="eager"
+            sizes="(max-width: 767px) 100vw, 72rem"
+            breiten={[600, 900, 1200, 1600]}
+          />
+        </div>
+      )
+    }
+
+    <div class="container">
+      <div class="beitrag-text textspalte">
+        <Content />
+      </div>
+    </div>
+
+    <nav class="container beitrag-navi" aria-label="Weitere Beiträge">
+      {
+        aelter ? (
+          <a href={`/news/${aelter.id}/`} class="beitrag-navi-links">
+            <span class="beitrag-navi-label">
+              <Icon name="ph:caret-left" width="14" height="14" aria-hidden="true" />
+              Älterer Beitrag
+            </span>
+            <span class="beitrag-navi-titel">{aelter.data.titel}</span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        neuer && (
+          <a href={`/news/${neuer.id}/`} class="beitrag-navi-rechts">
+            <span class="beitrag-navi-label">
+              Neuerer Beitrag
+              <Icon name="ph:caret-right" width="14" height="14" aria-hidden="true" />
+            </span>
+            <span class="beitrag-navi-titel">{neuer.data.titel}</span>
+          </a>
+        )
+      }
+    </nav>
+  </article>
+</Basis>
+
+<style>
+  .beitrag-kopf {
+    padding-block: var(--db-space-xl) var(--db-space-lg);
+  }
+
+  .beitrag-zurueck a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--db-text-sm);
+    text-decoration: none;
+  }
+
+  .beitrag-zurueck a:hover {
+    text-decoration: underline;
+    text-underline-offset: var(--link-abstand);
+  }
+
+  .beitrag-datum {
+    display: block;
+    margin-top: var(--db-space-lg);
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+  }
+
+  .beitrag-kopf h1 {
+    margin-top: var(--db-space-2xs);
+    max-width: 20ch;
+  }
+
+  .beitrag-bild {
+    margin-bottom: var(--db-space-xl);
+  }
+
+  .beitrag-text :global(h2) {
+    font-size: var(--db-text-2xl);
+    margin-top: var(--db-space-xl);
+  }
+
+  .beitrag-text :global(h3) {
+    font-size: var(--db-text-xl);
+    margin-top: var(--db-space-lg);
+  }
+
+  .beitrag-text :global(p) {
+    margin-top: var(--db-space-sm);
+  }
+
+  .beitrag-text :global(ul),
+  .beitrag-text :global(ol) {
+    margin-top: var(--db-space-sm);
+    padding-left: var(--db-space-md);
+    display: grid;
+    gap: var(--db-space-3xs);
+  }
+
+  .beitrag-navi {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--db-space-lg);
+    margin-top: var(--db-space-3xl);
+    padding-top: var(--db-space-md);
+    border-top: 1px solid var(--db-linie);
+  }
+
+  .beitrag-navi a {
+    text-decoration: none;
+    color: var(--db-text);
+  }
+
+  .beitrag-navi-rechts {
+    text-align: right;
+  }
+
+  .beitrag-navi-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+  }
+
+  .beitrag-navi-rechts .beitrag-navi-label {
+    justify-content: flex-end;
+  }
+
+  .beitrag-navi-titel {
+    display: block;
+    margin-top: var(--db-space-3xs);
+    font-family: var(--db-font-display);
+    font-weight: var(--db-weight-semibold);
+    color: var(--db-text-ueberschrift);
+  }
+
+  .beitrag-navi a:hover .beitrag-navi-titel {
+    text-decoration: underline;
+    text-underline-offset: var(--link-abstand);
+  }
+
+  @media (max-width: 599px) {
+    .beitrag-navi {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .beitrag-navi-rechts {
+      text-align: left;
+    }
+    .beitrag-navi-rechts .beitrag-navi-label {
+      justify-content: flex-start;
+    }
+  }
+</style>

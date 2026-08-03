@@ -1,10 +1,10 @@
 ---
-name: Zirkuszelt
-gruppe: Überdachung
+name: "Zirkuszelt"
+gruppe: "Überdachung"
 masse:
   - 12 m Durchmesser
   - 113 m² Innenfläche
-bildAlt: Das aufgebaute Zirkuszelt im Brauereigarten
+bildAlt: "Das aufgebaute Zirkuszelt im Brauereigarten"
 reihenfolge: 1
 ---
 

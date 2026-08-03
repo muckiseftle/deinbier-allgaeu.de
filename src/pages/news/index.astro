@@ -1,0 +1,206 @@
+---
+import { getCollection } from 'astro:content';
+
+import Basis from '../../layouts/Basis.astro';
+import Bild from '../../komponenten/basis/Bild.astro';
+import { formatDatum, isoDatum, jahrAus } from '../../lib/datum';
+
+const alle = (await getCollection('news')).sort((a, b) =>
+  b.data.datum.localeCompare(a.data.datum),
+);
+
+const [neuester, ...uebrige] = alle;
+
+/* Jahresabschnitte statt einer endlosen Liste aus 46 Eintraegen. */
+const jahre = [...new Set(uebrige.map((n) => jahrAus(n.data.datum)))].sort((a, b) => b - a);
+---
+
+<Basis
+  titel="News"
+  beschreibung="Neues aus der Brauerei DEIN BIER: Termine, neue Biere, Feste und was sonst in Hausen passiert."
+>
+  <section class="seitenkopf">
+    <div class="container">
+      <h1>Aus der Brauerei</h1>
+      <p class="vorspann">Was bei uns gerade läuft.</p>
+    </div>
+  </section>
+
+  {/* ---------- Neuester Beitrag, doppelt so gross ---------- */}
+  {
+    neuester && (
+      <section class="container aufmacher-bereich">
+        <article class="aufmacher">
+          <a href={`/news/${neuester.id}/`} class="aufmacher-bild">
+            <Bild
+              quelle={neuester.data.bild}
+              alt={neuester.data.bildAlt ?? ''}
+              hinweis="Foto folgt"
+              verhaeltnis="16 / 9"
+              laden="eager"
+              sizes="(max-width: 767px) 100vw, 66vw"
+            />
+          </a>
+          <div class="aufmacher-text">
+            <time datetime={isoDatum(neuester.data.datum)} class="datum">
+              {formatDatum(neuester.data.datum)}
+            </time>
+            <h2>
+              <a href={`/news/${neuester.id}/`}>{neuester.data.titel}</a>
+            </h2>
+            <p>{neuester.data.anriss}</p>
+            <p class="weiterlesen">
+              <a href={`/news/${neuester.id}/`}>Weiterlesen</a>
+            </p>
+          </div>
+        </article>
+      </section>
+    )
+  }
+
+  {/* ---------- Jahresabschnitte ---------- */}
+  {
+    jahre.map((jahr) => (
+      <section class="jahr">
+        <div class="container">
+          <h2 class="jahr-titel" id={`jahr-${jahr}`}>
+            {jahr}
+          </h2>
+          <div class="beitraege">
+            {uebrige
+              .filter((n) => jahrAus(n.data.datum) === jahr)
+              .map((n, i) => (
+                <article class="beitrag einblenden" style={`--index: ${Math.min(i, 5)}`}>
+                  <a href={`/news/${n.id}/`} class="beitrag-bild">
+                    <Bild
+                      quelle={n.data.bild}
+                      alt={n.data.bildAlt ?? ''}
+                      hinweis="Foto folgt"
+                      verhaeltnis="16 / 9"
+                      sizes="(max-width: 599px) 100vw, (max-width: 999px) 50vw, 33vw"
+                    />
+                  </a>
+                  <time datetime={isoDatum(n.data.datum)} class="datum">
+                    {formatDatum(n.data.datum)}
+                  </time>
+                  <h3>
+                    <a href={`/news/${n.id}/`}>{n.data.titel}</a>
+                  </h3>
+                  <p>{n.data.anriss}</p>
+                </article>
+              ))}
+          </div>
+        </div>
+      </section>
+    ))
+  }
+</Basis>
+
+<style>
+  .seitenkopf {
+    padding-block: var(--db-space-2xl) var(--db-space-lg);
+  }
+
+  .aufmacher-bereich {
+    margin-bottom: var(--db-space-3xl);
+  }
+
+  .aufmacher {
+    display: grid;
+    grid-template-columns: 8fr 4fr;
+    gap: var(--db-space-xl);
+    align-items: center;
+  }
+
+  .aufmacher-bild {
+    display: block;
+    border-radius: var(--db-radius-lg);
+    overflow: hidden;
+  }
+
+  .aufmacher-text h2 {
+    margin-top: var(--db-space-3xs);
+  }
+
+  .aufmacher-text p {
+    margin-top: var(--db-space-sm);
+  }
+
+  @media (max-width: 899px) {
+    .aufmacher {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--db-space-md);
+    }
+  }
+
+  .jahr + .jahr {
+    margin-top: var(--db-space-3xl);
+  }
+
+  .jahr-titel {
+    font-size: var(--db-text-2xl);
+    color: var(--db-text-leise);
+    padding-bottom: var(--db-space-2xs);
+    border-bottom: 1px solid var(--db-linie);
+    scroll-margin-top: calc(var(--kopf-hoehe) + var(--db-space-md));
+  }
+
+  .beitraege {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--db-space-xl);
+    margin-top: var(--db-space-lg);
+  }
+
+  .beitrag-bild {
+    display: block;
+    border-radius: var(--db-radius-md);
+    overflow: hidden;
+  }
+
+  .beitrag h3 {
+    font-size: var(--db-text-lg);
+    margin-top: var(--db-space-3xs);
+  }
+
+  .beitrag p {
+    margin-top: var(--db-space-2xs);
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+  }
+
+  @media (max-width: 999px) {
+    .beitraege {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 599px) {
+    .beitraege {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .datum {
+    display: block;
+    margin-top: var(--db-space-sm);
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+  }
+
+  h2 a,
+  h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  h2 a:hover,
+  h3 a:hover {
+    text-decoration: underline;
+    text-underline-offset: var(--link-abstand);
+  }
+
+  .weiterlesen {
+    margin-top: var(--db-space-md) !important;
+  }
+</style>

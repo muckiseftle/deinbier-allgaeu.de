@@ -1,8 +1,8 @@
 ---
-name: Winterzicke
-kurz: Unser Bockbier in der Ein-Liter-Flasche, für die kalte Jahreszeit.
+name: "Winterzicke"
+kurz: "Unser Bockbier in der Ein-Liter-Flasche, für die kalte Jahreszeit."
 bild: ../../bilder/winterzicke.png
-bildAlt: Die Ein-Liter-Flasche Winterzicke
+bildAlt: "Die Ein-Liter-Flasche Winterzicke"
 reihenfolge: 5
 ---
 
