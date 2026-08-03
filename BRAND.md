@@ -414,11 +414,36 @@ für Bereiche („10–12 Uhr"), Gedankenstrich mit Leerzeichen — so.
   ohne Einwilligung abmahnfähig, weil dabei die IP-Adresse an Google in die USA übertragen wird.
 - Ausgeliefert wird **nur `woff2`**, nur der **Subset `latin`** (enthält ä ö ü ß vollständig).
   Kein `latin-ext`, kein `cyrillic`, kein `vietnamese`.
-- Bei den variablen Schnitten: **nur die tatsächlich genutzten Achsenbereiche** ausliefern.
+- Die `@font-face`-Regeln werden **von Hand geschrieben**, nicht aus dem Fontsource-Paket
+  importiert. Dessen `wght.css` enthält alle Subsets auf einmal.
 - Jede Datei mit `font-display: swap`.
-- Die zwei Dateien, die den ersten Bildschirm tragen (Display + Text), per
+- Die zwei Dateien, die den ersten Bildschirm tragen, per
   `<link rel="preload" as="font" type="font/woff2" crossorigin>` vorladen.
-- Erwartetes Gewicht: **unter 90 KB für beide Familien zusammen**.
+
+**Tatsächliches Gewicht, gemessen am 03.08.2026:**
+
+| Datei | Größe | Rolle | Preload |
+|---|---|---|---|
+| `vollkorn-latin.woff2` | 45,3 KB | Überschriften, Vorspann, Zahlen | ja |
+| `work-sans-latin.woff2` | 49,1 KB | Fließtext | ja |
+| `vollkorn-latin-italic.woff2` | 46,4 KB | Zitate, Signaturzeile | nein |
+| **Summe** | **140,8 KB** | | 94,4 KB kritisch |
+
+> **Korrektur zur ersten Schätzung.** In Phase 1 stand hier „unter 90 KB für beide Familien
+> zusammen". Das war zu optimistisch: Variable Schriften mit dem Gewichtsbereich 400–900
+> liegen je Datei bei 45 bis 50 KB. Der reale Wert ist 140,8 KB.
+>
+> Entscheidend ist aber nicht die Summe, sondern was den ersten Bildschirm blockiert:
+> **94,4 KB**. Die kursive Fassung wird nur für Zitate und die Signaturzeile in der Fußzeile
+> gebraucht, beides unterhalb des ersten Bildschirms, und lädt deshalb nachrangig.
+>
+> Zum Vergleich: Ein einziges unoptimiertes Foto der Altseite ist 770 KB groß. Nach dem ersten
+> Besuch liegen die Schriften im Browser-Zwischenspeicher.
+>
+> Weitere Verkleinerung wäre möglich, indem die Schriften auf den deutschen Zeichenvorrat
+> zugeschnitten werden (grob 30 bis 40 Prozent weniger). Das bräuchte ein zusätzliches Werkzeug
+> im Bauprozess und ist als **freiwillige Verbesserung für Phase 8** vorgemerkt, nicht als
+> Voraussetzung.
 
 ---
 

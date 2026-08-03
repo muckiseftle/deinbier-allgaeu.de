@@ -565,28 +565,40 @@ blockquote {
 
 - [ ] **Schritt 4: Schriften einbinden**
 
-Die Fontsource-Pakete liefern viele Subsets. Ausgeliefert wird **nur `latin`, nur `woff2`**.
-In `src/layouts/Basis.astro` (Aufgabe 4) wird importiert:
+> **Korrektur beim Ausführen am 03.08.2026.** Der ursprüngliche Plan sah
+> `import '@fontsource-variable/vollkorn/latin.css'` vor. **Diese Datei existiert nicht.**
+> Das Paket liefert `index.css`, `wght.css` und `wght-italic.css`, und `wght.css` enthält
+> **alle** Subsets auf einmal: kyrillisch, kyrillisch-erweitert, griechisch, latin,
+> latin-erweitert, vietnamesisch. Ein Import hätte zwölf Schriftdateien in den Build gezogen.
 
-```ts
-import '@fontsource-variable/vollkorn/latin.css';
-import '@fontsource-variable/work-sans/latin.css';
+Stattdessen: die drei benötigten Dateien nach `public/schriften/` kopieren und die
+`@font-face`-Regeln in `src/styles/schriften.css` von Hand schreiben.
+
+```powershell
+New-Item -ItemType Directory -Force public\schriften
+$v = "node_modules\@fontsource-variable\vollkorn\files"
+$w = "node_modules\@fontsource-variable\work-sans\files"
+Copy-Item "$v\vollkorn-latin-wght-normal.woff2" public\schriften\vollkorn-latin.woff2
+Copy-Item "$v\vollkorn-latin-wght-italic.woff2" public\schriften\vollkorn-latin-italic.woff2
+Copy-Item "$w\work-sans-latin-wght-normal.woff2" public\schriften\work-sans-latin.woff2
 ```
 
-- [ ] **Schritt 5: Prüfen, dass wirklich nur `latin` mitkommt**
+Der `unicode-range` für das Subset `latin` wird aus `wght.css` des Pakets übernommen.
+
+- [ ] **Schritt 5: Gewicht prüfen**
 
 Ausführen:
-```bash
-node -e "const fs=require('fs');const d='node_modules/@fontsource-variable/vollkorn';console.log(fs.readdirSync(d).filter(f=>f.endsWith('.css')).join('\n'))"
+```powershell
+Get-ChildItem public\schriften | Select-Object Name, @{n='KB';e={[math]::Round($_.Length/1KB,1)}}
 ```
-Erwartet: eine Liste, die `latin.css` enthält.
-Nach dem ersten echten Build (Aufgabe 15) zusätzlich prüfen:
-```bash
-node -e "const fs=require('fs');const p='dist/_astro';const f=fs.readdirSync(p).filter(n=>/\.(woff2|ttf)$/.test(n));console.log(f.join('\n'));console.log('Anzahl:',f.length)"
-```
-Erwartet: ausschließlich `.woff2`, höchstens vier Dateien, zusammen unter 90 KB.
-Falls Dateien für `cyrillic`, `greek` oder `vietnamese` auftauchen: Import auf die
-Einzeldateien umstellen (`vollkorn/latin-wght-normal.css`).
+
+Gemessen: Vollkorn normal 45,3 KB, Work Sans normal 49,1 KB, Vollkorn kursiv 46,4 KB.
+**Summe 140,8 KB**, davon **94,4 KB kritisch** (die kursive Fassung wird nur unterhalb des
+ersten Bildschirms gebraucht und daher nicht vorgeladen).
+
+Die Schätzung „unter 90 KB" aus Phase 1 war zu optimistisch; Begründung und Einordnung
+stehen in `BRAND.md` Abschnitt 4.5. Nach dem Build zusätzlich prüfen, dass **keine**
+Dateien für `cyrillic`, `greek` oder `vietnamese` in `dist/` liegen.
 
 - [ ] **Schritt 6: Commit**
 

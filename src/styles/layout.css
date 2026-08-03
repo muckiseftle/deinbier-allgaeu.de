@@ -1,0 +1,94 @@
+/* =============================================================================
+   Container, Raster, Abschnittsrhythmus.
+   Bewusst wenige Hilfsklassen: alles Weitere lebt in den Komponenten.
+   ============================================================================= */
+
+.container {
+  width: 100%;
+  max-width: var(--db-breite-inhalt);
+  margin-inline: auto;
+  padding-inline: var(--db-rand);
+}
+
+.container-weit {
+  width: 100%;
+  max-width: var(--db-breite-weit);
+  margin-inline: auto;
+  padding-inline: var(--db-rand);
+}
+
+.textspalte {
+  max-width: var(--db-mass-text);
+}
+
+/* Unten bewusst mehr als oben: optisch gleicher Abstand verlangt unten
+   etwas mehr, sonst wirkt der Abschnitt kopflastig. */
+.abschnitt {
+  padding-block: var(--db-abschnitt-oben) var(--db-abschnitt-unten);
+}
+
+/* -----------------------------------------------------------------------------
+   Zwoelfspaltiges Raster.
+   CSS Grid, nirgends Flexbox-Prozentrechnung.
+   Asymmetrische Teilungen sind 7/5 oder 8/4, niemals 6/6 (DESIGN.md 6.1).
+   -------------------------------------------------------------------------- */
+
+.raster {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--db-space-md);
+}
+
+.spalte-4 { grid-column: span 4; }
+.spalte-5 { grid-column: span 5; }
+.spalte-6 { grid-column: span 6; }
+.spalte-7 { grid-column: span 7; }
+.spalte-8 { grid-column: span 8; }
+.spalte-12 { grid-column: 1 / -1; }
+
+/* Unter 768 px faellt jedes Raster auf eine Spalte. Ohne diese Regel
+   quetschen sich asymmetrische Teilungen auf dem Handy zusammen. */
+@media (max-width: 767px) {
+  .raster {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--db-space-lg);
+  }
+
+  .raster > * {
+    grid-column: 1 / -1;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Einblenden beim Scrollen.
+   Wird von einem IntersectionObserver umgeschaltet, nie von einem
+   Scroll-Ereignis. Bewegt werden nur transform und opacity.
+   -------------------------------------------------------------------------- */
+
+.einblenden {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity var(--db-dauer-ruhig) var(--db-easing-standard),
+    transform var(--db-dauer-ruhig) var(--db-easing-standard);
+}
+
+.einblenden.sichtbar {
+  opacity: 1;
+  transform: none;
+}
+
+/* Gestaffeltes Einblenden fuer Listen. Kurze Versaetze: lange Verzoegerungen
+   lassen die Seite langsam wirken. */
+.einblenden[style*='--index'] {
+  transition-delay: calc(var(--index) * var(--db-staffel));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .einblenden {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    transition-delay: 0ms;
+  }
+}

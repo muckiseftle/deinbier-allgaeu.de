@@ -1,0 +1,128 @@
+/* =============================================================================
+   Reset. Bewusst knapp: was nicht stoert, bleibt Browserstandard.
+   ============================================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--db-flaeche);
+  color: var(--db-text);
+  font-family: var(--db-font-text);
+  font-size: var(--db-text-base);
+  line-height: var(--db-leading-text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+ul,
+ol {
+  padding-left: 0;
+}
+
+/* -----------------------------------------------------------------------------
+   Fokus. Niemals outline: none ohne Ersatz.
+   -------------------------------------------------------------------------- */
+
+:focus-visible {
+  outline: var(--db-fokus-breite) solid var(--db-fokus-farbe);
+  outline-offset: var(--db-fokus-versatz);
+  border-radius: var(--db-radius-xs);
+}
+
+/* Auf dunklem Grund braucht der Ring die helle Farbe, sonst verschwindet er. */
+.abschnitt-dunkel :focus-visible,
+.fusszeile :focus-visible,
+.zitatband :focus-visible {
+  outline-color: var(--db-fokus-farbe-invers);
+}
+
+/* -----------------------------------------------------------------------------
+   Nur fuer Screenreader
+   -------------------------------------------------------------------------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* -----------------------------------------------------------------------------
+   Sprungmarke: erstes fokussierbares Element jeder Seite
+   -------------------------------------------------------------------------- */
+
+.sprungmarke {
+  position: absolute;
+  top: var(--db-space-sm);
+  left: var(--db-space-sm);
+  z-index: var(--db-ebene-sprungmarke);
+  transform: translateY(-250%);
+  background: var(--sprung-flaeche);
+  color: var(--sprung-text);
+  padding: var(--db-space-2xs) var(--db-space-sm);
+  border-radius: var(--db-radius-md);
+  text-decoration: none;
+  font-weight: var(--db-weight-medium);
+  transition: transform var(--db-dauer-schnell) var(--db-easing-standard);
+}
+
+.sprungmarke:focus {
+  transform: translateY(0);
+}
+
+/* -----------------------------------------------------------------------------
+   Kornebene. Fest, faengt keine Klicks, liegt ueber allem.
+   Nie an einen scrollenden Container haengen: das erzwingt dauerhaftes
+   Neuzeichnen auf der GPU und kostet auf dem Handy Bilder pro Sekunde.
+   -------------------------------------------------------------------------- */
+
+.korn {
+  position: fixed;
+  inset: 0;
+  z-index: var(--db-ebene-korn);
+  pointer-events: none;
+  opacity: var(--db-korn-deckkraft);
+  background-image: var(--db-korn);
+  mix-blend-mode: multiply;
+}

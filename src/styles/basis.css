@@ -1,0 +1,138 @@
+/* =============================================================================
+   Grundtypografie und Satzregeln.
+   Display ist Vollkorn, Text ist Work Sans. Vollkorn ist KEINE
+   Fliesstextschrift: sie bekommt Ueberschriften, Vorspaenne, Zitate und Zahlen.
+   ============================================================================= */
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--db-font-display);
+  color: var(--db-text-ueberschrift);
+  font-weight: var(--db-weight-bold);
+  line-height: var(--db-leading-ueberschrift);
+  letter-spacing: var(--db-tracking-ueberschrift);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--db-text-4xl);
+  line-height: var(--db-leading-eng);
+  letter-spacing: var(--db-tracking-hero);
+}
+
+h2 {
+  font-size: var(--db-text-3xl);
+}
+
+h3 {
+  font-size: var(--db-text-2xl);
+  font-weight: var(--db-weight-semibold);
+}
+
+h4 {
+  font-size: var(--db-text-xl);
+  font-weight: var(--db-weight-semibold);
+}
+
+/* text-wrap: pretty verhindert einzelne Woerter in der letzten Zeile.
+   hyphens: auto ist im Deutschen Pflicht, sonst reissen Komposita
+   wie "Brauereigarnituren" das Layout auf. */
+p,
+li,
+dd {
+  text-wrap: pretty;
+  hyphens: auto;
+}
+
+p + p {
+  margin-top: var(--db-space-sm);
+}
+
+a {
+  color: var(--link-farbe);
+  text-decoration-line: underline;
+  text-underline-offset: var(--link-abstand);
+  text-decoration-thickness: var(--link-staerke);
+  transition:
+    text-underline-offset var(--db-dauer-schnell) var(--db-easing-standard),
+    text-decoration-thickness var(--db-dauer-schnell) var(--db-easing-standard);
+}
+
+/* Hover-Reaktionen nur auf Geraeten mit echtem Zeiger. Auf Tastgeraeten
+   loest ein Tippen sonst faelschlich den Hover-Zustand aus. */
+@media (hover: hover) and (pointer: fine) {
+  a:hover {
+    text-underline-offset: var(--link-abstand-hover);
+    text-decoration-thickness: var(--link-staerke-hover);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a {
+    transition: none;
+  }
+}
+
+strong {
+  font-weight: var(--db-weight-semibold);
+}
+
+/* -----------------------------------------------------------------------------
+   Zitate. Vollkorn kursiv hat ausgepraegte Unterlaengen bei g j p q y.
+   Ohne diese zwei Werte werden sie in Displaygraden unten abgeschnitten.
+   -------------------------------------------------------------------------- */
+
+blockquote {
+  font-family: var(--db-font-display);
+  font-style: italic;
+  font-weight: var(--db-weight-normal);
+  line-height: var(--db-kursiv-leading);
+  padding-bottom: var(--db-kursiv-reserve);
+}
+
+/* -----------------------------------------------------------------------------
+   Wiederkehrende Textrollen
+   -------------------------------------------------------------------------- */
+
+/* Etikettenzeile ueber einer Ueberschrift.
+   Hoechstens dreimal je Seite (DESIGN.md 6.3). */
+.etikettenzeile {
+  font-family: var(--db-font-text);
+  font-size: var(--db-text-sm);
+  font-weight: var(--db-weight-medium);
+  letter-spacing: var(--db-tracking-weit);
+  text-transform: uppercase;
+  color: var(--db-text-leise);
+}
+
+/* Vorspann unter einer Ueberschrift */
+.vorspann {
+  font-family: var(--db-font-display);
+  font-size: var(--db-text-lg);
+  font-weight: var(--db-weight-normal);
+  line-height: var(--db-leading-normal);
+  color: var(--db-text);
+  max-width: var(--db-mass-text);
+}
+
+/* Signaturzeile "zu Hause(n) gebraut" aus dem Logo */
+.signatur {
+  font-family: var(--db-font-display);
+  font-style: italic;
+  font-weight: var(--db-weight-normal);
+  line-height: var(--db-kursiv-leading);
+  padding-bottom: var(--db-kursiv-reserve);
+}
+
+/* Zahlen in Tabellen und Zahlenbaendern gleich breit setzen */
+.zahl {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Leiser Nebentext */
+.leise {
+  color: var(--db-text-leise);
+  font-size: var(--db-text-sm);
+}
