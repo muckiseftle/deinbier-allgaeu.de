@@ -69,11 +69,64 @@ for (const ansicht of ANSICHTEN) {
     const dateiname = (pfad === '/' ? 'start' : pfad.replace(/^\/|\/$/g, '').replace(/\//g, '-'));
 
     await seite.goto(url, { waitUntil: 'networkidle' });
+
     // Einblendungen beim Scrollen ausloesen, damit nichts unsichtbar bleibt.
     await seite.evaluate(() =>
       document.querySelectorAll('.einblenden').forEach((el) => el.classList.add('sichtbar')),
     );
-    await seite.waitForTimeout(400);
+
+    /* Einmal ganz durchscrollen und zurueck. Ohne das laedt loading="lazy"
+       die Bilder unterhalb des ersten Bildschirms nicht, und der
+       Vollseiten-Screenshot zeigt leere Flaechen.
+
+       Die Schleife ist nach oben begrenzt, und das Warten auf die Bilder
+       bekommt eine Zeitgrenze: ein Bild, das nie laedt, wuerde sonst
+       endlos blockieren. */
+    /* Zuverlaessiger als Scrollen: alle Bilder hart auf sofortiges Laden
+       umstellen. Reines Scrollen laedt in der Praxis nur die naechsten ein
+       bis zwei Bildschirme nach. */
+    await seite.evaluate(() => {
+      document.querySelectorAll('img[loading="lazy"]').forEach((b) => {
+        b.setAttribute('loading', 'eager');
+        b.setAttribute('fetchpriority', 'high');
+      });
+      document.querySelectorAll('source[srcset]').forEach((q) => {
+        // Neuzuweisung stoesst die Auswahl der Quelle erneut an.
+        q.srcset = q.srcset;
+      });
+    });
+
+    await seite.evaluate(async () => {
+      const schritt = window.innerHeight;
+      const hoehe = Math.min(document.body.scrollHeight, 40000);
+      for (let y = 0; y < hoehe; y += schritt) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 220));
+      }
+      window.scrollTo(0, 0);
+    });
+
+    await seite.evaluate(async () => {
+      const wartenAufBild = (b) =>
+        b.complete
+          ? Promise.resolve()
+          : new Promise((r) => {
+              const fertig = () => r(undefined);
+              b.addEventListener('load', fertig, { once: true });
+              b.addEventListener('error', fertig, { once: true });
+              setTimeout(fertig, 4000);
+            });
+      await Promise.all(Array.from(document.images).map(wartenAufBild));
+    });
+
+    /* Die klebende Kopfzeile wuerde beim Vollseiten-Bild mitten in der Seite
+       auftauchen, wo sie beim Scrollen gerade stand. Fuer die Aufnahme
+       einmalig loesen. */
+    await seite.addStyleTag({
+      content: '.kopfzeile { position: static !important; transform: none !important; }',
+    });
+
+    await seite.waitForTimeout(500);
 
     const datei = join(ziel, `${dateiname}-${ansicht.name}.png`);
     await seite.screenshot({ path: datei, fullPage: true });

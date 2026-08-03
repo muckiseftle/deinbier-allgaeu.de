@@ -6,7 +6,8 @@ gebinde:
   - 16er Holzträger
   - 6er Träger (0,3 l)
   - Fass 10, 20, 30 und 50 l
-bildAlt: Eine Flasche DEIN BIER Festbier
+bild: ../../bilder/rund-festbier.png
+bildAlt: Das runde Etikett des DEIN BIER Festbier
 reihenfolge: 5
 ---
 

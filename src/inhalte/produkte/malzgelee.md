@@ -1,7 +1,8 @@
 ---
 name: Malzgelee
 kurz: Aus warmer ungehopfter Bierwürze. Natur, Chili, Zimt oder Orange.
-bildAlt: Gläser mit Malzgelee in verschiedenen Sorten
+bild: ../../bilder/malzgelee.png
+bildAlt: Ein Glas DEIN BIER Malzgelee
 reihenfolge: 3
 ---
 

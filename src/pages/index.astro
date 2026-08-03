@@ -14,6 +14,18 @@ import { BETRIEB } from '../daten/betrieb';
 import { formatDatum, isoDatum } from '../lib/datum';
 import { nachSchluessel } from '../lib/gruppieren';
 
+/* Echte Fotos aus dem Bestand der Brauerei. Kein Stockfoto, kein
+ * erzeugtes Bild: PROJEKT.md Abschnitt 7 erlaubt KI-Bilder ausdruecklich
+ * nur fuer Texturen und Platzhalter, niemals fuer Brauerei- oder
+ * Produktaufnahmen. */
+import heroMobil from '../bilder/brauen-auswaerts-1.jpg';
+import brauscheuneInnen from '../bilder/gaertanks.jpg';
+import seminarBrauerei from '../bilder/brauseminar-runde.jpg';
+import seminarMobil from '../bilder/brauen-auswaerts-2.jpg';
+import zirkuszelt from '../bilder/zirkuszelt.png';
+import brauereigarten from '../bilder/brauereigarten-festzelt.jpg';
+import fewoBalkon from '../bilder/fewo-balkon.jpg';
+
 const alleBiere = await getCollection('biere');
 
 /* Eigene Reihenfolge fuer das Bento. Die Reihenfolge im Frontmatter gilt
@@ -76,9 +88,9 @@ const BENTO_SPALTEN: Record<string, string> = {
       <div class="spalte-5 hero-bild">
         <Etikettenrahmen>
           <Bild
-            alt="Die mobile Brauerei auf dem Anhänger, aufgebaut bei einem Fest"
-            hinweis="Foto der mobilen Brauerei folgt"
-            verhaeltnis="4 / 3"
+            quelle={heroMobil}
+            alt="Die mobile Brauanlage aufgebaut bei einem Kunden, Gäste stehen darum herum"
+            sizes="(max-width: 767px) 100vw, 40vw"
             laden="eager"
           />
         </Etikettenrahmen>
@@ -93,11 +105,10 @@ const BENTO_SPALTEN: Record<string, string> = {
     <div class="container-weit">
       <div class="band-rahmen einblenden">
         <Bild
-          alt="Die Brauscheune in Hausen im Abendlicht"
-          hinweis="Foto der Brauscheune folgt"
-          verhaeltnis="12 / 5"
+          quelle={brauscheuneInnen}
+          alt="Die Gär- und Lagertanks aus Edelstahl in der Brauscheune"
           sizes="100vw"
-          breiten={[800, 1200, 1600, 2400]}
+          breiten={[800, 1200, 1600, 1920]}
         />
         <div class="band-text">
           <h2>Klein, aber großartig.</h2>
@@ -161,9 +172,8 @@ const BENTO_SPALTEN: Record<string, string> = {
     <div class="seminar">
       <article class="seminar-halb einblenden">
         <Bild
+          quelle={seminarBrauerei}
           alt="Teilnehmer beim Brauseminar in der Brauscheune"
-          hinweis="Foto vom Seminar folgt"
-          verhaeltnis="3 / 2"
         />
         <h3>In der Brauerei</h3>
         <p>
@@ -177,9 +187,8 @@ const BENTO_SPALTEN: Record<string, string> = {
 
       <article class="seminar-halb einblenden" style="--index: 1">
         <Bild
-          alt="Die mobile Brauanlage aufgebaut bei einem Kunden"
-          hinweis="Foto der mobilen Anlage folgt"
-          verhaeltnis="3 / 2"
+          quelle={seminarMobil}
+          alt="Brauseminar mit der mobilen Anlage bei einem Kunden zu Hause"
         />
         <h3>Oder bei Euch daheim</h3>
         <p>
@@ -205,9 +214,8 @@ const BENTO_SPALTEN: Record<string, string> = {
     <div class="doppelkarten">
       <article class="karte einblenden">
         <Bild
-          alt="Das Zirkuszelt mit 12 Metern Durchmesser, aufgebaut"
-          hinweis="Foto des Zirkuszelts folgt"
-          verhaeltnis="3 / 2"
+          quelle={zirkuszelt}
+          alt="Das Zirkuszelt mit 12 Metern Durchmesser, aufgebaut auf einer Wiese"
         />
         <div class="karte-text">
           <h3>Leihinventar</h3>
@@ -221,9 +229,8 @@ const BENTO_SPALTEN: Record<string, string> = {
 
       <article class="karte einblenden" style="--index: 1">
         <Bild
+          quelle={brauereigarten}
           alt="Der Brauereigarten mit aufgebautem Festzelt"
-          hinweis="Foto des Brauereigartens folgt"
-          verhaeltnis="3 / 2"
         />
         <div class="karte-text">
           <h3>Feiern in der Brauerei</h3>
@@ -251,9 +258,8 @@ const BENTO_SPALTEN: Record<string, string> = {
       </div>
       <div class="spalte-6 fewo-bild einblenden" style="--index: 1">
         <Bild
+          quelle={fewoBalkon}
           alt="Der Balkon der Ferienwohnung mit Blick über die Ostallgäuer Landschaft"
-          hinweis="Foto der Ferienwohnung folgt"
-          verhaeltnis="4 / 5"
         />
       </div>
     </div>

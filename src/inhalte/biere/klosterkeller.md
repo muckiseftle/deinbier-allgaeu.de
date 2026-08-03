@@ -6,7 +6,8 @@ gebinde:
   - 16er Holzträger
   - 6er Träger (0,3 l)
   - Fass 10, 20, 30 und 50 l
-bildAlt: Eine Flasche DEIN BIER Klosterkeller
+bild: ../../bilder/rund-klosterkeller.png
+bildAlt: Das runde Etikett des Klosterkeller
 reihenfolge: 2
 besonderheit: Gebraut für die Erzabtei St. Ottilien
 ---

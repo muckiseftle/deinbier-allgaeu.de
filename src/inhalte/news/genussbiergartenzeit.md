@@ -2,6 +2,7 @@
 titel: Genussbiergartenzeit
 datum: "2026-06-17"
 anriss: Feierabendbiergarten und Familienbiergarten im Brauereihof. Grill steht bereit, eigene Speisen willkommen.
+bild: ../../bilder/feier-brauereigarten.jpg
 bildAlt: Biergarnituren im Brauereihof
 veraltet: true
 ---

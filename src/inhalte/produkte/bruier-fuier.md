@@ -1,6 +1,7 @@
 ---
 name: Bruier Fuier
 kurz: Unser Bierbrand aus dem Bockbier, im Holzfass gereift.
+bild: ../../bilder/bruier-fuier.png
 bildAlt: Eine Flasche Bruier Fuier, der Bierbrand aus dem Bockbier
 reihenfolge: 2
 abAchtzehn: true

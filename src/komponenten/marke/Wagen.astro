@@ -3,9 +3,15 @@
  * Signature-Element. Der Pritschenwagen mit dem Fass, freigelegt aus dem
  * runden Bestandslogo, wo er seit 2016 steht.
  *
- * PLATZHALTER: Die Pfade sind nach der Silhouette des vorhandenen
- * 300-px-PNG nachgezeichnet (content/alt/dateien/logo_rund.png). Sie werden
- * ersetzt, sobald die Vektordatei vorliegt (OFFENE-FRAGEN Nr. 16).
+ * Nachgezeichnet nach einer achtfach vergroesserten Ansicht des Logos
+ * (content/alt/dateien/logo_rund.png). Wichtig fuer die Wiedererkennung:
+ *   - gefuellter Scherenschnitt, keine Strichzeichnung
+ *   - Oldtimer-Form: lange Motorhaube links, Fahrerhaus dahinter
+ *   - das Fass liegt quer und ragt hoeher als das Fahrerhausdach
+ *   - Seitenfenster und Radnaben sind Aussparungen, keine aufgesetzten Linien
+ *
+ * PLATZHALTER: Wird durch die Pfade aus der Vektordatei ersetzt, sobald
+ * diese vorliegt (OFFENE-FRAGEN Nr. 16).
  *
  * Dies ist der einzige handgezeichnete Vektor im Projekt. Die Ausnahme von
  * der Regel gegen selbst gezeichnete SVG greift, weil es sich nicht um eine
@@ -23,44 +29,73 @@ const { breite = 56, einfahrt = false, klasse } = Astro.props;
 <svg
   class:list={['wagen', { 'wagen-einfahrt': einfahrt }, klasse]}
   width={breite}
-  viewBox="0 0 120 56"
-  fill="none"
-  stroke="currentColor"
-  stroke-width="2"
-  stroke-linecap="round"
-  stroke-linejoin="round"
+  viewBox="0 0 200 100"
+  fill="currentColor"
   role="img"
   aria-labelledby="wagen-titel"
 >
   <title id="wagen-titel">Die mobile Brauerei auf dem Anhänger</title>
 
+  <!-- Fass. Liegt quer auf der Pritsche und ragt ueber das Dach.
+       Die Daubenwoelbung macht die Fassform erst erkennbar. -->
+  <path
+    d="M100 20
+       C 118 16, 146 16, 164 20
+       C 168 21, 170 26, 170 36
+       C 170 46, 168 51, 164 52
+       C 146 56, 118 56, 100 52
+       C 96 51, 94 46, 94 36
+       C 94 26, 96 21, 100 20 Z"
+    opacity="0.92"
+  />
+  <!-- Fassreifen als Aussparungen -->
+  <path
+    d="M112 18.6 C 114.4 18.3, 116.8 18.1, 119.2 18 L119.2 54 C 116.8 53.9, 114.4 53.7, 112 53.4 Z
+       M145 18.1 C 147.4 18.2, 149.8 18.4, 152.2 18.7 L152.2 53.3 C 149.8 53.6, 147.4 53.8, 145 53.9 Z"
+    fill="var(--db-flaeche)"
+    opacity="0.55"
+  />
+
+  <!-- Wagenkoerper. Ein Pfad mit evenodd: das Seitenfenster ist eine
+       echte Aussparung, kein aufgesetztes Rechteck. -->
+  <path
+    fill-rule="evenodd"
+    d="M14 78
+       L14 62
+       C 14 57, 16 54, 21 53
+       L58 48
+       L66 33
+       C 67.5 30.5, 69.5 29, 73 29
+       L92 29
+       C 96 29, 98 31, 98 35
+       L98 54
+       L172 54
+       L172 78
+       Z
+       M74 35
+       L69 47
+       L90 44
+       L90 35
+       Z"
+  />
+
+  <!-- Raeder. Nabe als Aussparung, damit sie auch bei 44 px lesbar bleiben. -->
+  <path
+    fill-rule="evenodd"
+    d="M42 62 A16 16 0 1 1 42 94 A16 16 0 1 1 42 62 Z
+       M42 72 A6 6 0 1 0 42 84 A6 6 0 1 0 42 72 Z
+       M144 62 A16 16 0 1 1 144 94 A16 16 0 1 1 144 62 Z
+       M144 72 A6 6 0 1 0 144 84 A6 6 0 1 0 144 72 Z"
+  />
+
   <!-- Bodenlinie -->
-  <path d="M2 44h116" stroke-width="1.5" opacity="0.45" />
-
-  <!-- Fahrerhaus -->
-  <path d="M8 38V22a3 3 0 0 1 3-3h14v19" />
-  <path d="M13 19v-6a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v6" />
-  <path d="M15 13h7" stroke-width="1.5" opacity="0.6" />
-
-  <!-- Ladeflaeche -->
-  <path d="M25 38V26h38a3 3 0 0 1 3 3v9" />
-  <path d="M66 38h44V30a3 3 0 0 0-3-3H92" />
-  <path d="M92 38V27" />
-
-  <!-- Fass auf der Ladeflaeche -->
-  <ellipse cx="79" cy="17" rx="6" ry="9" transform="rotate(90 79 17)" />
-  <path d="M70 12v10M79 11v12M88 12v10" stroke-width="1.5" opacity="0.7" />
-
-  <!-- Raeder -->
-  <circle cx="34" cy="42" r="6" />
-  <circle cx="98" cy="42" r="6" />
-  <circle cx="34" cy="42" r="1.5" fill="currentColor" stroke="none" />
-  <circle cx="98" cy="42" r="1.5" fill="currentColor" stroke="none" />
+  <rect x="0" y="93" width="200" height="2.5" rx="1.25" opacity="0.35" />
 </svg>
 
 <style>
   .wagen {
     color: var(--wagen-farbe);
+    height: auto;
   }
 
   /* Der eine orchestrierte Moment: der Wagen faehrt einmal herein und haelt.

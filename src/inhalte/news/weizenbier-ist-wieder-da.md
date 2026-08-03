@@ -2,7 +2,8 @@
 titel: Weizenbier ist wieder da
 datum: "2026-06-17"
 anriss: Über die Sommermonate gibt es wieder DEIN BIER Weizen, ab sofort im Brauereiverkauf.
-bildAlt: Ein Weizenglas mit kräftiger Schaumkrone
+bild: ../../bilder/kiste-weizen.png
+bildAlt: Ein Holzträger DEIN BIER Weizen
 veraltet: false
 ---
 

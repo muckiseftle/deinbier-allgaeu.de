@@ -6,7 +6,8 @@ gebinde:
   - 16er Holzträger
   - 6er Träger (0,3 l)
   - Fass 10, 20, 30 und 50 l
-bildAlt: Eine Flasche DEIN BIER Weizen
+bild: ../../bilder/rund-weizen.png
+bildAlt: Das runde Etikett des DEIN BIER Weizen
 reihenfolge: 3
 ---
 

@@ -2,7 +2,8 @@
 titel: Bock auf Bock?
 datum: "2026-02-27"
 anriss: Das Bockbier ist frisch aus der Füllerei zurück. Nur solange der Vorrat reicht.
-bildAlt: Eine Flasche Bockbier
+bild: ../../bilder/kiste-bock.png
+bildAlt: Ein Holzträger DEIN BIER Bock
 veraltet: true
 ---
 

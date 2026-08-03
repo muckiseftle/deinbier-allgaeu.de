@@ -6,7 +6,8 @@ gebinde:
   - 16er Holzträger
   - 6er Träger (0,3 l)
   - Fass 10, 20, 30 und 50 l
-bildAlt: Eine Flasche DEIN BIER Bock
+bild: ../../bilder/rund-bock.png
+bildAlt: Das runde Etikett des DEIN BIER Bock
 reihenfolge: 4
 ---
 

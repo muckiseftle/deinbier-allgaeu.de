@@ -2,6 +2,7 @@
 titel: 10 Jahre DEIN BIER
 datum: "2026-07-24"
 anriss: Vom 11. bis 13. September feiern wir zehn Jahre Brauerei. Drei Tage Programm mit dem Verein Regional Genuss erleben.
+bild: ../../bilder/fest-brauereihof.jpg
 bildAlt: Gäste im Brauereihof beim Fest
 veraltet: false
 ---
