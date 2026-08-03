@@ -1,0 +1,92 @@
+/* =============================================================================
+   Knoepfe.
+
+   Bewusst global und nicht in Knopf.astro: Die Altersabfrage und einzelne
+   Seiten setzen die Klassen direkt, ohne die Komponente einzubinden. Laegen
+   die Regeln in der Komponente, faenden sie sich auf genau den Seiten nicht,
+   auf denen die Komponente nicht vorkommt. Genau das ist beim ersten
+   Testbild passiert.
+   ============================================================================= */
+
+.knopf {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--db-space-2xs);
+  padding: var(--knopf-primaer-polster);
+  border-radius: var(--knopf-primaer-radius);
+  border: 1px solid transparent;
+  font-family: var(--db-font-text);
+  font-size: var(--db-text-base);
+  font-weight: var(--db-weight-medium);
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  /* Eine Knopfbeschriftung, die auf zwei Zeilen umbricht, ist ein
+     kaputter Knopf. */
+  white-space: nowrap;
+  transition:
+    transform var(--knopf-dauer) var(--db-easing-standard),
+    background-color var(--knopf-dauer) var(--db-easing-standard),
+    border-color var(--knopf-dauer) var(--db-easing-standard),
+    box-shadow var(--knopf-dauer) var(--db-easing-standard);
+}
+
+/* Sofortige Rueckmeldung beim Druecken: der Knopf senkt sich, wie ein
+   echter Taster. */
+.knopf:active {
+  transform: scale(var(--knopf-druck));
+  box-shadow: none;
+}
+
+.knopf-primaer {
+  background: var(--knopf-primaer-flaeche);
+  color: var(--knopf-primaer-text);
+  box-shadow: var(--knopf-primaer-schatten);
+}
+
+/* Dunkler Text auf Bernstein. Cremefarbener Text ergaebe 3,26:1 und
+   faellt durch (DESIGN.md 9.2). */
+.knopf-bier {
+  background: var(--knopf-bier-flaeche);
+  color: var(--knopf-bier-text);
+  font-weight: var(--db-weight-semibold);
+}
+
+.knopf-still {
+  background: transparent;
+  color: var(--knopf-still-text);
+  border-color: var(--knopf-still-rahmen);
+}
+
+/* Hover nur auf Geraeten mit echtem Zeiger. Auf Tastgeraeten bliebe der
+   Zustand nach dem Tippen sonst kleben. */
+@media (hover: hover) and (pointer: fine) {
+  .knopf:hover {
+    transform: translateY(var(--knopf-hub));
+  }
+
+  .knopf-primaer:hover {
+    background: var(--knopf-primaer-flaeche-hover);
+    box-shadow: var(--knopf-primaer-schatten-hover);
+  }
+
+  .knopf-bier:hover {
+    background: var(--knopf-bier-flaeche-hover);
+  }
+
+  .knopf-still:hover {
+    background: var(--knopf-still-flaeche-hover);
+    border-color: var(--knopf-still-rahmen-hover);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .knopf {
+    transition: none;
+  }
+
+  .knopf:hover,
+  .knopf:active {
+    transform: none;
+  }
+}
