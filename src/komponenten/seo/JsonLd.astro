@@ -1,0 +1,60 @@
+---
+import { BETRIEB } from '../../daten/betrieb';
+
+interface Props {
+  /** Zusaetzliche Objekte, etwa NewsArticle oder Product. */
+  zusatz?: Record<string, unknown>[];
+}
+
+const { zusatz = [] } = Astro.props;
+
+/**
+ * Auf der Altseite gibt es auf keiner einzigen von 97 Seiten strukturiertes
+ * Markup. Hier steht es auf jeder.
+ *
+ * geo fehlt bewusst, solange die Koordinaten nicht bestaetigt sind
+ * (siehe daten/betrieb.ts). Lieber keine Angabe als eine erfundene.
+ */
+const brauerei = {
+  '@context': 'https://schema.org',
+  '@type': 'Brewery',
+  '@id': `${BETRIEB.domain}/#brauerei`,
+  name: BETRIEB.name,
+  alternateName: BETRIEB.kurzname,
+  description: BETRIEB.claim,
+  url: BETRIEB.domain,
+  telephone: BETRIEB.telefon,
+  email: BETRIEB.email,
+  foundingDate: BETRIEB.gegruendet,
+  founder: {
+    '@type': 'Person',
+    name: BETRIEB.inhaber,
+  },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: BETRIEB.strasse,
+    postalCode: BETRIEB.plz,
+    addressLocality: BETRIEB.ort,
+    addressCountry: BETRIEB.land,
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: 'https://schema.org/Saturday',
+      opens: '10:00',
+      closes: '12:00',
+    },
+  ],
+  sameAs: [BETRIEB.social.facebook, BETRIEB.social.instagram],
+};
+
+const alle = [brauerei, ...zusatz];
+---
+
+{
+  /* is:inline ist hier richtig: JSON-LD ist kein ausfuehrbares Skript und
+     darf nicht durch den Bundler laufen. */
+  alle.map((objekt) => (
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(objekt)} />
+  ))
+}

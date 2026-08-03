@@ -1,0 +1,89 @@
+---
+/**
+ * Signature-Element. Der Pritschenwagen mit dem Fass, freigelegt aus dem
+ * runden Bestandslogo, wo er seit 2016 steht.
+ *
+ * PLATZHALTER: Die Pfade sind nach der Silhouette des vorhandenen
+ * 300-px-PNG nachgezeichnet (content/alt/dateien/logo_rund.png). Sie werden
+ * ersetzt, sobald die Vektordatei vorliegt (OFFENE-FRAGEN Nr. 16).
+ *
+ * Dies ist der einzige handgezeichnete Vektor im Projekt. Die Ausnahme von
+ * der Regel gegen selbst gezeichnete SVG greift, weil es sich nicht um eine
+ * Illustration handelt, sondern um ein Markenzeichen des Kunden.
+ */
+interface Props {
+  breite?: number;
+  einfahrt?: boolean;
+  klasse?: string;
+}
+
+const { breite = 56, einfahrt = false, klasse } = Astro.props;
+---
+
+<svg
+  class:list={['wagen', { 'wagen-einfahrt': einfahrt }, klasse]}
+  width={breite}
+  viewBox="0 0 120 56"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  role="img"
+  aria-labelledby="wagen-titel"
+>
+  <title id="wagen-titel">Die mobile Brauerei auf dem Anhänger</title>
+
+  <!-- Bodenlinie -->
+  <path d="M2 44h116" stroke-width="1.5" opacity="0.45" />
+
+  <!-- Fahrerhaus -->
+  <path d="M8 38V22a3 3 0 0 1 3-3h14v19" />
+  <path d="M13 19v-6a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v6" />
+  <path d="M15 13h7" stroke-width="1.5" opacity="0.6" />
+
+  <!-- Ladeflaeche -->
+  <path d="M25 38V26h38a3 3 0 0 1 3 3v9" />
+  <path d="M66 38h44V30a3 3 0 0 0-3-3H92" />
+  <path d="M92 38V27" />
+
+  <!-- Fass auf der Ladeflaeche -->
+  <ellipse cx="79" cy="17" rx="6" ry="9" transform="rotate(90 79 17)" />
+  <path d="M70 12v10M79 11v12M88 12v10" stroke-width="1.5" opacity="0.7" />
+
+  <!-- Raeder -->
+  <circle cx="34" cy="42" r="6" />
+  <circle cx="98" cy="42" r="6" />
+  <circle cx="34" cy="42" r="1.5" fill="currentColor" stroke="none" />
+  <circle cx="98" cy="42" r="1.5" fill="currentColor" stroke="none" />
+</svg>
+
+<style>
+  .wagen {
+    color: var(--wagen-farbe);
+  }
+
+  /* Der eine orchestrierte Moment: der Wagen faehrt einmal herein und haelt.
+     Die Feder-Kurve laesst ihn beim Halten leicht nachwippen, wie ein
+     Fahrzeug es tut. */
+  .wagen-einfahrt {
+    animation: wagen-rein var(--wagen-einfahrt-dauer) var(--wagen-einfahrt-kurve) both;
+  }
+
+  @keyframes wagen-rein {
+    from {
+      transform: translateX(var(--wagen-einfahrt-weg));
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wagen-einfahrt {
+      animation: none;
+    }
+  }
+</style>

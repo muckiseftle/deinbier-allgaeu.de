@@ -1,0 +1,43 @@
+---
+import { BETRIEB } from '../../daten/betrieb';
+
+interface Props {
+  titel: string;
+  /**
+   * Pflicht ohne Standardwert. Damit kann keine Seite ohne Meta-Description
+   * gebaut werden. Auf der Altseite fehlt sie bei 96 von 97 Seiten.
+   */
+  beschreibung: string;
+  bildPfad?: string;
+  /** Rechtstexte und Weiterleitungen gehoeren nicht in den Index. */
+  nichtIndexieren?: boolean;
+}
+
+const { titel, beschreibung, bildPfad, nichtIndexieren = false } = Astro.props;
+
+const vollerTitel =
+  titel === BETRIEB.kurzname
+    ? `${BETRIEB.kurzname} · ${BETRIEB.claim}`
+    : `${titel} · ${BETRIEB.kurzname}`;
+
+const kanonisch = new URL(Astro.url.pathname, Astro.site).href;
+const ogBild = new URL(bildPfad ?? '/og-bild.jpg', Astro.site).href;
+---
+
+<title>{vollerTitel}</title>
+<meta name="description" content={beschreibung} />
+<link rel="canonical" href={kanonisch} />
+{nichtIndexieren && <meta name="robots" content="noindex, follow" />}
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={BETRIEB.kurzname} />
+<meta property="og:title" content={vollerTitel} />
+<meta property="og:description" content={beschreibung} />
+<meta property="og:url" content={kanonisch} />
+<meta property="og:image" content={ogBild} />
+<meta property="og:locale" content="de_DE" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={vollerTitel} />
+<meta name="twitter:description" content={beschreibung} />
+<meta name="twitter:image" content={ogBild} />

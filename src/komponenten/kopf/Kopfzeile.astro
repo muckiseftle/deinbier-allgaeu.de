@@ -1,0 +1,305 @@
+---
+import { NAVIGATION } from '../../daten/navigation';
+import { BETRIEB } from '../../daten/betrieb';
+import { Icon } from 'astro-icon/components';
+
+const aktuell = Astro.url.pathname;
+
+function istAktiv(pfad: string): boolean {
+  if (pfad === '/') return aktuell === '/';
+  return aktuell.startsWith(pfad);
+}
+---
+
+<header class="kopfzeile" data-kopfzeile>
+  <div class="container kopfzeile-innen">
+    <a class="kopfzeile-marke" href="/" aria-label={`${BETRIEB.kurzname}, zur Startseite`}>
+      {/* PLATZHALTER: 300-px-PNG. Wird durch logo.svg ersetzt, sobald die
+          Vektordatei vorliegt (OFFENE-FRAGEN Nr. 16). Blockiert den Livegang. */}
+      <img src="/logo.png" alt="" width="64" height="64" fetchpriority="high" />
+    </a>
+
+    <nav class="kopfzeile-navi" aria-label="Hauptnavigation">
+      <ul>
+        {
+          NAVIGATION.map((punkt) => (
+            <li>
+              <a href={punkt.pfad} aria-current={istAktiv(punkt.pfad) ? 'page' : undefined}>
+                {punkt.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a class="kopfzeile-kontakt" href="/kontakt/">Kontakt</a>
+
+    <button
+      class="kopfzeile-menueknopf"
+      type="button"
+      aria-expanded="false"
+      aria-controls="mobiles-menue"
+      data-menueknopf
+    >
+      <span class="sr-only" data-menue-beschriftung>Menü öffnen</span>
+      <Icon name="ph:list" width="28" height="28" aria-hidden="true" />
+    </button>
+  </div>
+
+  <div class="mobiles-menue" id="mobiles-menue" hidden data-mobiles-menue>
+    <nav aria-label="Hauptnavigation">
+      <ul>
+        {
+          NAVIGATION.map((punkt, i) => (
+            <li style={`--index: ${i}`}>
+              <a href={punkt.pfad} aria-current={istAktiv(punkt.pfad) ? 'page' : undefined}>
+                {punkt.name}
+              </a>
+            </li>
+          ))
+        }
+        <li style={`--index: ${NAVIGATION.length}`}>
+          <a href="/kontakt/">Kontakt</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .kopfzeile {
+    position: sticky;
+    top: 0;
+    z-index: var(--db-ebene-klebend);
+    background: var(--kopf-flaeche);
+    backdrop-filter: var(--kopf-weichzeichner);
+    border-bottom: 1px solid var(--kopf-linie);
+    transition: transform var(--db-dauer-normal) var(--db-easing-standard);
+  }
+
+  /* Beim Abwaertsscrollen weg, beim Aufwaertsscrollen zurueck. Auf einem
+     Handy im Hochformat frisst eine dauerhaft sichtbare Leiste ein Zehntel
+     der Flaeche, und dies ist eine Seite zum Lesen. */
+  .kopfzeile[data-versteckt] {
+    transform: translateY(-100%);
+  }
+
+  .kopfzeile-innen {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--db-space-md);
+    min-height: var(--kopf-hoehe);
+  }
+
+  .kopfzeile-marke {
+    flex-shrink: 0;
+    line-height: 0;
+  }
+
+  .kopfzeile-marke img {
+    width: var(--kopf-logo);
+    height: auto;
+  }
+
+  .kopfzeile-navi ul {
+    display: flex;
+    gap: var(--db-space-md);
+    list-style: none;
+    margin: 0;
+  }
+
+  .kopfzeile-navi a {
+    display: block;
+    font-size: var(--db-text-sm);
+    font-weight: var(--db-weight-medium);
+    color: var(--db-text);
+    text-decoration: none;
+    padding-block: var(--db-space-2xs);
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+
+  .kopfzeile-navi a[aria-current='page'] {
+    font-family: var(--db-font-display);
+    font-weight: var(--db-weight-semibold);
+    border-bottom-color: var(--kopf-aktiv-linie);
+  }
+
+  .kopfzeile-kontakt {
+    flex-shrink: 0;
+    font-size: var(--db-text-sm);
+    font-weight: var(--db-weight-medium);
+    color: var(--knopf-still-text);
+    text-decoration: none;
+    border: 1px solid var(--knopf-still-rahmen);
+    border-radius: var(--knopf-primaer-radius);
+    padding: 0.4rem 0.9rem;
+    white-space: nowrap;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .kopfzeile-kontakt:hover {
+      background: var(--knopf-still-flaeche-hover);
+      border-color: var(--knopf-still-rahmen-hover);
+    }
+  }
+
+  .kopfzeile-menueknopf {
+    display: none;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: var(--db-space-2xs);
+    color: var(--db-text-ueberschrift);
+  }
+
+  /* Umbruch bei 1100 px, nicht 1024: die deutschen Labels sind lang
+     ("Verkaufsstellen", "Events & Verleih"), und eine zweizeilige
+     Navigation ist ein Baufehler. */
+  @media (max-width: 1099px) {
+    .kopfzeile-navi,
+    .kopfzeile-kontakt {
+      display: none;
+    }
+
+    .kopfzeile-menueknopf {
+      display: block;
+    }
+
+    .kopfzeile-marke img {
+      width: var(--kopf-logo-mobil);
+    }
+  }
+
+  .mobiles-menue {
+    position: fixed;
+    inset: var(--kopf-hoehe) 0 0 0;
+    background: var(--db-flaeche);
+    z-index: var(--db-ebene-ueberlagerung);
+    padding: var(--db-space-xl) var(--db-rand);
+    overflow-y: auto;
+  }
+
+  .mobiles-menue[hidden] {
+    display: none;
+  }
+
+  .mobiles-menue ul {
+    list-style: none;
+    margin: 0;
+    display: grid;
+    gap: var(--db-space-md);
+  }
+
+  .mobiles-menue a {
+    font-family: var(--db-font-display);
+    font-size: var(--db-text-2xl);
+    font-weight: var(--db-weight-semibold);
+    color: var(--db-text-ueberschrift);
+    text-decoration: none;
+  }
+
+  .mobiles-menue a[aria-current='page'] {
+    color: var(--db-text-link);
+  }
+
+  /* Gestaffeltes Einblenden. Kurze Versaetze: lange Verzoegerungen lassen
+     das Menue langsam wirken. */
+  .mobiles-menue li {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: menue-rein var(--db-dauer-normal) var(--db-easing-standard) forwards;
+    animation-delay: calc(var(--index) * var(--db-staffel));
+  }
+
+  @keyframes menue-rein {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kopfzeile {
+      transition: none;
+    }
+
+    .mobiles-menue li {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const kopf = document.querySelector<HTMLElement>('[data-kopfzeile]');
+  const knopf = document.querySelector<HTMLButtonElement>('[data-menueknopf]');
+  const menue = document.querySelector<HTMLElement>('[data-mobiles-menue]');
+  const beschriftung = document.querySelector<HTMLElement>('[data-menue-beschriftung]');
+
+  if (knopf && menue) {
+    const umschalten = () => {
+      const offen = knopf.getAttribute('aria-expanded') === 'true';
+      knopf.setAttribute('aria-expanded', String(!offen));
+      menue.hidden = offen;
+      document.body.style.overflow = offen ? '' : 'hidden';
+      if (beschriftung) {
+        beschriftung.textContent = offen ? 'Menü öffnen' : 'Menü schließen';
+      }
+    };
+
+    knopf.addEventListener('click', umschalten);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menue.hidden) {
+        umschalten();
+        knopf.focus();
+      }
+    });
+  }
+
+  /* Kopfzeile beim Abwaertsscrollen ausblenden.
+     Kein window.addEventListener("scroll"): das laeuft bei jedem Bild neu und
+     erzwingt dauerndes Nachrechnen. Stattdessen ein IntersectionObserver auf
+     einen unsichtbaren Wachposten am Seitenanfang. */
+  if (kopf) {
+    const wachposten = document.createElement('div');
+    wachposten.setAttribute('aria-hidden', 'true');
+    wachposten.style.cssText = 'position:absolute;top:0;left:0;height:1px;width:1px;';
+    document.body.prepend(wachposten);
+
+    let obenSichtbar = true;
+
+    const beobachter = new IntersectionObserver(
+      ([eintrag]) => {
+        obenSichtbar = eintrag.isIntersecting;
+        if (obenSichtbar) kopf.removeAttribute('data-versteckt');
+      },
+      { threshold: 0 },
+    );
+    beobachter.observe(wachposten);
+
+    /* Richtungserkennung ueber die Sichtbarkeit eines zweiten Wachpostens,
+       der der Kopfzeile folgt. So bleibt alles ereignisfrei. */
+    const folger = document.createElement('div');
+    folger.setAttribute('aria-hidden', 'true');
+    folger.style.cssText = 'position:absolute;top:60vh;left:0;height:1px;width:1px;';
+    document.body.prepend(folger);
+
+    const folgerBeobachter = new IntersectionObserver(
+      ([eintrag]) => {
+        if (obenSichtbar) return;
+        if (!eintrag.isIntersecting) {
+          kopf.setAttribute('data-versteckt', '');
+        } else {
+          kopf.removeAttribute('data-versteckt');
+        }
+      },
+      { threshold: 0 },
+    );
+    folgerBeobachter.observe(folger);
+  }
+</script>

@@ -1,0 +1,138 @@
+---
+import { BETRIEB } from '../../daten/betrieb';
+import { NAVIGATION, RECHTLICHES } from '../../daten/navigation';
+import Wegstrecke from '../marke/Wegstrecke.astro';
+
+const jahr = new Date().getFullYear();
+---
+
+<Wegstrecke mitWagen={false} />
+
+<footer class="fusszeile">
+  <div class="container fusszeile-raster">
+    <div>
+      <p class="fusszeile-marke">{BETRIEB.kurzname}</p>
+      <p class="signatur fusszeile-signatur">{BETRIEB.signatur}</p>
+
+      <address>
+        {BETRIEB.strasse}<br />
+        {BETRIEB.plz} {BETRIEB.ort}
+      </address>
+
+      <p class="fusszeile-kontakt">
+        {/* Echtes tel: und mailto:. Auf der Altseite steht im Footer
+            href="info@deinbier-allgaeu.de" ohne Schema, der Browser macht
+            daraus einen relativen Pfad und landet auf einer 404. */}
+        <a href={`tel:${BETRIEB.telefon}`}>{BETRIEB.telefonAnzeige}</a><br />
+        <a href={`mailto:${BETRIEB.email}`}>{BETRIEB.email}</a>
+      </p>
+    </div>
+
+    <nav aria-label="Seiten">
+      <ul>
+        {NAVIGATION.map((p) => <li><a href={p.pfad}>{p.name}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav aria-label="Rechtliches und soziale Netzwerke">
+      <ul>
+        {RECHTLICHES.map((p) => <li><a href={p.pfad}>{p.name}</a></li>)}
+        <li>
+          <a href={BETRIEB.social.facebook} rel="noopener noreferrer" target="_blank">
+            Facebook <span aria-hidden="true">↗</span>
+            <span class="sr-only">(öffnet in neuem Tab)</span>
+          </a>
+        </li>
+        <li>
+          <a href={BETRIEB.social.instagram} rel="noopener noreferrer" target="_blank">
+            Instagram <span aria-hidden="true">↗</span>
+            <span class="sr-only">(öffnet in neuem Tab)</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container fusszeile-abschluss">
+    <p class="fusszeile-hinweis">
+      Bitte genießt unser Bier verantwortungsvoll. Kein Alkohol an Personen
+      unter 16&nbsp;Jahren; Bierbrand und Bierlikör erst ab 18.
+    </p>
+    {/* Jahreszahl berechnet, damit hier nicht in vier Jahren wieder
+        "© 2022" steht wie auf der Altseite. */}
+    <p class="fusszeile-copyright">© {jahr} {BETRIEB.name}</p>
+  </div>
+</footer>
+
+<style>
+  .fusszeile {
+    background: var(--fuss-flaeche);
+    color: var(--fuss-text);
+    padding-block: var(--db-space-3xl) var(--db-space-xl);
+    margin-top: var(--db-space-2xl);
+  }
+
+  .fusszeile-raster {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--db-space-xl);
+  }
+
+  @media (max-width: 767px) {
+    .fusszeile-raster {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--db-space-lg);
+    }
+  }
+
+  .fusszeile-marke {
+    font-family: var(--db-font-display);
+    font-size: var(--db-text-2xl);
+    font-weight: var(--db-weight-bold);
+    line-height: var(--db-leading-eng);
+  }
+
+  .fusszeile-signatur {
+    color: var(--db-text-invers-akzent);
+    font-size: var(--db-text-lg);
+    margin-bottom: var(--db-space-md);
+  }
+
+  .fusszeile address {
+    font-style: normal;
+    color: var(--fuss-text-leise);
+  }
+
+  .fusszeile-kontakt {
+    margin-top: var(--db-space-sm);
+  }
+
+  .fusszeile ul {
+    list-style: none;
+    margin: 0;
+    display: grid;
+    gap: var(--db-space-2xs);
+  }
+
+  .fusszeile a {
+    color: var(--fuss-link);
+  }
+
+  .fusszeile-abschluss {
+    margin-top: var(--db-space-2xl);
+    padding-top: var(--db-space-md);
+    border-top: 1px solid var(--fuss-linie);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--db-space-md);
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .fusszeile-hinweis,
+  .fusszeile-copyright {
+    font-size: var(--db-text-sm);
+    color: var(--fuss-text-leise);
+    max-width: var(--db-mass-text);
+  }
+</style>

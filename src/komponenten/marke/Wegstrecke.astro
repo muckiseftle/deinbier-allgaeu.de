@@ -1,0 +1,49 @@
+---
+import Wagen from './Wagen.astro';
+
+/**
+ * Einsatzregel, verbindlich (DESIGN.md 7.3):
+ * genau dreimal auf der Startseite, einmal ueber der Fusszeile (dort ohne
+ * Wagen), einmal auf der 404. Nirgends sonst. Zwischen jedem Abschnitt
+ * eingesetzt kippt sie in Dekoration.
+ */
+interface Props {
+  mitWagen?: boolean;
+}
+
+const { mitWagen = true } = Astro.props;
+---
+
+<div class="wegstrecke" aria-hidden="true">
+  <div class="wegstrecke-linie"></div>
+  {
+    mitWagen && (
+      <div class="wegstrecke-wagen">
+        <Wagen breite={44} />
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .wegstrecke {
+    position: relative;
+    max-width: var(--db-breite-inhalt);
+    margin-inline: auto;
+    padding-inline: var(--db-rand);
+  }
+
+  .wegstrecke-linie {
+    height: var(--weg-staerke);
+    background: var(--weg-linie);
+  }
+
+  .wegstrecke-wagen {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    background: var(--db-flaeche);
+    padding-inline: var(--db-space-sm);
+  }
+</style>

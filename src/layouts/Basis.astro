@@ -1,0 +1,105 @@
+---
+import '../styles/schriften.css';
+import '../styles/tokens.css';
+import '../styles/reset.css';
+import '../styles/basis.css';
+import '../styles/layout.css';
+
+import Sprungmarke from '../komponenten/basis/Sprungmarke.astro';
+import Kopfzeile from '../komponenten/kopf/Kopfzeile.astro';
+import Fusszeile from '../komponenten/fuss/Fusszeile.astro';
+import Altersabfrage from '../komponenten/Altersabfrage.astro';
+import Meta from '../komponenten/seo/Meta.astro';
+import JsonLd from '../komponenten/seo/JsonLd.astro';
+
+interface Props {
+  titel: string;
+  beschreibung: string;
+  bildPfad?: string;
+  nichtIndexieren?: boolean;
+  jsonLdZusatz?: Record<string, unknown>[];
+}
+
+const { titel, beschreibung, bildPfad, nichtIndexieren, jsonLdZusatz } = Astro.props;
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    {/* Kein maximum-scale, kein user-scalable=no: das sperrt den Zoom und
+        verstoesst gegen WCAG 1.4.4. Die Altseite macht genau diesen Fehler. */}
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#523816" />
+
+    <Meta
+      titel={titel}
+      beschreibung={beschreibung}
+      bildPfad={bildPfad}
+      nichtIndexieren={nichtIndexieren}
+    />
+    <JsonLd zusatz={jsonLdZusatz} />
+
+    {/* Nur die zwei Schriften, die den ersten Bildschirm tragen. Die kursive
+        Fassung wird erst fuer Zitate und die Signaturzeile gebraucht, beides
+        unterhalb des ersten Bildschirms. */}
+    <link
+      rel="preload"
+      href="/schriften/vollkorn-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/schriften/work-sans-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <link rel="icon" href="/logo.png" type="image/png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+  </head>
+
+  <body>
+    <Sprungmarke />
+    <Kopfzeile />
+
+    <main id="inhalt">
+      <slot />
+    </main>
+
+    <Fusszeile />
+    <Altersabfrage />
+
+    <div class="korn" aria-hidden="true"></div>
+
+    <script>
+      /* Einblenden beim Scrollen. IntersectionObserver statt Scroll-Ereignis:
+         ein Scroll-Listener laeuft bei jedem Bild neu und erzwingt dauerndes
+         Nachrechnen. */
+      const beobachtete = document.querySelectorAll('.einblenden');
+      const wenigerBewegung = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (beobachtete.length > 0 && !wenigerBewegung) {
+        const beobachter = new IntersectionObserver(
+          (eintraege) => {
+            for (const eintrag of eintraege) {
+              if (eintrag.isIntersecting) {
+                eintrag.target.classList.add('sichtbar');
+                beobachter.unobserve(eintrag.target);
+              }
+            }
+          },
+          { threshold: 0.2 },
+        );
+        beobachtete.forEach((el) => beobachter.observe(el));
+      } else {
+        /* Ohne diesen Zweig blieben bei reduzierter Bewegung alle Abschnitte
+           unsichtbar, weil .einblenden mit opacity 0 startet. */
+        beobachtete.forEach((el) => el.classList.add('sichtbar'));
+      }
+    </script>
+  </body>
+</html>

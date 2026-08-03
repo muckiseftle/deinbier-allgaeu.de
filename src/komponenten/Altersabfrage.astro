@@ -1,0 +1,138 @@
+---
+/**
+ * Altersabfrage ohne Cookie.
+ *
+ * Die Antwort liegt in localStorage. Kein Cookie, keine Uebertragung an
+ * einen Server, kein Drittanbieter. Ein Einwilligungsbanner wird dadurch
+ * nicht noetig; die Datenschutzerklaerung bekommt in Phase 7 einen Absatz.
+ *
+ * Der Seiteninhalt steht vollstaendig im HTML darunter. Suchmaschinen und
+ * Nutzer ohne JavaScript sehen die Seite ungehindert.
+ *
+ * Altersgrenze 16 und das Verhalten bei "Nein" sind die Empfehlung aus
+ * OFFENE-FRAGEN Nr. 27 und noch nicht vom Betreiber bestaetigt.
+ */
+---
+
+<div
+  class="altersabfrage"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="alter-titel"
+  aria-describedby="alter-text"
+  hidden
+  data-altersabfrage
+>
+  <div class="altersabfrage-kasten">
+    <img src="/logo.png" alt="" width="96" height="96" />
+
+    <h2 id="alter-titel">Seid Ihr schon 16?</h2>
+    <p id="alter-text">Wir schenken Bier aus. Deshalb fragen wir kurz nach.</p>
+
+    <div class="altersabfrage-knoepfe">
+      <button type="button" class="knopf knopf-bier" data-alter-ja>Ja, bin ich</button>
+      <a class="knopf knopf-still" href="/zu-jung/">Nein</a>
+    </div>
+
+    <p class="altersabfrage-fussnote">Bierbrand und Bierlikör gibt es erst ab 18.</p>
+  </div>
+</div>
+
+<style>
+  .altersabfrage {
+    position: fixed;
+    inset: 0;
+    z-index: var(--db-ebene-dialog);
+    background: var(--alter-schleier);
+    display: grid;
+    place-items: center;
+    padding: var(--db-rand);
+    /* Bewusst ohne Einblendbewegung: der Dialog darf nicht aufflackern,
+       wenn die Antwort bereits gespeichert ist. */
+  }
+
+  .altersabfrage[hidden] {
+    display: none;
+  }
+
+  .altersabfrage-kasten {
+    background: var(--alter-flaeche);
+    border-radius: var(--alter-radius);
+    padding: var(--db-space-xl);
+    max-width: 30rem;
+    text-align: center;
+    display: grid;
+    gap: var(--db-space-md);
+    justify-items: center;
+  }
+
+  .altersabfrage-kasten img {
+    width: var(--alter-logo);
+    height: auto;
+  }
+
+  .altersabfrage-knoepfe {
+    display: flex;
+    gap: var(--db-space-sm);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .altersabfrage-fussnote {
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+  }
+</style>
+
+<script>
+  const SCHLUESSEL = 'db-alter-bestaetigt';
+
+  const dialog = document.querySelector<HTMLElement>('[data-altersabfrage]');
+  const jaKnopf = document.querySelector<HTMLButtonElement>('[data-alter-ja]');
+
+  function bereitsBestaetigt(): boolean {
+    try {
+      return localStorage.getItem(SCHLUESSEL) === 'ja';
+    } catch {
+      // Privater Modus oder gesperrter Speicher: Dialog einmal je Aufruf.
+      return false;
+    }
+  }
+
+  if (dialog && jaKnopf && !bereitsBestaetigt()) {
+    dialog.hidden = false;
+    document.body.style.overflow = 'hidden';
+    jaKnopf.focus();
+
+    // Fokusfalle: Tab laeuft im Dialog im Kreis.
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+
+      const fokussierbar = dialog.querySelectorAll<HTMLElement>('button, a[href]');
+      if (fokussierbar.length === 0) return;
+
+      const erstes = fokussierbar[0];
+      const letztes = fokussierbar[fokussierbar.length - 1];
+
+      if (e.shiftKey && document.activeElement === erstes) {
+        e.preventDefault();
+        letztes.focus();
+      } else if (!e.shiftKey && document.activeElement === letztes) {
+        e.preventDefault();
+        erstes.focus();
+      }
+    });
+
+    // Bewusst kein Schliessen mit Escape: der Dialog soll nicht
+    // versehentlich weggedrueckt werden.
+    jaKnopf.addEventListener('click', () => {
+      try {
+        localStorage.setItem(SCHLUESSEL, 'ja');
+      } catch {
+        // Speicher gesperrt: dann eben bei jedem Aufruf erneut fragen.
+      }
+      dialog.hidden = true;
+      document.body.style.overflow = '';
+    });
+  }
+</script>
