@@ -1,0 +1,82 @@
+---
+import { Picture } from 'astro:assets';
+
+/**
+ * Bild mit Platzhalter.
+ *
+ * Wo Material fehlt, steht ein gestalteter Platzhalter, kein hochskaliertes
+ * unscharfes Foto. Jede Verwendung ohne Quelle gehoert in OFFENE-FRAGEN
+ * Nr. 15.
+ *
+ * Breite und Hoehe setzt Picture selbst, damit beim Laden nichts springt.
+ */
+interface Props {
+  quelle?: ImageMetadata;
+  alt: string;
+  breiten?: number[];
+  sizes?: string;
+  laden?: 'lazy' | 'eager';
+  /** Text im Platzhalter, wenn die Quelle fehlt. */
+  hinweis?: string;
+  /** Seitenverhaeltnis des Platzhalters, etwa "3 / 2" oder "4 / 5". */
+  verhaeltnis?: string;
+  klasse?: string;
+}
+
+const {
+  quelle,
+  alt,
+  breiten = [480, 800, 1200, 1600],
+  sizes = '(max-width: 767px) 100vw, 50vw',
+  laden = 'lazy',
+  hinweis,
+  verhaeltnis = '3 / 2',
+  klasse,
+} = Astro.props;
+---
+
+{
+  quelle ? (
+    <Picture
+      class:list={['bild', klasse]}
+      src={quelle}
+      formats={['avif', 'webp']}
+      widths={breiten}
+      sizes={sizes}
+      alt={alt}
+      loading={laden}
+      decoding="async"
+    />
+  ) : (
+    <div
+      class:list={['bild-platzhalter', klasse]}
+      style={`aspect-ratio: ${verhaeltnis}`}
+      role="img"
+      aria-label={alt}
+    >
+      <span>{hinweis ?? 'Foto folgt'}</span>
+    </div>
+  )
+}
+
+<style>
+  .bild {
+    width: 100%;
+    height: auto;
+    border-radius: var(--db-radius-md);
+  }
+
+  .bild-platzhalter {
+    width: 100%;
+    background: var(--platzhalter-flaeche);
+    border-radius: var(--db-radius-md);
+    display: grid;
+    place-items: center;
+    color: var(--platzhalter-zeichen);
+    font-size: var(--db-text-sm);
+    letter-spacing: var(--db-tracking-weit);
+    text-transform: uppercase;
+    text-align: center;
+    padding: var(--db-space-md);
+  }
+</style>

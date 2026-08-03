@@ -1,0 +1,58 @@
+---
+interface Props {
+  /** Etikettenzeile. Hoechstens dreimal je Seite (DESIGN.md 6.3). */
+  etikett?: string;
+  titel?: string;
+  vorspann?: string;
+  dunkel?: boolean;
+  weit?: boolean;
+  id?: string;
+  klasse?: string;
+}
+
+const { etikett, titel, vorspann, dunkel = false, weit = false, id, klasse } = Astro.props;
+const containerKlasse = weit ? 'container-weit' : 'container';
+const hatKopf = Boolean(etikett || titel || vorspann);
+---
+
+<section class:list={['abschnitt', { 'abschnitt-dunkel': dunkel }, klasse]} id={id}>
+  <div class={containerKlasse}>
+    {
+      hatKopf && (
+        <header class="abschnitt-kopf einblenden">
+          {etikett && <p class="etikettenzeile">{etikett}</p>}
+          {titel && <h2>{titel}</h2>}
+          {vorspann && <p class="vorspann">{vorspann}</p>}
+        </header>
+      )
+    }
+    <slot />
+  </div>
+</section>
+
+<style>
+  .abschnitt-dunkel {
+    background: var(--db-flaeche-dunkel);
+    color: var(--db-text-invers);
+  }
+
+  .abschnitt-dunkel :global(h2) {
+    color: var(--db-text-invers);
+  }
+
+  .abschnitt-dunkel :global(.etikettenzeile) {
+    color: var(--db-text-invers-leise);
+  }
+
+  .abschnitt-kopf {
+    margin-bottom: var(--db-space-xl);
+  }
+
+  .abschnitt-kopf .etikettenzeile {
+    margin-bottom: var(--db-space-2xs);
+  }
+
+  .abschnitt-kopf .vorspann {
+    margin-top: var(--db-space-sm);
+  }
+</style>

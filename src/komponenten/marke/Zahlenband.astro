@@ -1,0 +1,50 @@
+---
+/**
+ * Zahlen ohne Kartenrahmen. Getrennt wird durch Leerraum und eine Haarlinie
+ * oben, nicht durch Kaesten.
+ */
+interface Props {
+  eintraege: { zahl: string; text: string }[];
+}
+
+const { eintraege } = Astro.props;
+---
+
+<dl class="zahlenband">
+  {
+    eintraege.map((e, i) => (
+      <div class="zahlenband-eintrag einblenden" style={`--index: ${i}`}>
+        <dt class="zahlenband-zahl zahl">{e.zahl}</dt>
+        <dd class="zahlenband-text">{e.text}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .zahlenband {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: var(--db-space-xl);
+    margin: 0;
+  }
+
+  .zahlenband-eintrag {
+    border-top: 1px solid var(--db-linie);
+    padding-top: var(--db-space-sm);
+  }
+
+  .zahlenband-zahl {
+    font-family: var(--db-font-display);
+    font-size: var(--db-text-3xl);
+    font-weight: var(--db-weight-bold);
+    color: var(--db-text-ueberschrift);
+    line-height: var(--db-leading-eng);
+  }
+
+  .zahlenband-text {
+    margin: var(--db-space-3xs) 0 0;
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+  }
+</style>

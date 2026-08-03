@@ -1,0 +1,36 @@
+---
+/**
+ * Verschachtelte Fassung nach dem Vorbild eines Bieretiketts.
+ * Der Innenradius ist der Aussenradius minus dem Innenabstand, damit die
+ * Rundungen konzentrisch laufen.
+ *
+ * Einsatzregel: nur Bierkarten, Hero-Bild und Etikettenbeispiele.
+ * Nicht bei News-Karten, nicht bei Verkaufsstellen. Sonst wird aus einem
+ * Kunstgriff eine Tapete.
+ */
+interface Props {
+  klasse?: string;
+}
+
+const { klasse } = Astro.props;
+---
+
+<div class:list={['etikett-schale', klasse]}>
+  <div class="etikett-kern"><slot /></div>
+</div>
+
+<style>
+  .etikett-schale {
+    background: var(--etikett-schale-flaeche);
+    border: 1px solid var(--etikett-schale-linie);
+    border-radius: var(--etikett-schale-radius);
+    padding: var(--etikett-schale-polster);
+  }
+
+  .etikett-kern {
+    background: var(--etikett-kern-flaeche);
+    border-radius: var(--etikett-kern-radius);
+    box-shadow: var(--etikett-kern-glanz);
+    overflow: hidden;
+  }
+</style>

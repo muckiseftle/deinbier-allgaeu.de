@@ -1,0 +1,48 @@
+---
+/**
+ * Der einzige dunkle Abschnitt im Seitenfluss.
+ *
+ * Vollflaechig und grosszuegig, damit er als Zaesur gelesen wird und nicht
+ * als Kopierfehler. Ein dunkler Kasten zwischen zwei hellen Abschnitten
+ * wirkt wie ein Versehen.
+ *
+ * Das Zitat muss echt sein. Eine erfundene Kundenstimme hat hier nichts
+ * verloren.
+ */
+interface Props {
+  zitat: string;
+  quelle: string;
+}
+
+const { zitat, quelle } = Astro.props;
+---
+
+<section class="zitatband">
+  <div class="container">
+    <figure>
+      <blockquote>„{zitat}“</blockquote>
+      <figcaption>{quelle}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .zitatband {
+    background: var(--zitat-flaeche);
+    padding-block: var(--db-space-4xl);
+  }
+
+  .zitatband blockquote {
+    color: var(--zitat-text);
+    font-size: var(--db-text-3xl);
+    /* Hoechstens drei Zeilen. Ein Zitat auf einer Seite ist ein Ausschnitt,
+       keine vollstaendige Rezension. */
+    max-width: 24ch;
+  }
+
+  .zitatband figcaption {
+    color: var(--zitat-quelle);
+    font-size: var(--db-text-sm);
+    margin-top: var(--db-space-md);
+  }
+</style>
