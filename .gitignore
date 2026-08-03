@@ -1,0 +1,40 @@
+# Abhängigkeiten
+node_modules/
+.pnpm-store/
+
+# Astro-Build
+dist/
+.astro/
+.output/
+
+# Betriebssystem
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+
+# Claude Code: persoenliche Einstellungen und die Junctions nach .agents/skills
+# (die echten Skill-Dateien liegen versioniert unter .agents/skills/)
+.claude/settings.local.json
+.claude/skills/
+
+# Umgebung
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Temporäres
+*.tmp
+.cache/
