@@ -233,6 +233,45 @@ Die Signaturzeile **„zu Hause(n) gebraut“** stammt unverändert aus dem Logo
 
 ---
 
+## Neu aus Phase 5 (Bilder und Social-Preview)
+
+### 30. 🔴 Social-Preview-Bild zeigt erkennbare Personen
+Das Bild, das beim Teilen der Seite auf WhatsApp, Facebook und Co. erscheint
+(`public/og-bild.jpg`), zeigt fünf Teilnehmerinnen und Teilnehmer eines
+Brauseminars mit ihren Bierkenner-Diplomen. Es stammt von der alten Website.
+
+**Warum ich nachfrage:** Auf der eigenen Website ist das Foto seit Jahren
+öffentlich, ein Einverständnis liegt also vermutlich vor. Als Vorschaubild
+bekommt es aber eine deutlich größere Reichweite: Es erscheint bei **jedem**
+geteilten Link, auch in fremden Chats und Timelines. Das ist eine andere
+Nutzungsintensität als eine Unterseite.
+
+**Bitte bestätigen**, dass die abgebildeten Personen mit dieser Verwendung
+einverstanden sind. Falls unklar oder unangenehm: Ich tausche das Foto in
+zwei Minuten gegen eine Aufnahme ohne Gesichter (Vorschlag: die Gär- und
+Lagertanks oder der Brauereigarten). Sagt einfach Bescheid.
+
+### 31. 🟡 Video vorhanden?
+PROJEKT.md sieht ein selbst gehostetes Video vor (Datei unter 100&nbsp;MB,
+`preload="none"`, Posterbild, kein YouTube). **Es liegt kein Videomaterial
+vor**, deshalb ist auf der Seite derzeit keines eingebunden. Im
+Jubiläumsbeitrag ist von „einer Überraschung in bewegten Bildern“ die Rede,
+also existiert womöglich etwas.
+
+Falls Material vorhanden ist: gerne liefern, ich binde es ein. Falls nicht,
+bleibt es dabei, und die Seite kommt gut ohne aus.
+
+### 32. 🟡 Favicon-Set ist noch behelfsmäßig
+Das Symbolset (`favicon.ico`, `apple-touch-icon.png`, `icon-192`, `icon-512`,
+`icon-512-maskable`) ist aus dem 300-px-PNG erzeugt. Die Größen ab 192&nbsp;px
+sind daher hochskaliert und nicht scharf.
+
+Sobald die Vektordatei vorliegt (Nr. 16), erzeuge ich das Set neu; das Skript
+dafür liegt fertig unter `werkzeuge/favicons.ps1`. Bis dahin gilt: Der
+Browser-Tab zeigt ein erkennbares, aber leicht weiches Symbol.
+
+---
+
 ## Erledigt
 
 ### ✅ 6 · Preise auf der Website — **nein** (entschieden 03.08.2026)

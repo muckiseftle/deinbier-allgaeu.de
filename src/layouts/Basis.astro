@@ -59,7 +59,12 @@ const { titel, beschreibung, bildPfad, nichtIndexieren, jsonLdZusatz } = Astro.p
       crossorigin
     />
 
-    <link rel="icon" href="/logo.png" type="image/png" />
+    {/* Favicon-Set. PLATZHALTER: aus dem 300-px-PNG erzeugt, die grossen
+        Groessen sind daher hochskaliert. Neu erzeugen, sobald die
+        Vektordatei vorliegt (werkzeuge/favicons.ps1). */}
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap-index.xml" />
   </head>
 
