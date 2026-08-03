@@ -1,6 +1,6 @@
 # OFFENE FRAGEN an den Betreiber
 
-**Angelegt:** 03.08.2026 (Phase 0) · **Letzte Aktualisierung:** 03.08.2026
+**Angelegt:** 03.08.2026 (Phase 0) · **Letzte Aktualisierung:** 03.08.2026 (nach Phase 1)
 
 Diese Liste wächst über alle Phasen. Nichts hier wird erfunden — solange eine Frage offen ist,
 steht an der betreffenden Stelle im Code ein `[PLATZHALTER: …]`.
@@ -38,24 +38,8 @@ Aufbewahrungsfristen bleiben unberührt“. Bitte bestätigen oder korrigieren.
 
 ## Inhalt und Preise
 
-### 6. 🔴 Preise auf der Website — ja oder nein?
-PROJEKT.md legt „keine Preise“ fest. Die **alte Seite veröffentlicht aber an vier Stellen Preise**:
-
-| Fundstelle | Inhalt |
-|---|---|
-| PDF „Preisliste Leihinventar“ (verlinkt) | komplette Mietpreise |
-| `/events-service/anfrage-verleihinventar/` | 12,50 € je angefangene Mitarbeiter-Viertelstunde, 3 € pro Glas/Krug, 45 € pro Tisch, 22,50 € pro Bank, 30 €/220 € Sonnenschirme, 25 € Spanngurt, 15 € CO₂-Pfand, 65 € Durchlaufkühler-Einstellung |
-| `/ferienwohnung/1785-2/` | 86 € für 2 Personen pro Tag, jede weitere Person 15 €, Haustier 50 €, Endreinigung 50 € |
-| News „Termine öffentliche Brauseminare 1. Halbjahr 2026“ | Brauseminar 53 € pro Person |
-
-Einordnung: Bei **Bier** löst eine Preisangabe die Grundpreispflicht nach PAngV aus (€ pro Liter) —
-deshalb dort bewusst keine Preise. Bei **Ferienwohnung, Seminaren und Verleih** ist eine
-Preisangabe unproblematisch und für Gäste sogar hilfreich; bei der Ferienwohnung erwarten
-Buchende sie geradezu.
-
-**Empfehlung:** Bierpreise weglassen („im Brauereiverkauf"). Seminar-, Verleih- und
-Ferienwohnungspreise übernehmen, sofern sie aktuell sind. **Bitte entscheiden — und falls
-übernommen: sind die oben genannten Beträge noch gültig?**
+### 6. ✅ Preise auf der Website — **entschieden: nein** (03.08.2026)
+→ siehe „Erledigt“ am Ende des Dokuments.
 
 ### 7. 🔴 Öffnungszeiten Brauereiverkauf
 Die Altseite nennt an zwei Stellen **Samstag 10:00–12:00 Uhr** sowie: „Samstags keine Zeit? Dann
@@ -94,14 +78,8 @@ Mehrwert gegenüber der Altseite schaffen.
 - Sind alle 16 Verkaufsstellen noch aktiv? Sind neue dazugekommen?
 - Schreibweise: „Edeka **Drexel**" oder „Edeka **Dexel**"? (Auf der Altseite beides.)
 
-### 12. 🟡 Altersabfrage beibehalten?
-Die Altseite blendet über das Plugin `age-gate` bei jedem Erstbesuch eine Altersabfrage ein.
-Rechtlich ist das für eine Brauerei-Website **nicht zwingend**; der Deutsche Werberat verlangt
-lediglich, dass Alkoholwerbung sich nicht an Minderjährige richtet. Eine Altersabfrage kostet
-jeden Besucher einen Klick und lässt sich ohne Cookie technisch ohnehin nicht durchhalten
-(und ein Cookie würde die cookiefreie Architektur brechen).
-**Empfehlung:** weglassen, stattdessen der klare Hinweis im Footer („Kein Alkohol an Personen
-unter 16 Jahren, Spirituosen erst ab 18"). **Bitte bestätigen.**
+### 12. ✅ Altersabfrage — **entschieden: bleibt** (03.08.2026)
+→ siehe „Erledigt“ am Ende des Dokuments. Eine Restfrage dazu ist offen: **Nr. 27**.
 
 ### 13. 🟡 Vereinsname bestätigen
 Im Jubiläumsbeitrag steht „Verein Regional Genuß erleben (RGE)“. Korrekte Schreibweise des
@@ -135,21 +113,40 @@ Das vorhandene Material reicht für einen modernen Auftritt nicht aus:
 Besonders wichtig: **die mobile Brauerei auf dem Anhänger** — das ist der USP und der stärkste
 Bildkandidat für den Hero.
 
-### 16. 🔴 Logo als Vektordatei
-Das runde Logo liegt nur als **PNG mit 300 × 298 px** vor. Für Favicon-Set, Druck und große
-Darstellung wird eine **SVG-, AI- oder EPS-Datei** gebraucht. Existiert eine? Falls nicht: Wer hat
-das Logo gestaltet, und liegt dort noch die Originaldatei?
+### 16. 🔴 Logo als Vektordatei — **vorhanden, wird gebraucht**
+Bestätigt am 03.08.2026: Eine Vektordatei existiert. **Sie liegt noch nicht vor.**
+
+Bitte die Datei ins Repository legen unter `assets/logo/` oder per Mail schicken.
+Gebraucht wird: **SVG oder AI/EPS** des Volllogos, Pfade statt eingebetteter Rasterbilder,
+Schrift in Kurven umgewandelt.
+
+Daraus abgeleitet werden dann (das übernehme ich): reduzierte Fassung ohne Fußband,
+Hopfen-Signet, Wagen-Signet, einfarbige Fassungen sowie das vollständige Favicon-Set
+(`favicon.svg`, `favicon.ico`, `apple-touch-icon.png`, `icon-192`, `icon-512`, `icon-512-maskable`).
+
+**Warum das blockiert:** Das vorhandene PNG hat 300 × 298 px. Für die Kopfzeile auf einem
+Retina-Display reicht das nicht — es würde unscharf. Phase 2 und 4 können mit dem PNG arbeiten,
+der Livegang nicht. Details zur Logo-Analyse und den Verwendungsregeln: `BRAND.md` Abschnitt 2.
 
 ### 17. 🟡 Video vorhanden?
 Im Jubiläumsbeitrag ist von „einer Überraschung in bewegten Bildern“ die Rede. Gibt es Videomaterial
 von der Brauerei oder von Seminaren? Randbedingung: Die Datei muss **unter 100 MB** bleiben
 (GitHub-Limit) und wird selbst gehostet — kein YouTube-Einbettung.
 
-### 18. 🟡 Etiketten-Motive
-Die individuellen Bieretiketten (Hochzeitsbier, Vereinsbier, Firmenbier, „Bartaxt“, „Kraftstoff“,
-„Physio“) sind ein starkes Markenfeature und ein Kandidat für das Signature-Element der neuen
-Seite. **Gibt es die Etiketten in hoher Auflösung oder als Druckdatei?** Und: Dürfen die
-Kundenetiketten öffentlich gezeigt werden (Einverständnis der jeweiligen Kunden)?
+### 18. 🟡 Etiketten-Motive — **vorhanden, werden gebraucht**
+Bestätigt am 03.08.2026: Die Etiketten liegen in hoher Auflösung vor. **Sie liegen noch nicht bei.**
+
+Bitte die Dateien liefern (Druckdateien oder Bilder ab ca. 1600 px Kantenlänge) — gern auch
+mehr als die sechs von der Altseite bekannten Motive (Hochzeitsbier, Vereinsbier, Dorfladen Waal,
+Stockheimer, „Bartaxt“, „Kraftstoff“, „Physio“, Michelin).
+
+**Eine Rückfrage bleibt:** Dürfen die **Kundenetiketten** öffentlich gezeigt werden — liegt für
+Firmen- und Hochzeitsetiketten das Einverständnis der jeweiligen Kunden vor? Falls unklar, zeigen
+wir nur eigene Motive und anonymisierte Beispiele.
+
+Verwendung: Die Etiketten bekommen einen eigenen Abschnitt auf `/brauseminare/`. Als
+Signature-Element der Gesamtseite wurden sie **nicht** gewählt — Begründung in `BRAND.md`
+Abschnitt 8.
 
 ### 19. 🟢 Auszeichnungen und Mitgliedschaften
 Auf der Ferienwohnungsseite tauchen **Blauer Gockel** und **Allgäuer GenussMacher** auf.
@@ -203,6 +200,93 @@ Erweiterung der Datenschutzerklärung. **Bedarf vorhanden?**
 
 ---
 
+---
+
+## Neu aus Phase 1 (Brandkit)
+
+### 27. 🟡 Altersabfrage — ab welchem Alter, und was passiert bei „Nein“?
+Die Altersabfrage bleibt (Entscheidung Nr. 12). Drei Details fehlen noch:
+
+1. **Altersgrenze:** **16** (Bier) oder **18** (weil auch Bierbrand und Bierlikör im Sortiment
+   sind)? Die Altseite ließ das im Dialogtext offen („Verify you are over %s years of age?“ —
+   der Platzhalter wurde nie ersetzt). **Empfehlung: 16**, mit dem Hinweis, dass Spirituosen
+   erst ab 18 abgegeben werden.
+2. **Bei „Nein“:** Weiterleitung wohin? Üblich ist eine ruhige Hinweisseite („Schön, dass Du da
+   warst — komm in ein paar Jahren wieder“) statt eines Rauswurfs auf eine fremde Seite.
+   **Empfehlung: eigene Hinweisseite.**
+3. **Abfrageart:** einfache Ja/Nein-Frage oder Geburtsdatumseingabe? **Empfehlung: Ja/Nein** —
+   eine Geburtsdatumseingabe erhebt personenbezogene Daten und macht die Sache
+   datenschutzrechtlich unnötig kompliziert.
+
+### 28. 🟢 Claim: „Bayrische“ oder „Bairische“?
+Der Claim lautet auf der Altseite und im Logo „Echt Bayrische Bierkultur die Verbindet“.
+Sprachlich üblich wäre für den Dialekt „bairisch“, für den Bezug zum Bundesland „bayerisch“;
+„bayrisch“ ist die umgangssprachliche Kurzform. Da die Schreibweise im **Logo festgeschrieben**
+ist, würde ich sie **unverändert übernehmen** und nur die Kommasetzung korrigieren
+(„Echt Bayrische Bierkultur, die verbindet“). **Bitte bestätigen.**
+
+### 29. 🟢 Weitere Marken-Textbausteine
+Vorschlag für wiederkehrende Zeilen, die aus dem Bestand abgeleitet sind:
+**„Die Brauerei kommt zu Euch.“** (mobile Brauerei) und **„Ihr rührt mit.“** (Seminare).
+Passt das zur Selbstwahrnehmung, oder klingt es zu forsch?
+Die Signaturzeile **„zu Hause(n) gebraut“** stammt unverändert aus dem Logo und wird gesetzt.
+
+---
+
 ## Erledigt
 
-_(noch nichts — die Liste wird beim Beantworten fortgeschrieben)_
+### ✅ 6 · Preise auf der Website — **nein** (entschieden 03.08.2026)
+
+Auf der neuen Website erscheinen **keine Preise**. Das gilt für alle Bereiche: Biere,
+Brauseminare, Leihinventar und Ferienwohnung.
+
+**Was das konkret bedeutet:**
+
+- Statt Preisen: „Preise im Brauereiverkauf“, „Preisliste auf Anfrage“, „Wir machen Euch gern
+  ein Angebot“.
+- Die **PDF-Preisliste Leihinventar** wird auf der neuen Seite **nicht** verlinkt.
+- Die **Schadenspauschalen** von der Anfrageseite (12,50 €/Viertelstunde, 3 € pro Glas …)
+  entfallen auf der Website. Sie gehören ohnehin in die Mietbedingungen, nicht ins Schaufenster —
+  am besten als PDF, das bei einer konkreten Anfrage mitgeschickt wird.
+- Die **Ferienwohnungspreise** (86 € für 2 Personen usw.) entfallen ebenfalls.
+- Der **Seminarpreis** (53 € p. P.) entfällt.
+
+Ein Hinweis, damit die Entscheidung bewusst bleibt: Bei der **Ferienwohnung** ist das die
+spürbarste Folge — Gäste suchen dort erfahrungsgemäß zuerst nach dem Preis, und die Anfragen
+werden mehr und unverbindlicher. Falls sich das im Betrieb als lästig erweist, lässt sich für
+diese eine Seite später eine Preisangabe nachrüsten, ohne den Rest anzufassen. Als Kompromiss
+ginge auch eine Spanne („ab … € pro Nacht“). Die Entscheidung bleibt bis auf Widerruf: keine Preise.
+
+### ✅ 12 · Altersabfrage — **bleibt** (entschieden 03.08.2026)
+
+Die neue Seite bekommt wieder eine Altersabfrage. Umsetzung ohne WordPress-Plugin, selbst gebaut.
+
+**Technische Folge, die festgehalten werden muss:** Damit die Abfrage nicht bei jedem Seitenaufruf
+erneut erscheint, muss die Antwort auf dem Gerät gespeichert werden. Verwendet wird
+**`localStorage`** — kein Cookie, keine Übertragung an einen Server, kein Drittanbieter.
+
+**Was das für den Datenschutz heißt:**
+
+- **Ein Cookie-Banner wird weiterhin nicht nötig.** Es wird nichts übertragen, nichts
+  ausgewertet, nichts an Dritte gegeben. Der Wert bleibt auf dem Gerät und enthält lediglich
+  ein Ja.
+- Die **Datenschutzerklärung bekommt einen kurzen eigenen Absatz** dazu (Phase 7).
+- Die Abnahme-Checkliste in PROJEKT.md §9 fordert „**kein Storage-Zugriff**“. Das ist damit die
+  **einzige bewusste Abweichung** vom ursprünglichen Plan. Sie wird in `QA.md` (Phase 8)
+  ausdrücklich als solche vermerkt, nicht stillschweigend übergangen.
+
+**Wie es gebaut wird:**
+
+- Der Seiteninhalt steht **vollständig im HTML**, die Abfrage legt sich nur darüber. Damit
+  bleibt die Seite für Suchmaschinen und für Nutzer ohne JavaScript vollständig lesbar.
+- Der Dialog ist **tastaturbedienbar**, fängt den Fokus, lässt sich mit `Esc` nicht umgehen und
+  meldet sich korrekt an Screenreader (`role="dialog"`, `aria-modal`, beschriftet).
+- Er ist im Markenlook gestaltet, nicht als graues Standard-Overlay.
+
+Offene Detailfragen dazu: **Nr. 27**.
+
+### ✅ 16 · Logo als Vektordatei — **existiert** (bestätigt 03.08.2026)
+Die Datei liegt noch nicht vor. Die Anforderung steht weiterhin oben unter Nr. 16.
+
+### ✅ 18 · Etiketten in hoher Auflösung — **existieren** (bestätigt 03.08.2026)
+Die Dateien liegen noch nicht vor. Die Anforderung steht weiterhin oben unter Nr. 18.

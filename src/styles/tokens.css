@@ -1,0 +1,295 @@
+/* =============================================================================
+   DEIN BIER — Design-Tokens
+   Phase 1 · Stand 03.08.2026
+   Herleitung, Begruendung und Kontrastnachweise: siehe BRAND.md
+
+   Diese Datei ist die einzige Quelle fuer Farben, Schriftgroessen, Abstaende,
+   Radien, Schatten und Bewegung. Kein Hexwert und keine px-Groesse steht sonst
+   irgendwo im Projekt.
+
+   Namensschema:  --db-<gruppe>-<stufe>      Grundwerte (Palette)
+                  --db-<rolle>               Semantische Werte (Verwendung)
+   Komponenten benutzen ausschliesslich die semantischen Werte.
+   ============================================================================= */
+
+:root {
+  /* ===========================================================================
+     1 · FARBE — Grundwerte
+     Die drei Kernfarben sind aus dem Bestandslogo gemessen (Pixelanalyse),
+     nicht gewaehlt: malz-700, hopfen-600, stroh-300.
+     =========================================================================== */
+
+  /* --- Neutrale, warm getoent (Braunfamilie) — kein neutrales Grau im System */
+  --db-creme-50: #fbf7ec;   /* Seitenhintergrund. Nie #ffffff verwenden          */
+  --db-creme-100: #f4eede;  /* abgesetzte Flaechen, Karten                       */
+  --db-sand-200: #e8dfc8;   /* ruhige Abschnitte, Bildrahmen                     */
+  --db-sand-300: #d6c9a8;   /* DEKORATIV. 1,54:1 — nie Text, nie Bedienrahmen    */
+  --db-holz-400: #a8916b;   /* DEKORATIV. 2,83:1 — nie Text, nie Bedienrahmen    */
+  --db-holz-500: #7c6844;   /* Sekundaertext (5,00:1), kleinster Bedienrahmen    */
+  --db-malz-700: #523816;   /* LOGOFARBE. Ueberschriften, Primaerflaeche          */
+  --db-malz-800: #3d2911;   /* Fliesstext (12,87:1)                              */
+  --db-nacht-900: #241809;  /* dunkle Abschnitte, Footer, Hero-Abdunklung        */
+
+  /* --- Gruen: Hopfen — Marken- und Bedienfarbe */
+  --db-hopfen-100: #ddebd8; /* Hinterlegung, Erfolgsmeldung                      */
+  --db-hopfen-400: #4e9a45; /* Grafik, Hover auf dunklem Grund                   */
+  --db-hopfen-500: #7cbe6f; /* Links auf dunklem Grund (7,81:1 auf nacht-900)    */
+  --db-hopfen-600: #297424; /* LOGOFARBE. Flaechen, Grafik (5,42:1 auf creme-50) */
+  --db-hopfen-700: #1f5a1c; /* Links, Fokusring, Erfolg (7,73:1 auf creme-50)    */
+
+  /* --- Bernstein: das Bier — Produktfarbe */
+  --db-bernstein-300: #e8b871; /* Flaechen, Verlaufsende, Hervorhebung           */
+  --db-bernstein-500: #bf7a16; /* Bier-Aktionsflaeche — NUR mit dunklem Text     */
+  --db-bernstein-600: #9c5f10; /* Text auf Creme (4,83:1), Rahmen                */
+
+  /* --- Stroh: Gerste und Schaum — aus dem Logo */
+  --db-stroh-300: #e2de9c;  /* LOGOFARBE. Auf dunklem Grund (12,53:1)            */
+
+  /* --- Kupfer: der Braukessel — Detailfarbe, sparsam */
+  --db-kupfer-500: #a85b32; /* Zierlinien, Initialen, Trennzeichen               */
+  --db-kupfer-700: #8a4726; /* Text, Hinweise (6,52:1 auf creme-50)              */
+
+  /* --- Funktional */
+  --db-rot-600: #9e2b1a;    /* Fehler, abgesagter Termin (6,97:1 auf creme-50)   */
+
+  /* ===========================================================================
+     2 · FARBE — Semantische Rollen
+     Komponenten benutzen nur diese Werte.
+     =========================================================================== */
+
+  /* --- Flaechen */
+  --db-flaeche: var(--db-creme-50);
+  --db-flaeche-erhoben: var(--db-creme-100);
+  --db-flaeche-ruhig: var(--db-sand-200);
+  --db-flaeche-dunkel: var(--db-nacht-900);
+  --db-flaeche-bier: var(--db-bernstein-300);
+  --db-flaeche-hopfen: var(--db-hopfen-100);
+
+  /* --- Text auf hellem Grund */
+  --db-text: var(--db-malz-800);
+  --db-text-ueberschrift: var(--db-malz-700);
+  --db-text-leise: var(--db-holz-500);
+  --db-text-link: var(--db-hopfen-700);
+  --db-text-hinweis: var(--db-kupfer-700);
+  --db-text-fehler: var(--db-rot-600);
+  --db-text-erfolg: var(--db-hopfen-700);
+
+  /* --- Text auf dunklem Grund */
+  --db-text-invers: var(--db-creme-50);
+  --db-text-invers-leise: #c8b9a0;          /* 9,01:1 auf nacht-900             */
+  --db-text-invers-link: var(--db-hopfen-500);
+  --db-text-invers-akzent: var(--db-stroh-300);
+
+  /* --- Linien und Rahmen */
+  --db-linie: var(--db-sand-300);            /* dekorativ                        */
+  --db-linie-kraeftig: var(--db-holz-500);   /* Bedienelemente, min. 3:1         */
+  --db-linie-zier: var(--db-kupfer-500);
+  --db-linie-invers: rgb(251 247 236 / 0.22);
+
+  /* --- Aktionen */
+  --db-aktion-flaeche: var(--db-malz-700);
+  --db-aktion-text: var(--db-creme-50);
+  --db-aktion-flaeche-hover: var(--db-malz-800);
+
+  --db-aktion-bier-flaeche: var(--db-bernstein-500);
+  --db-aktion-bier-text: var(--db-nacht-900);   /* 4,97:1 — heller Text faellt durch */
+  --db-aktion-bier-flaeche-hover: var(--db-bernstein-600);
+
+  --db-aktion-still-rahmen: var(--db-holz-500);
+  --db-aktion-still-text: var(--db-malz-800);
+  --db-aktion-still-flaeche-hover: var(--db-creme-100);
+
+  /* --- Fokus: 2 px Ring mit 2 px Versatz in der Flaechenfarbe */
+  --db-fokus-farbe: var(--db-hopfen-700);
+  --db-fokus-farbe-invers: var(--db-stroh-300);
+  --db-fokus-breite: 2px;
+  --db-fokus-versatz: 2px;
+
+  /* ===========================================================================
+     3 · SCHRIFT
+     Paarung A (Empfehlung Phase 1): Fraunces + Work Sans.
+     Endgueltige Festlegung in Phase 2 — dann werden nur diese zwei Werte
+     getauscht, sonst nichts.
+     =========================================================================== */
+
+  --db-font-display: "Fraunces Variable", "Fraunces", Georgia, "Times New Roman", serif;
+  --db-font-text: "Work Sans Variable", "Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Fraunces-Achsen. WONK bleibt 0 — die schraegen Formen waeren Effekthascherei.
+     SOFT 30 nimmt die Haerte aus den Ecken: der Unterschied zwischen
+     Brauerei und Anwaltskanzlei. */
+  --db-display-soft: 30;
+  --db-display-wonk: 0;
+
+  /* --- Groessenskala: mobil Faktor 1,25 → Desktop 1,333, stufenlos ueber clamp.
+         Basis 17 px, damit Fliesstext auf dem Handy nicht zu klein wird. */
+  --db-text-xs: clamp(0.8rem, 0.78rem + 0.10vw, 0.85rem);
+  --db-text-sm: clamp(0.906rem, 0.88rem + 0.13vw, 0.956rem);
+  --db-text-base: clamp(1.0625rem, 1.03rem + 0.16vw, 1.125rem);
+  --db-text-lg: clamp(1.194rem, 1.14rem + 0.27vw, 1.294rem);
+  --db-text-xl: clamp(1.331rem, 1.24rem + 0.46vw, 1.5rem);
+  --db-text-2xl: clamp(1.6rem, 1.44rem + 0.80vw, 1.9rem);
+  --db-text-3xl: clamp(1.919rem, 1.65rem + 1.34vw, 2.5rem);
+  --db-text-4xl: clamp(2.306rem, 1.86rem + 2.23vw, 3.331rem);
+  --db-text-5xl: clamp(2.763rem, 2.06rem + 3.51vw, 4.444rem);
+  --db-text-hero: clamp(3.25rem, 2.06rem + 5.95vw, 6.5rem);
+
+  /* --- Schnitte. Vier Stufen, nicht nur 400 und 700. */
+  --db-weight-normal: 400;
+  --db-weight-medium: 500;
+  --db-weight-semibold: 600;
+  --db-weight-bold: 700;
+
+  /* --- Zeilenhoehen: je groesser der Grad, desto enger */
+  --db-leading-hero: 0.98;
+  --db-leading-eng: 1.08;
+  --db-leading-ueberschrift: 1.2;
+  --db-leading-normal: 1.5;
+  --db-leading-text: 1.65;
+
+  /* --- Laufweite */
+  --db-tracking-hero: -0.035em;
+  --db-tracking-ueberschrift: -0.02em;
+  --db-tracking-normal: 0;
+  --db-tracking-weit: 0.08em;      /* Etiketten, Kapitaelchen */
+
+  /* --- Zeilenlaenge: max. 68 Zeichen */
+  --db-mass-text: 34rem;
+  --db-mass-eng: 26rem;
+  --db-mass-breit: 46rem;
+
+  /* ===========================================================================
+     4 · ABSTAND
+     Basis 4 px. Grosszuegig — die Marke braucht Luft, keine Dichte.
+     =========================================================================== */
+
+  --db-space-3xs: 0.25rem;   /*  4px */
+  --db-space-2xs: 0.5rem;    /*  8px */
+  --db-space-xs: 0.75rem;    /* 12px */
+  --db-space-sm: 1rem;       /* 16px */
+  --db-space-md: 1.5rem;     /* 24px */
+  --db-space-lg: 2rem;       /* 32px */
+  --db-space-xl: 3rem;       /* 48px */
+  --db-space-2xl: 4rem;      /* 64px */
+  --db-space-3xl: 6rem;      /* 96px */
+  --db-space-4xl: 8rem;      /* 128px */
+
+  /* --- Abschnittsrhythmus. Unten bewusst etwas mehr als oben (optischer
+         Ausgleich — gleiche Werte wirken kopflastig). */
+  --db-abschnitt-oben: clamp(3.5rem, 2.5rem + 5vw, 7rem);
+  --db-abschnitt-unten: clamp(4rem, 2.8rem + 6vw, 8rem);
+
+  /* ===========================================================================
+     5 · LAYOUT
+     =========================================================================== */
+
+  --db-breite-inhalt: 72rem;      /* 1152px — Standardcontainer               */
+  --db-breite-weit: 84rem;        /* 1344px — breite Bildbaender              */
+  --db-breite-eng: 46rem;         /*  736px — Fliesstextspalten               */
+  --db-rand: clamp(1.25rem, 0.9rem + 1.8vw, 2.5rem);   /* Seitenrand          */
+
+  /* Volle Hoehe: dvh statt vh — verhindert das Springen in mobilen Browsern */
+  --db-hoehe-voll: 100dvh;
+  --db-hoehe-hero: clamp(30rem, 82dvh, 48rem);
+
+  /* ===========================================================================
+     6 · RADIEN
+     Aussen weicher als innen — sonst wirken verschachtelte Ecken falsch.
+     =========================================================================== */
+
+  --db-radius-xs: 2px;
+  --db-radius-sm: 4px;
+  --db-radius-md: 8px;
+  --db-radius-lg: 14px;
+  --db-radius-xl: 22px;
+  --db-radius-rund: 9999px;
+
+  /* ===========================================================================
+     7 · SCHATTEN
+     Braun getoent, nie schwarz. Eine einzige Lichtrichtung: von oben.
+     =========================================================================== */
+
+  --db-schatten-xs: 0 1px 2px rgb(82 56 22 / 0.06);
+  --db-schatten-sm: 0 2px 6px rgb(82 56 22 / 0.08);
+  --db-schatten-md: 0 6px 18px -4px rgb(82 56 22 / 0.12);
+  --db-schatten-lg: 0 16px 40px -12px rgb(82 56 22 / 0.16);
+  --db-schatten-innen: inset 0 1px 0 rgb(251 247 236 / 0.5);
+
+  /* ===========================================================================
+     8 · TEXTUR
+     Kornstruktur bricht die digitale Glaette. Als feste Ebene ueber der Seite,
+     3-5 % Deckkraft, pointer-events: none.
+     =========================================================================== */
+
+  --db-korn-deckkraft: 0.04;
+  --db-korn: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* Warmes Licht hinter dem Hero: radial, nicht linear-45-Grad. */
+  --db-licht-bernstein: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    rgb(232 184 113 / 0.32) 0%,
+    rgb(232 184 113 / 0) 70%
+  );
+
+  /* ===========================================================================
+     9 · BEWEGUNG
+     Ein orchestrierter Moment schlaegt zehn verstreute Effekte.
+     Animiert werden ausschliesslich transform und opacity.
+     =========================================================================== */
+
+  --db-dauer-sofort: 100ms;
+  --db-dauer-schnell: 180ms;
+  --db-dauer-normal: 260ms;
+  --db-dauer-ruhig: 420ms;
+  --db-dauer-lang: 900ms;      /* Hero-Einstieg */
+
+  --db-easing-standard: cubic-bezier(0.2, 0, 0.1, 1);
+  --db-easing-raus: cubic-bezier(0.4, 0, 1, 1);
+  --db-easing-rein: cubic-bezier(0, 0, 0.2, 1);
+  --db-easing-feder: cubic-bezier(0.34, 1.4, 0.5, 1);   /* leichtes Ueberschwingen */
+
+  --db-staffel: 70ms;          /* Versatz zwischen gestaffelten Elementen */
+
+  /* ===========================================================================
+     10 · EBENEN
+     Feste Skala. Keine willkuerlichen Werte wie 9999 irgendwo im Code.
+     =========================================================================== */
+
+  --db-ebene-hinter: -1;
+  --db-ebene-basis: 0;
+  --db-ebene-erhoben: 10;
+  --db-ebene-klebend: 100;     /* Kopfzeile */
+  --db-ebene-ueberlagerung: 200;
+  --db-ebene-dialog: 300;      /* Altersabfrage */
+  --db-ebene-korn: 400;        /* liegt ueber allem, faengt keine Klicks */
+  --db-ebene-sprungmarke: 500; /* "Zum Inhalt springen" immer ganz oben */
+}
+
+/* =============================================================================
+   Bewegung reduzieren — respektiert die Systemeinstellung.
+   Bewegung wird abgeschaltet, nicht nur verkuerzt.
+   ============================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --db-dauer-sofort: 1ms;
+    --db-dauer-schnell: 1ms;
+    --db-dauer-normal: 1ms;
+    --db-dauer-ruhig: 1ms;
+    --db-dauer-lang: 1ms;
+    --db-staffel: 0ms;
+  }
+}
+
+/* =============================================================================
+   Hoher Kontrast — Systemeinstellung "erhoehter Kontrast".
+   Dekorative Linien werden kraeftig, Zierfarben weichen der Textfarbe.
+   ============================================================================= */
+
+@media (prefers-contrast: more) {
+  :root {
+    --db-linie: var(--db-holz-500);
+    --db-text-leise: var(--db-malz-800);
+    --db-korn-deckkraft: 0;
+  }
+}
