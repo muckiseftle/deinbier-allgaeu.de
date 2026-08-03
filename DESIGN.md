@@ -1121,7 +1121,17 @@ Meine Empfehlung mit fünf Gründen steht in Abschnitt 3. **Braucht ein Ja.**
 Falls jemand die Seite später übernimmt, der Tailwind gewohnt ist, wäre das das einzige
 Gegenargument.
 
-### 14.2 Dunkles Farbschema: ja oder nein?
+### 14.2 ✅ Dunkles Farbschema: **nein** (entschieden 03.08.2026)
+
+Die Seite bekommt **nur die helle Fassung**. Kein zweiter Satz semantischer Werte, keine
+doppelte Kontrastprüfung. Der Kontrast entsteht über das dunkle Zitatband und die dunkle
+Fußzeile, beides aus `--db-nacht-900`.
+
+Nutzer mit Systemeinstellung „dunkel" bekommen dieselbe helle Seite. Das ist eine Entscheidung,
+keine Auslassung, und wird in `QA.md` (Phase 8) als solche vermerkt, weil der Lead-Skill
+`design-taste-frontend` §6.C beide Fassungen verlangt.
+
+*Ursprüngliche Fragestellung, zur Nachvollziehbarkeit:*
 
 Der Lead-Skill verlangt für Seiten mit Publikumsverkehr beide Fassungen. `BRAND.md` empfiehlt
 nur die helle.
@@ -1143,11 +1153,14 @@ Abschnitt 4. Die Abkehr von Fraunces ist begründet. **Braucht ein Ja.**
 Falls Ihr die Schriften sehen wollt, bevor Ihr entscheidet: Phase 4 baut zuerst die Startseite,
 dort ist es nach einer Stunde sichtbar und ein Wechsel kostet zwei Zeilen in `tokens.css`.
 
-### 14.4 Der Wagen als Leitmotiv
+### 14.4 ✅ Der Wagen als Leitmotiv: **ja** (entschieden 03.08.2026)
 
-Abschnitt 7. **Braucht ein Ja.**
-Wichtig zu wissen: Er wird bis zum Eintreffen der Vektordatei nach der Silhouette des
-vorhandenen PNG nachgezeichnet. Die endgültige Fassung entsteht erst aus dem Original.
+Der Pritschenwagen mit dem Fass wird das Signature-Element, mit den Einsatzregeln aus
+Abschnitt 7: genau fünf Auftritte, Wegstrecke dreimal auf der Startseite.
+
+Bis die Logo-Vektordatei vorliegt (OFFENE-FRAGEN Nr. 16), wird er nach der Silhouette des
+vorhandenen 300-px-PNG nachgezeichnet. Die endgültige Fassung entsteht erst aus dem Original,
+und bis dahin ist jede Darstellung eine Näherung.
 
 ---
 
