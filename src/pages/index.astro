@@ -71,10 +71,6 @@ const BENTO_SPALTEN: Record<string, string> = {
 >
   {/* ===== A · HERO, asymmetrisch 7/5 ===== */}
   <section class="hero">
-    {/* Grosses Leitmotiv statt gekacheltem Muster: gibt der Flaeche Tiefe,
-        ohne zur Tapete zu werden. Beim Ueberfahren laeuft ein goldener
-        Schimmer an den Konturen entlang. */}
-    <Leitmotiv art="hopfen" seite="links" hoehe={560} drehung={-8} />
     <div class="container raster hero-raster">
       <div class="spalte-7 hero-text">
         <p class="etikettenzeile hero-etikett">{BETRIEB.signatur}</p>
@@ -97,6 +93,17 @@ const BENTO_SPALTEN: Record<string, string> = {
             alt="Die mobile Brauanlage aufgebaut bei einem Kunden, Gäste stehen darum herum"
             sizes="(max-width: 767px) 100vw, 40vw"
             laden="eager"
+          />
+          {/* Die Dolde liegt im Bild und wird von der Etikettenfassung
+              angeschnitten. Auf dem Foto braucht sie die helle Linie; in
+              Malzbraun waere sie dort unsichtbar. */}
+          <Leitmotiv
+            art="hopfen"
+            ton="hell"
+            seite="rechts"
+            hoehe="120%"
+            drehung={11}
+            ueberstand={0.1}
           />
         </Etikettenrahmen>
       </div>
@@ -130,7 +137,9 @@ const BENTO_SPALTEN: Record<string, string> = {
 
   {/* ===== C · DIE BIERE, Bento mit exakter Zellenzahl ===== */}
   <Abschnitt etikett="Fünf Biere" titel="Was bei uns im Tank liegt." klasse="abschnitt-motiv">
-    <Leitmotiv art="gerste" seite="rechts" hoehe={620} drehung={9} />
+    {/* Die Aehre soll man finden, ohne sie zu suchen: gross, weit oben im
+        Abschnitt, und mit den langen Grannen weit ueber den Rand hinaus. */}
+    <Leitmotiv art="gerste" seite="rechts" hoehe={780} drehung={7} />
     <div class="raster bento">
       {
         biere.map((bier, i) => (
@@ -275,7 +284,7 @@ const BENTO_SPALTEN: Record<string, string> = {
 
   {/* ===== H · VERKAUFSSTELLEN, gruppierte Ortsliste ===== */}
   <Abschnitt titel="Wo es DEIN BIER gibt" klasse="abschnitt-motiv">
-    <Leitmotiv art="hopfen" seite="rechts" hoehe={420} drehung={14} />
+    <Leitmotiv art="hopfen" seite="rechts" hoehe={520} drehung={14} />
     <div class="stellen">
       {
         stellenGruppen.map((gruppe, i) => (
@@ -333,21 +342,16 @@ const BENTO_SPALTEN: Record<string, string> = {
 
 <style>
   /* Ein Motiv braucht einen Bezugsrahmen und darf nicht seitlich
-     herausragen, sonst entsteht ein waagerechter Scrollbalken. */
-  .hero,
+     herausragen, sonst entsteht ein waagerechter Scrollbalken.
+     Im Hero uebernimmt das die Etikettenfassung des Bildes: sie schneidet
+     die Dolde sauber am Bildrand ab. */
   :global(.abschnitt-motiv) {
     position: relative;
     overflow: hidden;
   }
 
   /* Inhalt ueber das Motiv legen, damit es nicht ueber Text und Bildern
-     liegt. Im Hero ist das Motiv ein Geschwister des Containers, im
-     Abschnitt liegt es darin: deshalb zwei Regeln. */
-  .hero > :global(.container) {
-    position: relative;
-    z-index: 1;
-  }
-
+     liegt. */
   :global(.abschnitt-motiv .container > *:not(.leitmotiv)) {
     position: relative;
     z-index: 1;

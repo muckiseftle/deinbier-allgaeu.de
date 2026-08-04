@@ -3,79 +3,213 @@
  * Grosses Hintergrundmotiv: Hopfendolde oder Gerstenaehre.
  *
  * Bewusst KEIN gekacheltes Muster. Ein Muster wird zur Tapete und macht die
- * Flaeche unruhig; ein einzelnes, sehr grosses und sehr blasses Motiv gibt
- * der Flaeche Tiefe, ohne sich in den Vordergrund zu draengen.
+ * Flaeche unruhig; ein einzelnes, sehr grosses Motiv gibt der Flaeche Tiefe,
+ * ohne sich in den Vordergrund zu draengen.
  *
- * Beim Ueberfahren laeuft ein goldener Schimmer an den Konturen entlang.
- * Umgesetzt mit stroke-dashoffset auf einer zweiten, goldenen Kopie der
- * Pfade: ein kurzes helles Segment wandert die Umrisslinie ab. Das ist
- * genau der Effekt, den man an einer angestrahlten Kante sieht.
+ * Der Zeiger ist ein Lichtpunkt. Wo er steht, glimmen die Linien goldgelb
+ * auf und werden nach aussen hin schwaecher; die Kanten der Zeichnung
+ * leuchten kraeftig, die Binnenzeichnung deutlich zurueckhaltender. Das ist
+ * der Unterschied zu einer Kontur, die einfach gleichmaessig aufleuchtet:
+ * es sieht aus, als truege man eine Lampe ueber ein geprägtes Blatt.
  *
- * Nur auf der Startseite. Auf Unterseiten wuerde es zur Manier.
+ * Aufbau: dieselbe Zeichnung zweimal uebereinander. Unten der blasse Grund,
+ * darueber eine goldene Kopie, die mit einem radialen Verlauf maskiert ist.
+ * Die Maske sitzt an einem HTML-Element und nicht an einer SVG-Gruppe, weil
+ * CSS-Masken auf SVG-Kindern je nach Browser unterschiedlich greifen.
  */
 interface Props {
   art: 'hopfen' | 'gerste';
   /** Position: an welcher Seite das Motiv aus dem Rand ragt. */
   seite?: 'links' | 'rechts';
-  /** Hoehe in Pixeln. Gedacht sind 380 bis 620. */
-  hoehe?: number;
+  /**
+   * Hoehe als CSS-Laenge. Zahlen gelten als Pixel; gedacht sind 380 bis 780.
+   * Ein Prozentwert bezieht sich auf den umgebenden Bezugsrahmen — im
+   * Hero-Bild ist das die Etikettenfassung, sodass das Motiv mit dem Foto
+   * mitwaechst statt bei jeder Fensterbreite anders zu sitzen.
+   */
+  hoehe?: number | string;
   /** Zusaetzliche Drehung in Grad. */
   drehung?: number;
+  /**
+   * Wie weit das Motiv ueber den Rand hinausragt, als Anteil seiner eigenen
+   * Breite. Auf grossen Flaechen darf das viel sein; in einem kleinen
+   * Bildausschnitt bleibt sonst zu wenig von der Form uebrig, um sie zu
+   * erkennen.
+   */
+  ueberstand?: number;
+  /** `dunkel` fuer Cremeflaechen, `hell` fuer dunkle Fotos. */
+  ton?: 'dunkel' | 'hell';
   klasse?: string;
 }
 
-const { art, seite = 'rechts', hoehe = 520, drehung = 0, klasse } = Astro.props;
+const {
+  art,
+  seite = 'rechts',
+  hoehe = 520,
+  drehung = 0,
+  ueberstand = 0.26,
+  ton = 'dunkel',
+  klasse,
+} = Astro.props;
 
-/* Die Pfade liegen einmal hier und werden zweimal gezeichnet: blass in
-   Malzbraun als Grundzustand, golden als Schimmerkopie darueber. */
-const HOPFEN = [
-  'M0 0C-42 11-58 42-53 74-48 111-27 148 0 174 27 148 48 111 53 74 58 42 42 11 0 0Z',
-  'M-50 45C-21 63 21 63 50 45',
-  'M-51 79C-21 98 21 98 48 79',
-  'M-43 111C-19 127 19 127 40 111',
-  'M-29 140C-11 151 11 151 27 140',
-  'M0 0V-34',
-  'M0-24C-19-37-34-34-45-18',
-  'M0-24C19-37 34-34 45-18',
+const r = (n: number) => Math.round(n * 10) / 10;
+
+/* ---------------------------------------------------------------------------
+   Hopfendolde
+
+   Eine Dolde ist kein gestreiftes Ei. Sie besteht aus vielen sich
+   ueberlappenden Deckblaettern, die wie Schuppen versetzt uebereinander
+   liegen und nach unten spitz zulaufen. Genau diese Schuppen machen sie
+   erkennbar, deshalb werden sie einzeln gezeichnet statt als Querlinien
+   angedeutet.
+------------------------------------------------------------------------- */
+
+/**
+ * Ein Deckblatt, angedeutet durch seine Unterkante: ein nach unten
+ * durchhaengender Bogen.
+ *
+ * Ein erster Versuch zeichnete jedes Blatt als geschlossene Form. Bei neun
+ * Reihen ergab das ein Gewirr aus Schlaufen, das eher nach Draht aussah als
+ * nach einer Dolde. Nur die Unterkante zu setzen ist nicht nur ruhiger,
+ * es ist auch richtiger: an einem Zapfen sieht man von jeder Schuppe genau
+ * diese eine Linie, alles andere liegt unter der naechsten Schuppe.
+ */
+function schuppe(x: number, y: number, b: number) {
+  return `M${r(x - b)} ${r(y)}Q${r(x)} ${r(y + b * 0.86)} ${r(x + b)} ${r(y)}`;
+}
+
+/* Je Reihe: Hoehe und halbe Doldenbreite an dieser Stelle. Die Reihen sind
+   gegeneinander versetzt — gerade Reihen drei Schuppen, ungerade zwei —,
+   damit die Schuppen wie am Zapfen auf Luecke sitzen. Die Schuppenbreite ist
+   in beiden Faellen ein Drittel der Doldenbreite, sonst waeren die Schuppen
+   der einen Reihe sichtbar groesser als die der anderen. */
+const HOPFEN_REIHEN: Array<[number, number]> = [
+  [14, 45],
+  [33, 51],
+  [52, 53],
+  [71, 52],
+  [89, 48],
+  [106, 42],
+  [122, 34],
+  [137, 25],
+  [150, 15],
 ];
 
-const GERSTE = [
-  'M0 0V252',
-  'M0 58C-26 42-37 18-37-8-16-5 0 14 5 34Z',
-  'M0 58C26 42 37 18 37-8 16-5 0 14-5 34Z',
-  'M0 121C-26 105-37 81-37 55-16 58 0 77 5 97Z',
-  'M0 121C26 105 37 81 37 55 16 58 0 77-5 97Z',
-  'M0 184C-24 168-34 145-34 120-15 123 0 141 5 159Z',
-  'M0 184C24 168 34 145 34 120 15 123 0 141-5 159Z',
-  'M-8-16C-21-63-34-100-52-132',
-  'M8-16C21-63 34-100 52-132',
-  'M0-20V-148',
-];
+const hopfenSchuppen = HOPFEN_REIHEN.flatMap(([y, hw], reihe) => {
+  const b = hw / 3;
+  return reihe % 2 === 0
+    ? [schuppe(-2 * b, y, b), schuppe(0, y, b), schuppe(2 * b, y, b)]
+    : [schuppe(-b, y, b), schuppe(b, y, b)];
+});
 
-const pfade = art === 'hopfen' ? HOPFEN : GERSTE;
-const box = art === 'hopfen' ? '-70 -40 140 220' : '-60 -155 120 415';
-const breite = art === 'hopfen' ? Math.round(hoehe * 0.62) : Math.round(hoehe * 0.32);
+const HOPFEN = {
+  /* Aussenkante: Umriss, Stiel, zwei Blaetter. Diese Linien leuchten stark. */
+  kante: [
+    'M0 2C-30 2-53 24-53 56-53 100-31 146 0 176 31 146 53 100 53 56 53 24 30 2 0 2Z',
+    'M0 2V-36',
+    'M0-26C-16-42-36-42-48-27-33-15-12-16 0-26Z',
+    'M0-26C16-42 36-42 48-27 33-15 12-16 0-26Z',
+  ],
+  /* Binnenzeichnung: die Schuppen. Sie leuchten deutlich schwaecher. */
+  innen: hopfenSchuppen,
+  box: '-70 -48 140 236',
+};
+
+/* ---------------------------------------------------------------------------
+   Gerstenaehre
+
+   Erkennbar wird die Aehre durch zwei Dinge: die paarweise am Halm sitzenden
+   Koerner und die sehr langen Grannen, die weit darueber hinausstehen. Eine
+   Aehre ohne Grannen sieht aus wie ein Grashalm — deshalb sind sie hier
+   bewusst lang und zahlreich.
+------------------------------------------------------------------------- */
+
+/** Ein Korn: laengliche Spindel vom Halm schraeg nach oben aussen. */
+function korn(s: number, y: number, l: number) {
+  const sx = s * l * 0.62;
+  const sy = y - l * 0.42;
+  return (
+    `M0 ${r(y + l * 0.55)}` +
+    `C${r(s * l * 0.24)} ${r(y + l * 0.12)} ${r(s * l * 0.54)} ${r(y - l * 0.12)} ${r(sx)} ${r(sy)}` +
+    `C${r(s * l * 0.34)} ${r(y - l * 0.02)} ${r(s * l * 0.08)} ${r(y + l * 0.3)} 0 ${r(y + l * 0.55)}Z`
+  );
+}
+
+/** Die Granne: setzt an der Kornspitze an und laeuft weit nach oben aussen. */
+function granne(s: number, y: number, l: number, laenge: number) {
+  const sx = s * l * 0.62;
+  const sy = y - l * 0.42;
+  const ex = s * (l * 0.62 + laenge * 0.42);
+  const ey = sy - laenge;
+  return `M${r(sx)} ${r(sy)}C${r(sx + s * laenge * 0.06)} ${r(sy - laenge * 0.42)} ${r(ex - s * laenge * 0.16)} ${r(ey + laenge * 0.34)} ${r(ex)} ${r(ey)}`;
+}
+
+/** Mittelrippe im Korn. */
+function rippe(s: number, y: number, l: number) {
+  return `M0 ${r(y + l * 0.5)}C${r(s * l * 0.14)} ${r(y + l * 0.06)} ${r(s * l * 0.4)} ${r(y - l * 0.16)} ${r(s * l * 0.58)} ${r(y - l * 0.38)}`;
+}
+
+/* Sieben Kornpaare. Die mittleren sind am groessten, oben und unten laeuft
+   die Aehre aus — sonst wirkt sie wie ein Rechteck. */
+const GERSTE_PAARE = Array.from({ length: 7 }, (_, i) => {
+  const y = 8 + i * 29;
+  const mitte = 1 - Math.abs(i - 3) / 4.6;
+  return { y, l: 38 + 16 * mitte, laenge: 96 + 44 * mitte };
+});
+
+const GERSTE = {
+  /* Kanten: Koerner und Grannen. Das ist die Silhouette der Aehre. */
+  kante: GERSTE_PAARE.flatMap(({ y, l, laenge }) => [
+    korn(-1, y, l),
+    korn(1, y, l),
+    granne(-1, y, l, laenge),
+    granne(1, y, l, laenge),
+  ]),
+  /* Binnenzeichnung: Halm und Mittelrippen. */
+  innen: [
+    'M0 6V268',
+    ...GERSTE_PAARE.flatMap(({ y, l }) => [rippe(-1, y, l), rippe(1, y, l)]),
+  ],
+  box: '-104 -158 208 442',
+};
+
+const motiv = art === 'hopfen' ? HOPFEN : GERSTE;
+const [, , boxB, boxH] = motiv.box.split(' ').map(Number);
+const hoeheCss = typeof hoehe === 'number' ? `${hoehe}px` : hoehe;
+/* Die Breite kommt aus dem Seitenverhaeltnis der Zeichenflaeche und nicht
+   aus einer Rechnung wie `calc(hoehe * verhaeltnis)`. Der Grund: ein
+   Prozentwert in einer Breitenangabe bezieht sich auf die Breite des
+   Bezugsrahmens, nicht auf dessen Hoehe. Bei `hoehe="132%"` kam so eine
+   Breite von 328 px heraus, wo 151 px richtig gewesen waeren. */
+const verhaeltnis = `${boxB} / ${boxH}`;
 ---
 
 <div
-  class:list={['leitmotiv', `leitmotiv-${seite}`, klasse]}
-  style={`--motiv-hoehe: ${hoehe}px; --motiv-breite: ${breite}px; --motiv-drehung: ${drehung}deg;`}
+  class:list={['leitmotiv', `leitmotiv-${seite}`, `leitmotiv-${ton}`, klasse]}
+  style={`--motiv-hoehe: ${hoeheCss}; --motiv-verhaeltnis: ${verhaeltnis}; --motiv-drehung: ${drehung}deg; --motiv-ueberstand: ${r(ueberstand * 100)}%;`}
   aria-hidden="true"
 >
-  <svg viewBox={box} fill="none" stroke-linecap="round" stroke-linejoin="round">
-    {/* Grundzustand: sehr blass, nur Tiefe fuer die Flaeche. */}
-    <g class="leitmotiv-grund" stroke="currentColor" stroke-width="2.4">
-      {pfade.map((d) => <path d={d} />)}
-    </g>
-    {/* Schimmerkopie: liegt genau darueber und ist im Ruhezustand
-        unsichtbar. */}
-    <g class="leitmotiv-schimmer" stroke-width="3">
-      {/* pathLength normiert jeden Pfad auf 100 Einheiten. Ohne das waere
-          das Schimmersegment auf einer kurzen Linie sofort vollstaendig
-          und auf einer langen kaum zu sehen: der Effekt wirkte zufaellig. */}
-      {pfade.map((d) => <path d={d} pathLength="100" />)}
-    </g>
+  {/* Grundzustand: sehr blass, nur Tiefe fuer die Flaeche. */}
+  <svg
+    class="leitmotiv-grund"
+    viewBox={motiv.box}
+    fill="none"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <g stroke-width="2.6">{motiv.kante.map((d) => <path d={d} />)}</g>
+    <g stroke-width="2">{motiv.innen.map((d) => <path d={d} />)}</g>
   </svg>
+
+  {/* Goldkopie. Die Maske am umgebenden Element laesst nur den Bereich um
+      den Zeiger stehen, alles andere blendet weich aus. */}
+  <div class="leitmotiv-licht">
+    <svg viewBox={motiv.box} fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <g class="licht-innen" stroke-width="2">{motiv.innen.map((d) => <path d={d} />)}</g>
+      <g class="licht-kante" stroke-width="3.2">{motiv.kante.map((d) => <path d={d} />)}</g>
+    </svg>
+  </div>
 </div>
 
 <style>
@@ -84,79 +218,138 @@ const breite = art === 'hopfen' ? Math.round(hoehe * 0.62) : Math.round(hoehe * 
     top: 50%;
     /* Bewusst 0 und nicht negativ: bei negativem z-index liegt das Motiv
        hinter der Flaeche des Abschnitts und ist fuer den Zeiger gar nicht
-       erreichbar, der Schimmer koennte nie ausloesen. Der Inhalt bekommt
+       erreichbar, der Lichtpunkt koennte nie ausloesen. Der Inhalt bekommt
        stattdessen z-index 1 und liegt damit darueber. */
     z-index: 0;
-    width: var(--motiv-breite);
     height: var(--motiv-hoehe);
-    transform: translateY(-50%) rotate(var(--motiv-drehung));
-    color: var(--db-malz-700);
+    aspect-ratio: var(--motiv-verhaeltnis);
+    width: auto;
+    transform: translateY(-50%) translateX(var(--motiv-versatz, 0)) rotate(var(--motiv-drehung));
+
+    /* Startwert, bis der Zeiger das erste Mal gemeldet wird. Auch der
+       Ruhewert fuer alle, die keinen Zeiger haben. */
+    --licht-x: 50%;
+    --licht-y: 45%;
+    /* Klein genug, dass man den Lichtpunkt als Punkt wahrnimmt und nicht
+       als allgemeine Aufhellung des ganzen Motivs. */
+    --licht-radius: 175px;
   }
 
   /* Das Hochlegen des Inhalts passiert in der jeweiligen Seite, weil die
-     Verschachtelung dort unterschiedlich ist: im Hero ist das Motiv ein
-     Geschwister des Containers, im Abschnitt liegt es darin. */
+     Verschachtelung dort unterschiedlich ist. */
 
   /* Ragt bewusst ueber den Rand hinaus: ein angeschnittenes Motiv wirkt
      wie ein Ausschnitt aus etwas Groesserem, ein vollstaendiges wie ein
-     aufgeklebtes Bild. */
+     aufgeklebtes Bild.
+     Der Ueberstand kommt aus einer Verschiebung und nicht aus `right`, weil
+     die Breite hier vom Seitenverhaeltnis abgeleitet wird und in CSS damit
+     nicht als Zahl vorliegt. Ein Prozentwert in `translateX` bezieht sich
+     dagegen auf die eigene Breite des Elements. */
   .leitmotiv-rechts {
-    right: calc(var(--motiv-breite) * -0.28);
+    right: 0;
+    --motiv-versatz: var(--motiv-ueberstand);
   }
 
   .leitmotiv-links {
-    left: calc(var(--motiv-breite) * -0.3);
+    left: 0;
+    --motiv-versatz: calc(var(--motiv-ueberstand) * -1);
   }
 
   .leitmotiv svg {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     overflow: visible;
   }
 
   .leitmotiv-grund {
-    opacity: 0.085;
     transition: opacity var(--db-dauer-ruhig) var(--db-easing-standard);
   }
 
-  .leitmotiv-schimmer {
-    stroke: var(--db-bernstein-300);
+  /* Auf Creme: warmes Braun, sehr blass. Kraeftig genug, dass man das Motiv
+     findet, ohne dass es mit dem Text konkurriert. */
+  .leitmotiv-dunkel .leitmotiv-grund {
+    color: var(--db-malz-700);
+    opacity: 0.15;
+  }
+
+  /* Auf einem Foto: helle Linie. Dunkles Braun waere dort unsichtbar.
+     Der Schlagschatten ist noetig, weil ein Foto helle und dunkle Stellen
+     hat: ohne ihn verschwindet die Linie ueber jeder hellen Flaeche. Mit ihm
+     wirkt sie wie in das Bild gepraegt. */
+  .leitmotiv-hell .leitmotiv-grund {
+    color: var(--db-creme-50);
+    opacity: 0.55;
+    filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.45));
+  }
+
+  /* -------------------------------------------------------------------------
+     Der Lichtpunkt
+     ---------------------------------------------------------------------- */
+
+  .leitmotiv-licht {
+    position: absolute;
+    inset: 0;
     opacity: 0;
-    /* In normierten Einheiten: ein Segment ueber 26 Prozent der Laenge,
-       der Rest Luecke. Beim Verschieben des Versatzes wandert es die
-       Kontur entlang, auf jedem Pfad gleichmaessig.
-       Die Luecke ist mit 200 groesser als der Pfad selbst. Nur so gibt es
-       Versatzwerte, bei denen ueberhaupt kein Segment auf der Kontur liegt:
-       bei 26 steht es komplett davor, bei -100 komplett dahinter. Genau
-       diese beiden Werte sind Anfang und Ende der Bewegung. */
-    stroke-dasharray: 26 200;
-    stroke-dashoffset: 26;
-    filter: drop-shadow(0 0 6px rgb(232 184 113 / 0.55));
+    /* Hinein zuegig, hinaus etwas langsamer: so wirkt es wie eine Lampe,
+       die man wegtraegt, und nicht wie ein Schalter. */
+    transition: opacity var(--db-dauer-ruhig) var(--db-easing-standard);
+
+    /* Der eigentliche Effekt. Voll deckend am Zeiger, dann rasch schwaecher.
+       Die vielen Stufen sind Absicht: mit nur zwei Stopps entsteht ein
+       harter Kreisrand, der wie ein Loch aussieht statt wie Licht. */
+    --licht-verlauf: radial-gradient(
+      circle var(--licht-radius) at var(--licht-x) var(--licht-y),
+      rgb(0 0 0 / 1) 0%,
+      rgb(0 0 0 / 1) 15%,
+      rgb(0 0 0 / 0.86) 32%,
+      rgb(0 0 0 / 0.52) 52%,
+      rgb(0 0 0 / 0.2) 72%,
+      rgb(0 0 0 / 0.04) 88%,
+      rgb(0 0 0 / 0) 100%
+    );
+    -webkit-mask-image: var(--licht-verlauf);
+    mask-image: var(--licht-verlauf);
   }
 
-  @media (hover: hover) and (pointer: fine) {
-    .leitmotiv:hover .leitmotiv-grund {
-      opacity: 0.14;
-    }
-
-    .leitmotiv:hover .leitmotiv-schimmer {
-      opacity: 0.9;
-      animation: schimmer 1.9s var(--db-easing-standard);
-    }
+  .leitmotiv[data-licht] .leitmotiv-licht {
+    opacity: 1;
   }
 
-  @keyframes schimmer {
-    from {
-      stroke-dashoffset: 26;
-    }
-    to {
-      stroke-dashoffset: -100;
-    }
+  .leitmotiv[data-licht] .leitmotiv-grund {
+    opacity: 0.22;
+  }
+
+  .leitmotiv-hell[data-licht] .leitmotiv-grund {
+    opacity: 0.68;
+  }
+
+  /* Die Kanten leuchten kraeftig: heller Kern, warmer Hof darum. Zwei
+     Schatten statt einem, weil ein einzelner weicher Schein flau aussieht
+     und ein einzelner harter wie ein Aufkleber. */
+  .licht-kante {
+    /* Sattes Goldgelb, nicht Creme. Eine sehr helle Linie liest sich als
+       weiss, sobald ein Schein darum liegt; erst mit Farbe im Strich selbst
+       wirkt es wie Metall. */
+    stroke: #ffd257;
+    stroke-width: 3.4;
+    filter: drop-shadow(0 0 2px rgb(255 230 150 / 1))
+      drop-shadow(0 0 7px rgb(255 196 60 / 0.9))
+      drop-shadow(0 0 16px rgb(226 148 18 / 0.7));
+  }
+
+  /* Die Binnenzeichnung bleibt deutlich zurueck. Sonst leuchtet die ganze
+     Flaeche und der Umriss geht darin unter. */
+  .licht-innen {
+    stroke: var(--db-bernstein-300);
+    opacity: 0.32;
+    filter: drop-shadow(0 0 4px rgb(232 184 113 / 0.4));
   }
 
   @media (max-width: 899px) {
     /* Auf schmalen Bildschirmen ist kein Platz fuer ein grosses Motiv am
-       Rand: es wuerde hinter dem Text stehen statt daneben. */
+       Rand: es laege hinter dem Text statt daneben. */
     .leitmotiv {
       display: none;
     }
@@ -164,15 +357,62 @@ const breite = art === 'hopfen' ? Math.round(hoehe * 0.62) : Math.round(hoehe * 
 
   @media (prefers-reduced-motion: reduce) {
     .leitmotiv-grund,
-    .leitmotiv-schimmer {
+    .leitmotiv-licht {
       transition: none;
-    }
-    /* Der Schimmer erscheint, wandert aber nicht. */
-    .leitmotiv:hover .leitmotiv-schimmer {
-      animation: none;
-      stroke-dasharray: none;
-      stroke-dashoffset: 0;
-      opacity: 0.45;
     }
   }
 </style>
+
+<script>
+  /**
+   * Fuehrt den Lichtpunkt am Zeiger nach.
+   *
+   * Gesetzt werden nur zwei eigene Eigenschaften, und zwar direkt am Motiv.
+   * Eine Eigenschaft weiter oben im Baum wuerde alle Nachfahren zur
+   * Neuberechnung zwingen; hier ist der Teilbaum genau ein Element gross.
+   */
+  const feiner = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const ruhig = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  for (const motiv of document.querySelectorAll<HTMLElement>('.leitmotiv')) {
+    if (!feiner.matches) continue;
+
+    motiv.addEventListener('pointerenter', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      motiv.dataset.licht = '';
+    });
+
+    motiv.addEventListener('pointerleave', () => {
+      delete motiv.dataset.licht;
+    });
+
+    /* Bei reduzierter Bewegung bleibt das Licht in der Mitte stehen: der
+       Effekt ist dann eine ruhige Aufhellung, kein wanderndes Objekt. */
+    if (ruhig.matches) continue;
+
+    let angefordert = 0;
+    let x = 0;
+    let y = 0;
+
+    const setzen = () => {
+      angefordert = 0;
+      motiv.style.setProperty('--licht-x', `${x}px`);
+      motiv.style.setProperty('--licht-y', `${y}px`);
+    };
+
+    motiv.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      /* Das Motiv ist gedreht. Ohne Ruecktransformation saesse das Licht
+         schief zum Zeiger, weil die Maske im gedrehten Raum liegt. */
+      const kasten = motiv.getBoundingClientRect();
+      const winkel =
+        (-parseFloat(getComputedStyle(motiv).getPropertyValue('--motiv-drehung')) || 0) *
+        (Math.PI / 180);
+      const mx = e.clientX - (kasten.left + kasten.width / 2);
+      const my = e.clientY - (kasten.top + kasten.height / 2);
+      x = motiv.offsetWidth / 2 + (mx * Math.cos(winkel) - my * Math.sin(winkel));
+      y = motiv.offsetHeight / 2 + (mx * Math.sin(winkel) + my * Math.cos(winkel));
+      if (!angefordert) angefordert = requestAnimationFrame(setzen);
+    });
+  }
+</script>

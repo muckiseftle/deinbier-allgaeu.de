@@ -65,17 +65,22 @@ Headless-Betrieb. Mobil mit der Standarddrosselung von Lighthouse.
 **Niedrigster Einzelwert: 98.** Ziel war 95.
 
 **Nachgemessen am 04.08.2026**, nach dem Einbau der Hintergrundmotive
-(DESIGN.md § 16). Die Motive bringen `overflow: hidden` und neue
-Stapelkontexte mit, beides kann Überlauf- und Kontrastprüfungen kippen.
-Startseite mobil 98 / Desktop 100, LCP 2,3 s mobil und 0,5 s Desktop,
-CLS 0 — alles unverändert. Die vier Prüfläufe (`qa-statisch`, `qa-browser`,
-`qa-bildpunkte`, `bewegung-pruefen`) liefen ohne Fehler durch.
+(DESIGN.md § 16) und noch einmal nach deren Überarbeitung. Die Motive bringen
+`overflow: hidden`, neue Stapelkontexte und ein Stück JavaScript mit; alles
+drei kann Überlauf-, Kontrast- und Performancewerte kippen.
+Startseite mobil 98 / Desktop 100, LCP 2,3 s mobil und 0,5 s Desktop, CLS 0,
+Blockierzeit 0 ms — alles unverändert. Die vier Prüfläufe (`qa-statisch`,
+`qa-browser`, `qa-bildpunkte`, `bewegung-pruefen`) liefen ohne Fehler durch.
+
+Das HTML der Startseite ist durch die Pfaddaten der drei Motive von 55,5 auf
+68,0 KB gewachsen. Übertragen werden davon **9,9 KB**: die Pfade wiederholen
+sich, und genau das komprimiert sehr gut.
 
 ---
 
 ## 3 · Was die Prüfung gefunden hat
 
-Fünf echte Fehler, alle behoben. Sie stehen hier vollständig, weil eine
+Sechs echte Fehler, alle behoben. Sie stehen hier vollständig, weil eine
 QA-Dokumentation ohne Fundstellen wertlos ist.
 
 ### 3.1 Text auf dem Foto war zu kontrastarm
@@ -127,27 +132,41 @@ wohin er führt.
 `DESIGN.md` 15.1), ergänzt um einen nur für Screenreader und Suchmaschinen
 sichtbaren Zusatz mit dem Beitragstitel. **SEO 92 → 100.**
 
-### 3.5 Der Goldschimmer konnte gar nicht auslösen
+### 3.5 Das Goldlicht konnte gar nicht auslösen
 
 **Gefunden von:** einer Instrumentierung mit `elementFromPoint`, nachträglich
 zur Abnahme, beim Einbau der Hintergrundmotive (DESIGN.md § 16).
 
 Die Motive lagen auf `z-index: -1`. Damit liegen sie hinter der Fläche des
 Abschnitts: `elementFromPoint` über der Hopfendolde lieferte `SECTION.hero`,
-nicht das SVG. Der Zeiger erreichte das Motiv nie, `:hover` griff nie, der
-Schimmer war unerreichbar.
+nicht das SVG. Der Zeiger erreichte das Motiv nie, `:hover` griff nie, das
+Licht war unerreichbar.
 
 Auf einem Bildschirmfoto sah alles richtig aus — das blasse Motiv stand an
 seinem Platz. Nur eine Zeigermessung konnte das finden.
 
 **Behoben:** `z-index: 0` am Motiv, `z-index: 1` am Inhalt.
+**Belegt:** `elementFromPoint` liefert jetzt `svg` bzw. `path`.
 
-**Belegt:** `elementFromPoint` liefert jetzt `svg`. Gezählte goldene
-Bildpunkte im Motivbereich: 290 im Ruhezustand, im Verlauf des Überfahrens
-bis 5048. Die Überschrift bleibt dabei oberstes Element, der Inhalt wird
-also nicht verdeckt.
+### 3.6 Das Motiv war doppelt so breit wie berechnet
 
----
+Die Breite des Motivs wurde als `calc(hoehe * seitenverhaeltnis)` gerechnet.
+Für Pixelwerte stimmt das. Für die Dolde im Hero-Bild, die mit `hoehe="132%"`
+am Foto hängt, nicht: **ein Prozentwert in einer Breitenangabe bezieht sich auf
+die Breite des Bezugsrahmens, nicht auf dessen Höhe.**
+
+Gemessen: 328 px breit statt der richtigen 151 px. Sichtbar war das nicht
+direkt — das SVG behält sein Seitenverhältnis bei und stand einfach mittig in
+einem viel zu breiten Kasten. Spürbar war es beim Überstand, der aus der
+Breite gerechnet wird und dadurch weit danebenlag.
+
+Gefunden durch Nachmessen der `getBoundingClientRect` aller beteiligten
+Kästen, nachdem der Bildausschnitt „irgendwie falsch" aussah.
+
+**Behoben:** `aspect-ratio` liefert die Breite, `translateX` mit Prozentwert
+den Überstand. Beide beziehen sich auf die tatsächliche Größe des Elements.
+**Nachgemessen:** 197 × 279 px Umriss bei 11° Drehung — das passt zu 151 × 255
+px unrotiert.
 
 ## 4 · Was die Prüfwerkzeuge selbst falsch gemacht haben
 
@@ -218,7 +237,7 @@ Platzhalter, keine kaputte Fläche.
 
 | | Altseite | Neu |
 |---|---|---|
-| HTML der Startseite | 281 KB | **55,5 KB** |
+| HTML der Startseite | 281 KB | **68,0 KB** (9,9 KB komprimiert) |
 | Externe Requests | Google reCAPTCHA, Facebook, Instagram | **0** |
 | Cookies | reCAPTCHA + Consent-Speicher | **0** |
 | Einwilligungsbanner | nötig | **nicht nötig** |

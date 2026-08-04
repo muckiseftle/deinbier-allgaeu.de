@@ -26,10 +26,10 @@ const STELLEN = [
      erfuellt, laesst sich nur am gerenderten Bildpunkt entscheiden.
      Beim Ueberfahren wird der Grund noch etwas kraeftiger (0,085 auf 0,14),
      deshalb misst der Lauf weiter unten zusaetzlich im Hoverzustand. */
-  { pfad: '/', auswahl: '.hero-etikett', name: 'Motiv, Etikettenzeile' },
-  { pfad: '/', auswahl: '.hero h1', name: 'Motiv, Ueberschrift' },
-  { pfad: '/', auswahl: '.hero-vorspann', name: 'Motiv, Vorspann' },
-  { pfad: '/', auswahl: '.stellen-gruppe h3', name: 'Motiv, Ortsueberschrift' },
+  { pfad: '/', auswahl: '.bento-nachsatz', name: 'Motiv Gerste, Nachsatz' },
+  { pfad: '/', auswahl: '.bierkarte-quer h3', name: 'Motiv Gerste, Kartentitel' },
+  { pfad: '/', auswahl: '.stellen-nachsatz', name: 'Motiv Hopfen, Nachsatz' },
+  { pfad: '/', auswahl: '.stellen-gruppe h3', name: 'Motiv Hopfen, Ortsueberschrift' },
 
   /* Leiser Sekundaertext auf reiner Cremeflaeche. Das ist die Farbe mit dem
      knappsten Abstand im ganzen System, deshalb bleibt sie unter Beobachtung. */
@@ -40,19 +40,19 @@ const STELLEN = [
   { pfad: '/biere/', auswahl: '.bier-saison', name: 'Creme, Saisonhinweis' },
 
   /* Derselbe Text noch einmal, waehrend das Motiv ueberfahren wird: dann ist
-     der Grund am kraeftigsten und der Goldschimmer liegt zusaetzlich darauf.
+     der Grund am kraeftigsten und das Goldlicht liegt zusaetzlich darauf.
      Das ist der wirklich unguenstigste Zustand. */
   {
     pfad: '/',
-    auswahl: '.hero-etikett',
-    ueberfahre: '.hero .leitmotiv',
-    name: 'Motiv beim Ueberfahren, Etikettenzeile',
+    auswahl: '.bento-nachsatz',
+    ueberfahre: '.abschnitt-motiv .leitmotiv',
+    name: 'Motiv Gerste beim Ueberfahren, Nachsatz',
   },
   {
     pfad: '/',
-    auswahl: '.hero-vorspann',
-    ueberfahre: '.hero .leitmotiv',
-    name: 'Motiv beim Ueberfahren, Vorspann',
+    auswahl: '.bierkarte-quer h3',
+    ueberfahre: '.abschnitt-motiv .leitmotiv',
+    name: 'Motiv Gerste beim Ueberfahren, Kartentitel',
   },
 ];
 
@@ -106,10 +106,23 @@ for (const stelle of STELLEN) {
   await el.scrollIntoViewIfNeeded();
   await seite.waitForTimeout(250);
 
-  /* Falls gefordert: erst ein anderes Element ueberfahren, damit dessen
-     Hoverzustand im Bild landet. Die Wartezeit deckt den Uebergang ab. */
+  /* Falls gefordert: ein anderes Element ueberfahren, damit dessen
+     Hoverzustand im Bild landet.
+     Bewusst nicht ueber `locator.hover()`: das scrollt das zu ueberfahrende
+     Element in den Sichtbereich und schiebt damit die eigentliche Messstelle
+     heraus. Stattdessen wird der Zeiger auf einen Punkt gesetzt, der im
+     bereits gescrollten Zustand innerhalb des Fensters liegt. */
   if (stelle.ueberfahre) {
-    await seite.locator(stelle.ueberfahre).first().hover();
+    const ziel = seite.locator(stelle.ueberfahre).first();
+    const zk = await ziel.boundingBox();
+    if (!zk) {
+      console.log(`  FEHL ${stelle.name}: ${stelle.ueberfahre} nicht sichtbar`);
+      fehler++;
+      continue;
+    }
+    const px = Math.min(1435, Math.max(5, zk.x + zk.width * 0.5));
+    const py = Math.min(895, Math.max(5, zk.y + zk.height * 0.5));
+    await seite.mouse.move(px, py, { steps: 6 });
     await seite.waitForTimeout(700);
   } else {
     /* Zeiger aus dem Weg, sonst faerbt ein zufaelliger Hover das Bild. */

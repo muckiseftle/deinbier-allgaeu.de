@@ -1226,56 +1226,106 @@ dunklere Wert bleibt, obwohl das Muster weg ist — er ist schlicht der bessere 
 
 ### 16.2 Umgesetzt: einzelne, sehr große Motive
 
-Statt vieler kleiner Kacheln stehen auf der Startseite drei einzelne Motive, jedes
-420 bis 620 px hoch, an den Rändern angeschnitten:
+Statt vieler kleiner Kacheln stehen auf der Startseite drei einzelne Motive,
+jedes am Rand angeschnitten:
 
-| Abschnitt | Motiv | Seite | Höhe | Drehung |
+| Abschnitt | Motiv | Lage | Größe | Ton |
 |---|---|---|---|---|
-| Hero | Hopfendolde | links | 560 px | −8° |
-| Die Biere | Gerstenähre | rechts | 620 px | +9° |
-| Verkaufsstellen | Hopfendolde | rechts | 420 px | +14° |
+| Hero | Hopfendolde | rechts **im Foto** | 120 % der Bildhöhe | hell |
+| Die Biere | Gerstenähre | rechts | 780 px | dunkel |
+| Verkaufsstellen | Hopfendolde | rechts | 520 px | dunkel |
 
-Drei Entscheidungen dahinter:
+Vier Entscheidungen dahinter:
 
-**Angeschnitten, nicht vollständig.** Ein Motiv, das über den Rand hinausragt, wirkt wie
-ein Ausschnitt aus etwas Größerem. Ein vollständig sichtbares wirkt wie ein aufgeklebtes
-Bild.
+**Die Dolde liegt im Bild, nicht daneben.** Auf Wunsch des Betreibers. Sie sitzt
+in der Etikettenfassung des Hero-Fotos und wird von deren `overflow: hidden`
+sauber am Bildrand abgeschnitten. Auf dem Foto braucht sie die helle Linie —
+Malzbraun wäre dort unsichtbar — und einen leichten Schlagschatten, weil ein
+Foto helle und dunkle Stellen hat und eine cremefarbene Linie über einer hellen
+Stelle sonst verschwindet.
 
-**Nur die Startseite.** Auf Unterseiten würde dasselbe Mittel zur Manier. Die Startseite
-darf großzügig sein, eine Rechtstextseite nicht.
+**Angeschnitten, nicht vollständig.** Ein Motiv, das über den Rand hinausragt,
+wirkt wie ein Ausschnitt aus etwas Größerem. Ein vollständig sichtbares wirkt
+wie ein aufgeklebtes Bild. Wie weit, steuert `ueberstand`: auf großen Flächen
+26 %, im kleinen Bildausschnitt nur 10 % — dort bliebe sonst zu wenig von der
+Form übrig, um sie zu erkennen.
 
-**Ab 900 px aufwärts.** Darunter gibt es keinen Rand, an dem ein großes Motiv stehen
-könnte — es läge hinter dem Text statt daneben. Unter 900 px ist es abgeschaltet, ebenso
-bei `prefers-contrast: more`.
+**Nur die Startseite.** Auf Unterseiten würde dasselbe Mittel zur Manier. Die
+Startseite darf großzügig sein, eine Rechtstextseite nicht.
 
-### 16.3 Der Goldschimmer
+**Ab 900 px aufwärts.** Darunter gibt es keinen Rand, an dem ein großes Motiv
+stehen könnte — es läge hinter dem Text statt daneben. Unter 900 px ist es
+abgeschaltet, ebenso bei `prefers-contrast: more`.
 
-Beim Überfahren läuft ein warmgoldenes Segment (`--db-bernstein-300`) an den Konturen
-entlang. Technisch: dieselben Pfade ein zweites Mal, in Gold, mit
-`stroke-dasharray` / `stroke-dashoffset`.
+### 16.3 Die Zeichnungen
 
-Zwei Details, ohne die es nicht funktioniert:
+Beide sind zweimal entstanden. Die erste Fassung war in beiden Fällen zu
+abstrakt, um erkannt zu werden — der Betreiber hat die Ähre schlicht nicht
+gefunden und die Dolde als „nicht gut" bezeichnet. Was gefehlt hat:
 
-- **`pathLength="100"` auf jedem Pfad.** Die Pfade sind unterschiedlich lang. Ohne
-  Normierung wäre ein festes Segment auf einer kurzen Linie sofort vollständig und auf
-  einer langen kaum zu sehen — der Schimmer wirkte zufällig statt geführt.
-- **Lücke größer als der Pfad** (`26 200`). Nur so gibt es Versatzwerte, bei denen gar
-  kein Segment auf der Kontur liegt. Die Bewegung läuft von 26 (komplett davor) bis −100
-  (komplett dahinter), fängt also im Nichts an und hört im Nichts auf.
+**Die Dolde ist kein gestreiftes Ei.** Sie besteht aus überlappenden
+Deckblättern, die wie Schuppen versetzt übereinanderliegen. Der zweite Versuch
+zeichnete jedes Blatt als geschlossene Form — bei neun Reihen ergab das ein
+Gewirr aus Schlaufen, das nach Draht aussah. Richtig ist, von jeder Schuppe
+nur die **Unterkante** zu setzen: ein nach unten durchhängender Bogen. Das ist
+nicht nur ruhiger, es ist auch das, was man am Zapfen tatsächlich sieht — alles
+andere liegt unter der nächsten Schuppe. Gerade Reihen tragen drei Schuppen,
+ungerade zwei, damit sie auf Lücke sitzen. Die Schuppenbreite ist in beiden
+Fällen ein Drittel der Doldenbreite, sonst wären die Schuppen der einen Reihe
+sichtbar größer als die der anderen.
 
-Einmaliger Durchlauf je Überfahren, 1,9 s, kein Dauerflackern. Bei
-`prefers-reduced-motion` erscheint der Schimmer als ruhige Kontur, ohne zu wandern.
+**Die Ähre lebt von den Grannen.** Ohne die langen Bortsten sieht sie aus wie
+ein Grashalm. Sieben Kornpaare, jedes mit einer Granne, die etwa doppelt so
+lang ist wie das Korn selbst. Die mittleren Paare sind am größten, oben und
+unten läuft die Ähre aus — sonst wirkt sie wie ein Rechteck.
 
-**Gemessen** (`werkzeuge/qa-bildpunkte.mjs` und eine Zählung goldener Bildpunkte im
-Motivbereich): Ruhezustand 290 Punkte, im Verlauf des Überfahrens bis 5048. Der Text über
-den Motiven bleibt auch im Hoverzustand über AA; engste Stelle ist die Etikettenzeile im
-Hero mit 5,42:1 bei nötigen 4,5.
+### 16.4 Der Zeiger ist ein Lichtpunkt
 
-### 16.4 Eine Falle, die zweimal zugeschnappt ist
+Die erste Fassung ließ ein goldenes Segment an der Kontur entlanglaufen,
+ausgelöst durch `:hover`. Das war eine Animation, keine Beleuchtung: sie lief
+immer gleich ab, egal wo der Zeiger stand. Der Betreiber wollte etwas anderes —
+Licht, das dort ist, wo die Maus ist.
 
-Das Motiv lag zuerst auf `z-index: -1`. Damit liegt es hinter der Fläche des Abschnitts,
-ist für den Zeiger gar nicht erreichbar, und der Schimmer konnte nie auslösen — sichtbar
-war das nur mit `elementFromPoint`, nicht auf einem Bildschirmfoto. Richtig ist
-`z-index: 0` am Motiv und `z-index: 1` am Inhalt. Die Regel dafür steht in der jeweiligen
-Seite und nicht in der Komponente, weil die Verschachtelung sich unterscheidet: im Hero
-ist das Motiv ein Geschwister des Containers, im Abschnitt liegt es darin.
+Umgesetzt als radiale Maske. Die Zeichnung liegt zweimal übereinander: unten
+der blasse Grund, darüber eine goldene Kopie, deren umgebendes Element mit
+einem `radial-gradient` maskiert ist. Zwei eigene Eigenschaften — `--licht-x`
+und `--licht-y` — führen den Mittelpunkt dem Zeiger nach.
+
+Vier Details, ohne die es nicht funktioniert:
+
+- **Die Maske sitzt an einem HTML-Element**, nicht an einer SVG-Gruppe. CSS-
+  Masken auf SVG-Kindern greifen je nach Browser unterschiedlich.
+- **Sieben Farbstopps statt zwei.** Mit nur zwei entsteht ein harter Kreisrand,
+  der wie ein Loch aussieht statt wie Licht.
+- **Rücktransformation der Zeigerposition.** Die Motive sind gedreht; die Maske
+  liegt im gedrehten Raum. Ohne Umrechnung säße das Licht schief zum Zeiger.
+- **Nur die Kanten leuchten kräftig.** Umriss, Stiel und Blätter der Dolde,
+  Körner und Grannen der Ähre bekommen den vollen Goldstrich mit drei
+  gestaffelten Schatten; die Binnenzeichnung liegt bei 32 % Deckkraft. Leuchtet
+  alles gleich stark, geht die Form darin unter.
+
+Das Gold ist bewusst gesättigt (`#ffd257`) und nicht cremefarben. Eine sehr
+helle Linie liest sich als Weiß, sobald ein Schein darum liegt; erst mit Farbe
+im Strich selbst wirkt es wie Metall.
+
+Die Zeigerposition wird über `requestAnimationFrame` gedrosselt und **direkt am
+Motiv** gesetzt, nicht weiter oben im Baum: eine eigene Eigenschaft an einem
+Elternelement zwingt alle Nachfahren zur Neuberechnung.
+
+Bei `prefers-reduced-motion` bleibt das Licht in der Mitte stehen. Der Effekt
+ist dann eine ruhige Aufhellung beim Überfahren, kein wanderndes Objekt.
+
+### 16.5 Zwei Fallen, die zugeschnappt sind
+
+**`z-index: -1`.** Damit liegt das Motiv hinter der Fläche des Abschnitts, ist
+für den Zeiger gar nicht erreichbar, und das Licht konnte nie ausgelöst
+werden — sichtbar war das nur mit `elementFromPoint`, nicht auf einem
+Bildschirmfoto. Richtig ist `z-index: 0` am Motiv und `z-index: 1` am Inhalt.
+
+**Prozenthöhe mal Seitenverhältnis.** Die Breite wurde zunächst als
+`calc(hoehe * verhaeltnis)` gerechnet. Das funktioniert für Pixelwerte, aber
+nicht für Prozente: ein Prozentwert in einer Breitenangabe bezieht sich auf die
+**Breite** des Bezugsrahmens, nicht auf dessen Höhe. Bei `hoehe="132%"` kam so
+eine Breite von 328 px heraus, wo 151 px richtig gewesen wären. Jetzt liefert
+`aspect-ratio` die Breite, und der Überstand kommt aus `translateX` mit einem
+Prozentwert — der bezieht sich auf die eigene Breite des Elements.

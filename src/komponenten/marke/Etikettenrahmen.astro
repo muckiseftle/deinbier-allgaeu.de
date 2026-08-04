@@ -28,6 +28,10 @@ const { klasse } = Astro.props;
   }
 
   .etikett-kern {
+    /* Bezugsrahmen, damit absolut gesetzte Auflagen (etwa ein Leitmotiv im
+       Hero-Bild) sich an der Fassung ausrichten und von ihr sauber
+       angeschnitten werden. */
+    position: relative;
     background: var(--etikett-kern-flaeche);
     border-radius: var(--etikett-kern-radius);
     box-shadow: var(--etikett-kern-glanz);
