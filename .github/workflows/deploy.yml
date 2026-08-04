@@ -1,0 +1,73 @@
+# Baut die Seite und veroeffentlicht sie auf GitHub Pages.
+#
+# Stand: Vorschau unter muckiseftle.github.io/deinbier-allgaeu.de/ — noch
+# nicht unter der eigenen Domain. Solange das so ist, laeuft nach dem Bauen
+# `werkzeuge/unterordner.mjs`: es setzt den Unterordner vor alle Pfade und
+# sperrt die Indexierung. Fuer den Livegang auf deinbier-allgaeu.de entfaellt
+# genau dieser eine Schritt, dafuer kommt eine CNAME-Datei dazu.
+# Siehe DEPLOY.md.
+
+name: Seite bauen und veroeffentlichen
+
+on:
+  push:
+    branches: [main]
+  # Von Hand ausloesbar, ohne dass etwas geaendert werden muss.
+  workflow_dispatch:
+
+# Pages braucht Schreibrechte auf die Veroeffentlichung und ein Token, mit
+# dem sich der Auftrag gegenueber Pages ausweist. Sonst nichts.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Laeuft ein Deployment bereits, wird es nicht abgebrochen: eine halb
+# veroeffentlichte Seite waere schlimmer als eine kurz veraltete.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  bauen:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Quelltext holen
+        uses: actions/checkout@v4
+
+      - name: Node einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # `npm ci` statt `npm install`: es haelt sich strikt an package-lock.json.
+      # Ein Deployment darf nicht von einer Abhaengigkeit abhaengen, die sich
+      # zwischen zwei Laeufen still geaendert hat.
+      - name: Abhaengigkeiten installieren
+        run: npm ci
+
+      - name: Tests
+        run: npm test
+
+      - name: Bauen
+        run: npm run build
+
+      - name: Auf den Unterordner umstellen
+        run: node werkzeuge/unterordner.mjs /deinbier-allgaeu.de
+
+      - name: Ergebnis hochladen
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  veroeffentlichen:
+    needs: bauen
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    steps:
+      - name: Auf Pages veroeffentlichen
+        id: pages
+        uses: actions/deploy-pages@v4

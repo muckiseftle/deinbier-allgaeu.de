@@ -1,0 +1,7 @@
+# Alles darf indexiert werden. Weiterleitungsseiten stehen nicht in der
+# Sitemap, blockiert werden sie aber bewusst nicht: eine Weiterleitung, die
+# Suchmaschinen nicht lesen duerfen, gibt das alte Ranking nicht weiter.
+User-agent: *
+Allow: /
+
+Sitemap: https://deinbier-allgaeu.de/sitemap-index.xml
