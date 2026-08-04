@@ -1278,14 +1278,26 @@ vorn gezeichnet. Das ist auch der Grund, warum ein Motiv auf eine ruhige
 Fläche gehört und nicht auf ein Foto: die Füllung müsste sonst die Farbe des
 Fotos haben.
 
-**Wenige und große Deckblätter.** Das war der letzte und entscheidende Punkt.
-Frühere Fassungen hatten sechs Lagen mit bis zu drei kleinen Schuppen — eine
-Struktur, die man erst beim Heranzoomen liest und die aus der Entfernung ein
-Muster ergibt statt einer Pflanze. Die Vorlage des Betreibers zeigt fünf Lagen
-mit höchstens zwei Blättern, jedes fast so breit wie die halbe Dolde, dazu ein
-einzelnes Kopfblatt über die volle Breite und einen geschwungenen Stiel. Das
-Profil läuft von oben rund nach unten spitz; gleichmäßig schmaler werdende
-Lagen ergeben dagegen einen Tannenzapfen.
+**Die Dolde besteht aus Reihen.** Das war der Punkt, an dem fünf Fassungen
+gescheitert sind. Jede Reihe hat ein Blatt links, eines in der Mitte, eines
+rechts; die seitlichen sind nach außen aufgefächert, und ihre Außenkanten
+ergeben zusammen den Umriss. Nach unten werden die Reihen kleiner und die
+Fächerung flacher. Ohne diesen Rhythmus zerfällt die Form — ein Mittelstreifen
+mit zwei Klumpen daneben ist keine Dolde.
+
+**Spitze Blätter, nicht runde Becher.** Eine Stapelung gerundeter Schuppen
+liest sich als Eisbecher. Die Spitze nach unten ist das Erkennungsmerkmal.
+
+**Der Umriss ist ein Ei, oben und unten rund.** Fassungen, die nach unten
+spitz zulaufen, werden zum Tannenzapfen.
+
+**Wie das gefunden wurde, ist die eigentliche Lehre:** Ich habe die Zeichnung
+fünfmal nur für sich betrachtet und jedes Mal für richtig gehalten. Einzeln
+sieht fast jede Zeichnung „irgendwie passend" aus, weil das Auge ergänzt, was
+es erwartet. Erst als Vorlage und eigene Zeichnung **nebeneinander auf einer
+Fläche** lagen, waren alle drei Fehler in Sekunden sichtbar. Dafür gibt es
+jetzt `werkzeuge/vergleich.mjs`. Die Regel gilt über die Dolde hinaus: was
+einer Vorlage folgen soll, nie einzeln beurteilen.
 
 **Die Ähre lebt von den Grannen.** Ohne die langen Borsten sieht sie aus wie
 ein Grashalm. Sieben Kornpaare, jedes mit einer Granne, die etwa doppelt so

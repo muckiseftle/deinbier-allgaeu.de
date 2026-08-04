@@ -105,49 +105,92 @@ function schuppe(cx: number, cy: number, b: number, h: number) {
   );
 }
 
-/* Der Koerper, nachgebaut nach der Vorlage des Betreibers.
-   Entscheidend ist die Groesse der Deckblaetter: WENIGE und GROSSE. Frueher
-   waren es sechs Lagen mit bis zu drei kleinen Schuppen — das ergibt eine
-   Struktur, die man erst beim Heranzoomen liest, und aus der Entfernung ein
-   Muster statt einer Pflanze. In der Vorlage sind es fuenf Lagen mit hoechstens
-   zwei Blaettern, jedes fast so breit wie die halbe Dolde.
+/* Der Aufbau der Vorlage, sichtbar geworden erst im direkten Vergleich
+   nebeneinander: die Dolde besteht aus REIHEN. Jede Reihe hat ein Blatt
+   links, eines in der Mitte, eines rechts; die seitlichen sind nach aussen
+   aufgefaechert, und ihre Aussenkanten ergeben zusammen den Umriss. Nach
+   unten werden die Reihen kleiner und die Faecherung flacher.
 
-   Das Profil laeuft von oben rund nach unten spitz. Zwei fruehere Fassungen
-   sind an genau diesem Punkt gescheitert: gleichmaessig schmaler werdende
-   Lagen ergeben einen Tannenzapfen, ein glatter Umriss mit Schuppen darin
-   eine Karotte. Richtig ist ein runder Kopf, dann Auslauf. */
-const HOPFEN_LAGEN: Array<{ y: number; b: number; h: number; x: number[] }> = [
-  /* Das Kopfblatt: eines statt zweier, und so breit wie die ganze Dolde.
-     Es macht die Rundung oben. */
-  { y: 44, b: 54, h: 100, x: [0] },
-  { y: 92, b: 40, h: 82, x: [-24, 24] },
-  { y: 132, b: 34, h: 70, x: [-17, 17] },
-  { y: 168, b: 27, h: 56, x: [-10, 10] },
-  { y: 196, b: 18, h: 40, x: [0] },
+   Drei Fehler frueherer Fassungen, alle drei beim Nebeneinanderlegen sofort
+   sichtbar:
+   - Runde Becher statt spitzer Blaetter: liest sich als Eisbecher.
+   - Nach unten spitz zulaufend statt Ei: wird zum Tannenzapfen.
+   - Ein Mittelstreifen mit zwei Klumpen daneben statt Reihen: ergibt gar
+     keinen Rhythmus, die Form zerfaellt.
+
+   Je Reihe: Hoehe, Blattlaenge und -breite, dann die Blaetter als Paare aus
+   seitlichem Versatz und Drehung. Die Drehung ist aussen am staerksten. */
+const HOPFEN_REIHEN: Array<{
+  y: number;
+  h: number;
+  b: number;
+  blaetter: Array<[number, number]>;
+  mitte?: { y: number; h: number; b: number };
+}> = [
+  {
+    y: 46,
+    h: 94,
+    b: 25,
+    blaetter: [
+      [-31, 44],
+      [31, -44],
+    ],
+    mitte: { y: 42, h: 82, b: 18 },
+  },
+  {
+    y: 92,
+    h: 92,
+    b: 24,
+    blaetter: [
+      [-40, 28],
+      [40, -28],
+    ],
+    mitte: { y: 94, h: 80, b: 19 },
+  },
+  {
+    y: 132,
+    h: 78,
+    b: 21,
+    blaetter: [
+      [-33, 19],
+      [33, -19],
+    ],
+    mitte: { y: 134, h: 68, b: 16 },
+  },
+  {
+    y: 168,
+    h: 62,
+    b: 17,
+    blaetter: [
+      [-16, 11],
+      [16, -11],
+    ],
+  },
 ];
 
-/* `rand` markiert, was den Umriss bildet: die aeusserste Schuppe jeder Lage.
-   Sie leuchtet kraeftig, was dazwischen sitzt bleibt zurueck. */
-const hopfenPfade = HOPFEN_LAGEN.flatMap(({ y, b, h, x }) =>
-  x.map((dx, i) => ({
-    d: schuppe(dx, y, b, h),
-    rand: i === 0 || i === x.length - 1,
-    voll: true,
-  })),
-);
-
 const HOPFEN = {
-  /* Reihenfolge ist hier Bildaufbau, nicht Geschmackssache: was spaeter
-     kommt, liegt vorn und verdeckt das Dahinterliegende. Ohne diese
-     Verdeckung kreuzen sich alle Umrisse und die Dolde wird zum Gitter. */
+  /* Reihenfolge ist Bildaufbau: was spaeter kommt, liegt vorn und verdeckt
+     das Dahinterliegende. Ohne diese Verdeckung kreuzen sich alle Umrisse
+     und die Dolde wird zum Gitter. Innerhalb einer Reihe kommen die
+     seitlichen Blaetter zuerst, das mittlere liegt darauf. */
   pfade: [
-    /* Der Stiel schwingt aus dem Kopf heraus, statt gerade abzustehen. Er ist
-       eine offene Linie und keine Flaeche — in der Vorlage ist er ein Strich
-       derselben Staerke wie die Umrisse. */
-    { d: 'M4-16C26-42 56-58 82-66', rand: true, voll: false },
-    ...hopfenPfade,
+    /* Stiel: kurzer, gerundeter Stummel wie in der Vorlage. */
+    { d: 'M-8 2C-10-16-8-32 0-32C8-32 10-16 8 2Z', rand: true, voll: true },
+    ...HOPFEN_REIHEN.flatMap(({ y, h, b, blaetter, mitte }) => [
+      ...blaetter.map(([dx, grad]) => ({
+        d: deckblatt(dx, y, b, h, grad),
+        /* Die seitlichen Blaetter bilden den Umriss und leuchten kraeftig. */
+        rand: true,
+        voll: true,
+      })),
+      ...(mitte
+        ? [{ d: deckblatt(0, mitte.y, mitte.b, mitte.h, 0), rand: false, voll: true }]
+        : []),
+    ]),
+    /* Das Abschlussblatt unten. */
+    { d: deckblatt(0, 194, 13, 50, 0), rand: true, voll: true },
   ],
-  box: '-70 -76 162 300',
+  box: '-76 -40 152 264',
 };
 
 /* ---------------------------------------------------------------------------

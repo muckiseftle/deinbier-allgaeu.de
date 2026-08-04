@@ -221,6 +221,29 @@ gefährlicher ist als keines.
 
 ---
 
+## 4b · Was ich selbst falsch beurteilt habe
+
+Die Hopfendolde ist **sechsmal** entstanden. Fünfmal habe ich sie gerendert,
+angesehen und für richtig gehalten; fünfmal hat der Betreiber widersprochen
+(„sieht nicht gut aus", „wie eine Karotte", „immer noch schlecht",
+„Katastrophe").
+
+Das Werkzeug war nie das Problem — Bildschirmfotos entstanden bei jeder
+Fassung. Das Problem war die **Art des Hinsehens**: ich habe die Zeichnung
+immer nur für sich betrachtet. Einzeln sieht fast jede Zeichnung „irgendwie
+passend" aus, weil das Auge ergänzt, was es erwartet.
+
+Beim sechsten Mal habe ich Vorlage und eigene Zeichnung nebeneinander auf eine
+Fläche gelegt. Drei Fehler waren in Sekunden sichtbar, alle drei grundlegend:
+runde Becher statt spitzer Blätter, ein nach unten spitzes Dreieck statt eines
+Eis, ein Mittelstreifen statt Reihen.
+
+**Werkzeug ergänzt:** `werkzeuge/vergleich.mjs` stellt eine Vorlage und ein
+Motiv gleich hoch nebeneinander. Aufwand: 15 Zeilen. Ersparnis, hätte es das
+vorher gegeben: fünf Durchgänge.
+
+---
+
 ## 5 · Bewusste Abweichungen von den Vorgaben
 
 Drei Stellen weichen von PROJEKT.md ab. Alle sind hier festgehalten, keine
