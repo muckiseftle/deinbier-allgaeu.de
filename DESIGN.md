@@ -1229,26 +1229,26 @@ dunklere Wert bleibt, obwohl das Muster weg ist — er ist schlicht der bessere 
 Statt vieler kleiner Kacheln stehen auf der Startseite drei einzelne Motive,
 jedes am Rand angeschnitten:
 
-| Abschnitt | Motiv | Lage | Größe | Ton |
-|---|---|---|---|---|
-| Hero | Hopfendolde | rechts **im Foto** | 120 % der Bildhöhe | hell |
-| Die Biere | Gerstenähre | rechts | 780 px | dunkel |
-| Verkaufsstellen | Hopfendolde | rechts | 520 px | dunkel |
+| Abschnitt | Motiv | Lage | Größe |
+|---|---|---|---|
+| Hero, **ganz oben** | Hopfendolde | rechts, hinter dem Foto | 640 px |
+| Die Biere | Gerstenähre | rechts | 780 px |
+| Verkaufsstellen | Hopfendolde | rechts | 520 px |
 
 Vier Entscheidungen dahinter:
 
-**Die Dolde liegt im Bild, nicht daneben.** Auf Wunsch des Betreibers. Sie sitzt
-in der Etikettenfassung des Hero-Fotos und wird von deren `overflow: hidden`
-sauber am Bildrand abgeschnitten. Auf dem Foto braucht sie die helle Linie —
-Malzbraun wäre dort unsichtbar — und einen leichten Schlagschatten, weil ein
-Foto helle und dunkle Stellen hat und eine cremefarbene Linie über einer hellen
-Stelle sonst verschwindet.
+**Die Dolde steht ganz oben, auf der Cremefläche.** Ein Zwischenschritt legte
+sie in das Hero-Foto: helle Linie, Schlagschatten, von der Etikettenfassung
+angeschnitten. Technisch sauber, aber sie ging in den Bilddetails unter — der
+Betreiber hat sie schlicht nicht gefunden. Auf der ruhigen Fläche daneben trägt
+die Form. Sie steht jetzt hinter dem Foto und schaut rechts daran vorbei.
+Der Ton `hell` bleibt in der Komponente: er ist richtig, sobald ein Motiv
+einmal auf einem dunklen Grund landen soll.
 
 **Angeschnitten, nicht vollständig.** Ein Motiv, das über den Rand hinausragt,
 wirkt wie ein Ausschnitt aus etwas Größerem. Ein vollständig sichtbares wirkt
-wie ein aufgeklebtes Bild. Wie weit, steuert `ueberstand`: auf großen Flächen
-26 %, im kleinen Bildausschnitt nur 10 % — dort bliebe sonst zu wenig von der
-Form übrig, um sie zu erkennen.
+wie ein aufgeklebtes Bild. Wie weit, steuert `ueberstand` — voreingestellt
+26 % der eigenen Breite.
 
 **Nur die Startseite.** Auf Unterseiten würde dasselbe Mittel zur Manier. Die
 Startseite darf großzügig sein, eine Rechtstextseite nicht.
@@ -1295,18 +1295,34 @@ Vier Details, ohne die es nicht funktioniert:
 
 - **Die Maske sitzt an einem HTML-Element**, nicht an einer SVG-Gruppe. CSS-
   Masken auf SVG-Kindern greifen je nach Browser unterschiedlich.
-- **Sieben Farbstopps statt zwei.** Mit nur zwei entsteht ein harter Kreisrand,
+- **Sechs Farbstopps statt zwei.** Mit nur zwei entsteht ein harter Kreisrand,
   der wie ein Loch aussieht statt wie Licht.
 - **Rücktransformation der Zeigerposition.** Die Motive sind gedreht; die Maske
   liegt im gedrehten Raum. Ohne Umrechnung säße das Licht schief zum Zeiger.
-- **Nur die Kanten leuchten kräftig.** Umriss, Stiel und Blätter der Dolde,
-  Körner und Grannen der Ähre bekommen den vollen Goldstrich mit drei
-  gestaffelten Schatten; die Binnenzeichnung liegt bei 32 % Deckkraft. Leuchtet
-  alles gleich stark, geht die Form darin unter.
+- **Nur die Kanten leuchten.** Umriss, Stiel und Blätter der Dolde, Körner und
+  Grannen der Ähre bekommen den Goldstrich; die Binnenzeichnung liegt bei 22 %
+  Deckkraft. Leuchtet alles gleich stark, geht die Form darin unter.
 
-Das Gold ist bewusst gesättigt (`#ffd257`) und nicht cremefarben. Eine sehr
-helle Linie liest sich als Weiß, sobald ein Schein darum liegt; erst mit Farbe
-im Strich selbst wirkt es wie Metall.
+**Die Stärke ist zweimal nachjustiert worden.** Die erste Fassung ging in der
+Maske bis 1,0 Deckkraft, hatte 3,4 px Goldstrich und drei kräftige Schatten.
+Das sah aus wie eine Leuchtreklame; der Betreiber nannte es „zu stark". Jetzt
+gilt:
+
+| | zu stark | jetzt |
+|---|---|---|
+| Maske am Zeiger | 1,0 | **0,62** |
+| Lichtradius | 175 px | **240 px** |
+| Goldstrich | #ffd257, 3,4 px | **#edc169, 2,6 px** |
+| Schein | 3 Schatten, bis 0,95 | **2 Schatten, bis 0,5** |
+| Einblenden / Ausblenden | 420 ms / 420 ms | **420 ms / 760 ms** |
+
+Zwei Gedanken dahinter. Erstens: der Strich der Lichtkopie ist **nicht breiter**
+als der der Grundzeichnung. Er soll die Linie zum Glimmen bringen, nicht
+verdicken. Zweitens: die Maske erreicht nirgends volle Deckung. Dadurch bleibt
+das Gold immer durchscheinend statt aufgemalt — das ist der Unterschied
+zwischen edel und grell. Das Ausblenden dauert fast doppelt so lang wie das
+Einblenden: das Licht soll verlöschen wie eine weggetragene Lampe, nicht
+abgeschaltet werden.
 
 Die Zeigerposition wird über `requestAnimationFrame` gedrosselt und **direkt am
 Motiv** gesetzt, nicht weiter oben im Baum: eine eigene Eigenschaft an einem

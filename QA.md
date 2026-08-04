@@ -65,7 +65,7 @@ Headless-Betrieb. Mobil mit der Standarddrosselung von Lighthouse.
 **Niedrigster Einzelwert: 98.** Ziel war 95.
 
 **Nachgemessen am 04.08.2026**, nach dem Einbau der Hintergrundmotive
-(DESIGN.md § 16) und noch einmal nach deren Überarbeitung. Die Motive bringen
+(DESIGN.md § 16) und nach jeder ihrer beiden Überarbeitungen. Die Motive bringen
 `overflow: hidden`, neue Stapelkontexte und ein Stück JavaScript mit; alles
 drei kann Überlauf-, Kontrast- und Performancewerte kippen.
 Startseite mobil 98 / Desktop 100, LCP 2,3 s mobil und 0,5 s Desktop, CLS 0,
@@ -75,6 +75,11 @@ Blockierzeit 0 ms — alles unverändert. Die vier Prüfläufe (`qa-statisch`,
 Das HTML der Startseite ist durch die Pfaddaten der drei Motive von 55,5 auf
 68,0 KB gewachsen. Übertragen werden davon **9,9 KB**: die Pfade wiederholen
 sich, und genau das komprimiert sehr gut.
+
+Der Lichteffekt ist objektiv nachgemessen, indem goldene Bildpunkte im
+Motivbereich gezählt werden. An der Gerstenähre: **4703 in Ruhe, 11997 unter
+dem Zeiger.** Vor der Abschwächung waren es 38034 — der Effekt ist also auf
+etwa ein Drittel zurückgenommen und trotzdem klar messbar vorhanden.
 
 ---
 

@@ -230,9 +230,10 @@ const verhaeltnis = `${boxB} / ${boxH}`;
        Ruhewert fuer alle, die keinen Zeiger haben. */
     --licht-x: 50%;
     --licht-y: 45%;
-    /* Klein genug, dass man den Lichtpunkt als Punkt wahrnimmt und nicht
-       als allgemeine Aufhellung des ganzen Motivs. */
-    --licht-radius: 175px;
+    /* Gross genug, dass der Rand des Lichts weit ausserhalb des Blickfelds
+       liegt und man keinen Kreis wahrnimmt, klein genug, dass es immer noch
+       ein Ort ist und keine allgemeine Aufhellung. */
+    --licht-radius: 240px;
   }
 
   /* Das Hochlegen des Inhalts passiert in der jeweiligen Seite, weil die
@@ -292,21 +293,23 @@ const verhaeltnis = `${boxB} / ${boxH}`;
     position: absolute;
     inset: 0;
     opacity: 0;
-    /* Hinein zuegig, hinaus etwas langsamer: so wirkt es wie eine Lampe,
-       die man wegtraegt, und nicht wie ein Schalter. */
-    transition: opacity var(--db-dauer-ruhig) var(--db-easing-standard);
+    /* Diese Dauer gilt beim Verlassen. Sie ist bewusst lang: das Licht soll
+       verloeschen wie eine weggetragene Lampe, nicht abgeschaltet werden. */
+    transition: opacity 760ms var(--db-easing-standard);
 
-    /* Der eigentliche Effekt. Voll deckend am Zeiger, dann rasch schwaecher.
+    /* Der eigentliche Effekt. Bewusst nirgends voll deckend: schon am Zeiger
+       bleibt die Maske bei 0,62, sodass das Gold immer durchscheinend wirkt
+       statt aufgemalt. Ein erster Versuch ging bis 1,0 und war dem Betreiber
+       deutlich zu kraeftig.
        Die vielen Stufen sind Absicht: mit nur zwei Stopps entsteht ein
        harter Kreisrand, der wie ein Loch aussieht statt wie Licht. */
     --licht-verlauf: radial-gradient(
       circle var(--licht-radius) at var(--licht-x) var(--licht-y),
-      rgb(0 0 0 / 1) 0%,
-      rgb(0 0 0 / 1) 15%,
-      rgb(0 0 0 / 0.86) 32%,
-      rgb(0 0 0 / 0.52) 52%,
-      rgb(0 0 0 / 0.2) 72%,
-      rgb(0 0 0 / 0.04) 88%,
+      rgb(0 0 0 / 0.62) 0%,
+      rgb(0 0 0 / 0.55) 22%,
+      rgb(0 0 0 / 0.38) 44%,
+      rgb(0 0 0 / 0.18) 64%,
+      rgb(0 0 0 / 0.06) 82%,
       rgb(0 0 0 / 0) 100%
     );
     -webkit-mask-image: var(--licht-verlauf);
@@ -315,36 +318,40 @@ const verhaeltnis = `${boxB} / ${boxH}`;
 
   .leitmotiv[data-licht] .leitmotiv-licht {
     opacity: 1;
+    /* Beim Betreten etwas zuegiger als beim Verlassen, aber immer noch
+       ruhig genug, dass nichts aufblitzt. */
+    transition-duration: var(--db-dauer-ruhig);
   }
 
   .leitmotiv[data-licht] .leitmotiv-grund {
-    opacity: 0.22;
+    opacity: 0.18;
   }
 
   .leitmotiv-hell[data-licht] .leitmotiv-grund {
-    opacity: 0.68;
+    opacity: 0.62;
   }
 
-  /* Die Kanten leuchten kraeftig: heller Kern, warmer Hof darum. Zwei
-     Schatten statt einem, weil ein einzelner weicher Schein flau aussieht
-     und ein einzelner harter wie ein Aufkleber. */
+  /* Die Kanten tragen den Effekt: goldener Strich mit einem weiten, weichen
+     Hof. Der Strich ist nicht breiter als die Grundzeichnung — er soll die
+     Linie zum Glimmen bringen, nicht verdicken. Ein erster Versuch mit
+     3,4 px und drei kraeftigen Schatten sah aus wie eine Leuchtreklame. */
   .licht-kante {
-    /* Sattes Goldgelb, nicht Creme. Eine sehr helle Linie liest sich als
-       weiss, sobald ein Schein darum liegt; erst mit Farbe im Strich selbst
-       wirkt es wie Metall. */
-    stroke: #ffd257;
-    stroke-width: 3.4;
-    filter: drop-shadow(0 0 2px rgb(255 230 150 / 1))
-      drop-shadow(0 0 7px rgb(255 196 60 / 0.9))
-      drop-shadow(0 0 16px rgb(226 148 18 / 0.7));
+    /* Goldgelb, nicht Creme. Eine sehr helle Linie liest sich als weiss,
+       sobald ein Schein darum liegt; erst mit Farbe im Strich selbst wirkt
+       es wie Metall. */
+    stroke: #edc169;
+    stroke-width: 2.6;
+    /* Ein enger Schein fuer die Linie selbst, ein weiter fuer die Waerme
+       darum. Beide bewusst schwach: die Summe soll ein Glimmen ergeben. */
+    filter: drop-shadow(0 0 4px rgb(240 194 100 / 0.5))
+      drop-shadow(0 0 18px rgb(214 152 44 / 0.28));
   }
 
   /* Die Binnenzeichnung bleibt deutlich zurueck. Sonst leuchtet die ganze
      Flaeche und der Umriss geht darin unter. */
   .licht-innen {
     stroke: var(--db-bernstein-300);
-    opacity: 0.32;
-    filter: drop-shadow(0 0 4px rgb(232 184 113 / 0.4));
+    opacity: 0.22;
   }
 
   @media (max-width: 899px) {

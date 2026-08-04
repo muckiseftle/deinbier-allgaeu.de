@@ -71,6 +71,11 @@ const BENTO_SPALTEN: Record<string, string> = {
 >
   {/* ===== A · HERO, asymmetrisch 7/5 ===== */}
   <section class="hero">
+    {/* Ganz oben auf der Seite, gross und sichtbar. Ein erster Versuch legte
+        die Dolde in das Hero-Foto: dort war sie zu klein und ging in den
+        Bilddetails unter. Auf der ruhigen Cremeflaeche daneben traegt die
+        Form. Sie steht hinter dem Foto und schaut rechts daran vorbei. */}
+    <Leitmotiv art="hopfen" seite="rechts" hoehe={640} drehung={10} />
     <div class="container raster hero-raster">
       <div class="spalte-7 hero-text">
         <p class="etikettenzeile hero-etikett">{BETRIEB.signatur}</p>
@@ -93,17 +98,6 @@ const BENTO_SPALTEN: Record<string, string> = {
             alt="Die mobile Brauanlage aufgebaut bei einem Kunden, Gäste stehen darum herum"
             sizes="(max-width: 767px) 100vw, 40vw"
             laden="eager"
-          />
-          {/* Die Dolde liegt im Bild und wird von der Etikettenfassung
-              angeschnitten. Auf dem Foto braucht sie die helle Linie; in
-              Malzbraun waere sie dort unsichtbar. */}
-          <Leitmotiv
-            art="hopfen"
-            ton="hell"
-            seite="rechts"
-            hoehe="120%"
-            drehung={11}
-            ueberstand={0.1}
           />
         </Etikettenrahmen>
       </div>
@@ -342,16 +336,21 @@ const BENTO_SPALTEN: Record<string, string> = {
 
 <style>
   /* Ein Motiv braucht einen Bezugsrahmen und darf nicht seitlich
-     herausragen, sonst entsteht ein waagerechter Scrollbalken.
-     Im Hero uebernimmt das die Etikettenfassung des Bildes: sie schneidet
-     die Dolde sauber am Bildrand ab. */
+     herausragen, sonst entsteht ein waagerechter Scrollbalken. */
+  .hero,
   :global(.abschnitt-motiv) {
     position: relative;
     overflow: hidden;
   }
 
   /* Inhalt ueber das Motiv legen, damit es nicht ueber Text und Bildern
-     liegt. */
+     liegt. Im Hero ist das Motiv ein Geschwister des Containers, im
+     Abschnitt liegt es darin: deshalb zwei Regeln. */
+  .hero > :global(.container) {
+    position: relative;
+    z-index: 1;
+  }
+
   :global(.abschnitt-motiv .container > *:not(.leitmotiv)) {
     position: relative;
     z-index: 1;
