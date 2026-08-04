@@ -3,15 +3,41 @@ import Basis from '../layouts/Basis.astro';
 import { BETRIEB } from '../daten/betrieb';
 
 /**
- * GERUEST. Der endgueltige Text entsteht in Phase 7 nach Recherche zum
- * aktuellen Stand von DDG und MStV und nach Klaerung der offenen Punkte
- * 1 bis 3 in OFFENE-FRAGEN.md.
+ * IMPRESSUM
  *
- * Rechtstexte sind ein fundierter Entwurf und keine Rechtsberatung. Vor
- * dem Livegang von einer Fachperson pruefen lassen.
+ * Fundierter Entwurf, KEINE RECHTSBERATUNG. Vor dem Livegang von einer
+ * Fachperson pruefen lassen.
  *
  * Anrede hier "Sie", ueberall sonst "Ihr". Das entspricht der Konvention
  * bei Rechtstexten.
+ *
+ * ---------------------------------------------------------------------------
+ * QUELLEN, geprueft am 04.08.2026
+ * ---------------------------------------------------------------------------
+ *
+ * § 5 DDG (Digitale-Dienste-Gesetz), Pflichtangaben:
+ *   https://www.gesetze-im-internet.de/ddg/__5.html
+ *   Das DDG ist am 14.05.2024 in Kraft getreten und hat das TMG abgeloest.
+ *   Fuer Einzelunternehmen: vollstaendiger Vor- und Nachname des Inhabers,
+ *   ladungsfaehige Anschrift, E-Mail plus ein weiterer schneller
+ *   Kommunikationsweg. Die Angaben muessen leicht erkennbar, unmittelbar
+ *   erreichbar und staendig verfuegbar sein.
+ *
+ * OS-Plattform der EU, ABGESCHALTET zum 20.07.2025:
+ *   https://www.it-recht-kanzlei.de/entfernung-informationen-os-plattform.html
+ *   https://www.brak.de/newsroom/newsletter/nachrichten-aus-berlin/2025/ausgabe-16-2025-v-682025/europaeischen-plattform-fuer-online-streitbeilegung-wurde-eingestellt/
+ *   Die ODR-Verordnung (EU) Nr. 524/2013 wurde durch die Verordnung
+ *   (EU) 2024/3228 vom 19.12.2024 vollstaendig aufgehoben. Die Pflicht,
+ *   einen Link auf die OS-Plattform bereitzuhalten, ist damit entfallen;
+ *   der Link und die zugehoerigen Begleittexte MUESSEN entfernt werden.
+ *   Viele Impressum-Generatoren liefern ihn noch mit. Deshalb steht er
+ *   hier bewusst NICHT.
+ *   Die uebrigen Informationspflichten zur Verbraucherstreitbeilegung
+ *   nach § 36 VSBG bleiben davon unberuehrt.
+ *
+ * § 18 Abs. 2 MStV: Wegen des News-Bereichs (redaktionell gestaltete
+ *   Angebote) ist zusaetzlich ein inhaltlich Verantwortlicher mit
+ *   Anschrift zu benennen.
  */
 ---
 
@@ -40,15 +66,16 @@ import { BETRIEB } from '../daten/betrieb';
 
       <h2>Rechtsform</h2>
       <p class="platzhalter">
-        [PLATZHALTER: Rechtsform bestätigen. Die Angaben der Altseite deuten auf
-        ein Einzelunternehmen hin. Bei Eintragung im Handelsregister zusätzlich
-        Registergericht und Registernummer angeben.]
+        [PLATZHALTER: Rechtsform bestätigen. Die Angaben deuten auf ein
+        Einzelunternehmen hin. Bei Eintragung im Handelsregister sind
+        zusätzlich Registergericht und Registernummer anzugeben.]
       </p>
 
       <h2>Umsatzsteuer-Identifikationsnummer</h2>
       <p class="platzhalter">
-        [PLATZHALTER: USt-IdNr. nach § 27a UStG angeben, falls vorhanden.
-        Andernfalls entfällt dieser Abschnitt.]
+        [PLATZHALTER: Umsatzsteuer-Identifikationsnummer nach § 27a UStG
+        angeben, falls vorhanden. Andernfalls entfällt dieser Abschnitt
+        ersatzlos.]
       </p>
 
       <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
@@ -60,16 +87,41 @@ import { BETRIEB } from '../daten/betrieb';
 
       <h2>Verbraucherstreitbeilegung</h2>
       <p class="platzhalter">
-        [PLATZHALTER: Erklärung nach § 36 VSBG bestätigen. Üblich ist: nicht
-        bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer
-        Verbraucherschlichtungsstelle teilzunehmen.]
+        [PLATZHALTER: Erklärung nach § 36 VSBG bestätigen. Für kleine Betriebe
+        üblich und in aller Regel zutreffend ist die Formulierung: „Wir sind
+        nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor
+        einer Verbraucherschlichtungsstelle teilzunehmen.“]
+      </p>
+
+      <h2>Bildnachweis</h2>
+      <p>
+        Alle Fotos stammen aus dem Bestand der Brauerei DEIN BIER, sofern
+        nicht anders angegeben.
+      </p>
+
+      <h2>Haftung für Links</h2>
+      <p>
+        Unser Angebot enthält Links zu externen Websites Dritter, auf deren
+        Inhalte wir keinen Einfluss haben. Für diese fremden Inhalte können
+        wir keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist
+        stets der jeweilige Anbieter oder Betreiber verantwortlich. Die
+        verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche
+        Rechtsverstöße überprüft; rechtswidrige Inhalte waren nicht erkennbar.
+      </p>
+      <p>
+        Eine dauerhafte inhaltliche Kontrolle der verlinkten Seiten ist ohne
+        konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei
+        Bekanntwerden von Rechtsverletzungen entfernen wir derartige Links
+        umgehend.
       </p>
 
       <div class="hinweis-entwurf">
         <p>
-          <strong>Dieses Impressum ist noch nicht vollständig.</strong> Die
-          markierten Angaben fehlen und werden in Phase 7 ergänzt. Vor dem
-          Livegang muss der Text von einer Fachperson geprüft werden.
+          <strong>Hinweis zum Stand dieses Impressums.</strong> Die oben
+          markierten Angaben fehlen noch und müssen ergänzt werden, bevor die
+          Seite online geht. Dieser Text ist ein sorgfältig recherchierter
+          Entwurf und ersetzt keine Rechtsberatung. Wir empfehlen, ihn vor der
+          Veröffentlichung von einer Fachperson prüfen zu lassen.
         </p>
       </div>
     </div>

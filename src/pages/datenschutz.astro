@@ -3,32 +3,71 @@ import Basis from '../layouts/Basis.astro';
 import { BETRIEB } from '../daten/betrieb';
 
 /**
- * GERUEST. Der endgueltige Text entsteht in Phase 7. Dort wird per Recherche
- * geprueft, ob GitHub aktuell unter dem EU-U.S. Data Privacy Framework
- * zertifiziert ist, und die Quellen werden hier als Kommentar vermerkt.
+ * DATENSCHUTZERKLAERUNG
  *
- * Rechtstexte sind ein fundierter Entwurf und keine Rechtsberatung.
+ * Fundierter Entwurf, KEINE RECHTSBERATUNG. Vor dem Livegang von einer
+ * Fachperson pruefen lassen.
+ *
+ * ---------------------------------------------------------------------------
+ * QUELLEN, geprueft am 04.08.2026
+ * ---------------------------------------------------------------------------
+ *
+ * GitHub und das EU-U.S. Data Privacy Framework:
+ *   https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement
+ *   https://www.dataprivacyframework.gov/participant/6174
+ *   Woertlich aus dem GitHub General Privacy Statement:
+ *   "GitHub has certified to the U.S. Department of Commerce that it adheres
+ *    to the EU-U.S. Data Privacy Framework Principles."
+ *   Damit besteht fuer die Uebermittlung in die USA ein
+ *   Angemessenheitsbeschluss der EU-Kommission als Rechtsgrundlage.
+ *   Der Status ist regelmaessig zu pruefen: eine Zertifizierung kann
+ *   auslaufen oder zurueckgezogen werden.
+ *
+ * GitHub erhebt bei der Nutzung seiner Dienste automatisch unter anderem:
+ *   "Service Usage Information: We collect data about your interactions with
+ *    the Services, such as IP address, device information, session details"
+ *   Das Statement unterscheidet nicht ausdruecklich nach Produkten; fuer
+ *   GitHub Pages ist von Server-Logfiles einschliesslich IP-Adresse
+ *   auszugehen. Wir haben auf diese Verarbeitung keinen Einfluss und
+ *   erhalten die Daten auch nicht.
+ *
+ * Aufsichtsbehoerde fuer nicht-oeffentliche Stellen in Bayern:
+ *   Bayerisches Landesamt fuer Datenschutzaufsicht (BayLDA), Ansbach.
+ *
+ * BEWUSSTE ABWEICHUNG von PROJEKT.md Abschnitt 9:
+ *   Dort steht "kein Storage-Zugriff". Die Altersabfrage nutzt
+ *   localStorage. Entscheidung des Betreibers vom 03.08.2026, dokumentiert
+ *   in OFFENE-FRAGEN Nr. 12. Ein Einwilligungsbanner wird dadurch nicht
+ *   noetig: kein Cookie, keine Uebertragung, kein Drittanbieter, keine
+ *   personenbezogene Auswertung.
  */
 
 const ABSCHNITTE = [
   { id: 'verantwortlicher', titel: 'Verantwortlicher' },
-  { id: 'hosting', titel: 'Hosting auf GitHub Pages' },
-  { id: 'keine-cookies', titel: 'Keine Cookies, kein Tracking' },
+  { id: 'grundsatz', titel: 'Keine Cookies, kein Tracking' },
+  { id: 'hosting', titel: 'Hosting bei GitHub Pages' },
   { id: 'altersabfrage', titel: 'Altersabfrage' },
   { id: 'kontakt', titel: 'Kontaktaufnahme' },
-  { id: 'links', titel: 'Externe Links' },
+  { id: 'links', titel: 'Externe Links und soziale Netzwerke' },
   { id: 'rechte', titel: 'Ihre Rechte' },
+  { id: 'beschwerde', titel: 'Beschwerderecht' },
   { id: 'tls', titel: 'Verschlüsselung' },
+  { id: 'aenderungen', titel: 'Änderungen dieser Erklärung' },
 ];
 ---
 
 <Basis
   titel="Datenschutz"
-  beschreibung="Datenschutzerklärung der Brauerei DEIN BIER: keine Cookies, kein Tracking, keine externen Dienste."
+  beschreibung="Datenschutzerklärung der Brauerei DEIN BIER: keine Cookies, kein Tracking, keine externen Dienste, kein Einwilligungsbanner."
 >
   <section class="abschnitt container">
     <div class="rechtstext textspalte">
       <h1>Datenschutzerklärung</h1>
+
+      <p class="vorspann">
+        Diese Website kommt ohne Cookies, ohne Tracking und ohne Dienste
+        Dritter aus. Deshalb finden Sie hier auch kein Einwilligungsbanner.
+      </p>
 
       <nav class="inhalt" aria-label="Inhaltsverzeichnis">
         <p class="inhalt-titel">Inhalt</p>
@@ -39,89 +78,212 @@ const ABSCHNITTE = [
 
       <h2 id="verantwortlicher">Verantwortlicher</h2>
       <p>
+        Verantwortlich für die Datenverarbeitung auf dieser Website im Sinne
+        der Datenschutz-Grundverordnung ist:
+      </p>
+      <p>
         {BETRIEB.name}<br />
         {BETRIEB.inhaber}<br />
         {BETRIEB.strasse}<br />
         {BETRIEB.plz} {BETRIEB.ort}<br />
-        <a href={`mailto:${BETRIEB.email}`}>{BETRIEB.email}</a><br />
-        <a href={`tel:${BETRIEB.telefon}`}>{BETRIEB.telefonAnzeige}</a>
-      </p>
-
-      <h2 id="hosting">Hosting auf GitHub Pages</h2>
-      <p class="platzhalter">
-        [PLATZHALTER: Wird in Phase 7 ausformuliert. Inhalt: Server-Logfiles
-        inklusive IP-Adresse durch GitHub, Inc., Rechtsgrundlage Art. 6 Abs. 1
-        lit. f DSGVO, Drittlandübermittlung USA. Der aktuelle
-        Zertifizierungsstatus von GitHub unter dem EU-U.S. Data Privacy
-        Framework muss vorher geprüft werden.]
-      </p>
-
-      <h2 id="keine-cookies">Keine Cookies, kein Tracking</h2>
-      <p>
-        Diese Website setzt keine Cookies. Es findet keine Analyse Ihres
-        Verhaltens statt, es sind keine Werbenetzwerke eingebunden, und es
-        werden keine Inhalte von Drittanbietern nachgeladen. Schriften, Bilder
-        und Skripte liegen ausschließlich auf unserem eigenen Server.
+        Deutschland
       </p>
       <p>
-        Deshalb brauchen Sie hier auch kein Einwilligungsbanner wegzuklicken.
+        E-Mail: <a href={`mailto:${BETRIEB.email}`}>{BETRIEB.email}</a><br />
+        Telefon: <a href={`tel:${BETRIEB.telefon}`}>{BETRIEB.telefonAnzeige}</a>
+      </p>
+      <p>
+        Ein Datenschutzbeauftragter ist gesetzlich nicht bestellt und für einen
+        Betrieb dieser Größe auch nicht erforderlich.
+      </p>
+
+      <h2 id="grundsatz">Keine Cookies, kein Tracking</h2>
+      <p>Wir sagen das gerne deutlich, weil es selten geworden ist:</p>
+      <ul>
+        <li>Diese Website setzt <strong>keine Cookies</strong>.</li>
+        <li>Es findet <strong>keine Analyse</strong> Ihres Verhaltens statt.</li>
+        <li>Es sind <strong>keine Werbenetzwerke</strong> eingebunden.</li>
+        <li>
+          Es werden <strong>keine Inhalte von Dritten nachgeladen</strong>.
+          Schriften, Bilder und Skripte liegen ausschließlich auf unserem
+          eigenen Server.
+        </li>
+        <li>
+          Es gibt <strong>kein Kontaktformular</strong> und damit auch keinen
+          Formulardienstleister und keinen Spamschutz eines Drittanbieters.
+        </li>
+        <li>
+          Karten und Videos sind <strong>nicht eingebettet</strong>. Die
+          Anfahrtsskizze ist eine eigene Zeichnung.
+        </li>
+      </ul>
+      <p>
+        Aus diesem Grund brauchen Sie hier nichts wegzuklicken, und wir
+        brauchen für den Betrieb dieser Website keine Einwilligung von Ihnen.
+      </p>
+
+      <h2 id="hosting">Hosting bei GitHub Pages</h2>
+      <p>
+        Diese Website wird bei GitHub Pages gehostet, einem Dienst der
+        GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107,
+        USA.
+      </p>
+      <p>
+        Wenn Sie diese Website aufrufen, verarbeitet GitHub technisch
+        notwendige Verbindungsdaten, um die Seite an Ihr Gerät ausliefern zu
+        können. Dazu gehören insbesondere Ihre <strong>IP-Adresse</strong>,
+        Angaben zu Browser und Betriebssystem, die aufgerufene Adresse sowie
+        Datum und Uhrzeit des Abrufs. Diese Verarbeitung findet in der
+        Infrastruktur von GitHub statt. <strong>Wir haben darauf keinen
+        Einfluss und erhalten diese Daten auch nicht.</strong>
+      </p>
+      <p>
+        <strong>Rechtsgrundlage</strong> ist unser berechtigtes Interesse an
+        einer sicheren und zuverlässigen Bereitstellung dieser Website nach
+        Artikel 6 Absatz 1 Buchstabe f DSGVO.
+      </p>
+      <p>
+        <strong>Übermittlung in die USA:</strong> GitHub hat gegenüber dem
+        US-Handelsministerium zertifiziert, dass das Unternehmen die
+        Grundsätze des EU-U.S. Data Privacy Framework einhält. Für die
+        Europäische Union besteht insoweit ein Angemessenheitsbeschluss der
+        Europäischen Kommission, sodass die Übermittlung auf dieser Grundlage
+        erfolgt.
+      </p>
+      <p>
+        Näheres zur Datenverarbeitung durch GitHub finden Sie in deren
+        Datenschutzerklärung:
+        <a
+          href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+          rel="noopener noreferrer"
+          target="_blank"
+          >GitHub General Privacy Statement <span aria-hidden="true">↗</span>
+          <span class="sr-only">(öffnet in neuem Tab)</span></a
+        >
       </p>
 
       <h2 id="altersabfrage">Altersabfrage</h2>
       <p>
-        Beim ersten Aufruf fragen wir, ob Sie mindestens 16&nbsp;Jahre alt sind.
-        Ihre Antwort speichern wir ausschließlich lokal in Ihrem Browser
-        (<code>localStorage</code>), damit die Frage nicht bei jedem Seitenaufruf
-        erneut erscheint.
+        Weil wir Bier ausschenken, fragen wir beim ersten Aufruf, ob Sie
+        mindestens 16 Jahre alt sind. Damit diese Frage nicht bei jedem
+        Seitenaufruf erneut erscheint, speichern wir Ihre Antwort
+        <strong>ausschließlich lokal in Ihrem Browser</strong> im sogenannten
+        <code>localStorage</code>.
       </p>
+      <p>Konkret bedeutet das:</p>
+      <ul>
+        <li>Es wird <strong>kein Cookie</strong> gesetzt.</li>
+        <li>Es wird <strong>nichts an uns oder an Dritte übertragen</strong>.</li>
+        <li>
+          Gespeichert wird lediglich die Information, dass die Frage beantwortet
+          wurde. Weder Ihr Alter noch Ihr Geburtsdatum werden erhoben.
+        </li>
+        <li>Eine personenbezogene Auswertung findet nicht statt.</li>
+      </ul>
       <p>
-        Dabei wird kein Cookie gesetzt, nichts an uns oder an Dritte übertragen
-        und keine personenbezogene Auswertung vorgenommen. Gespeichert wird
-        lediglich, dass die Frage beantwortet wurde. Sie können den Eintrag
-        jederzeit über die Einstellungen Ihres Browsers löschen.
+        Sie können den Eintrag jederzeit über die Einstellungen Ihres Browsers
+        löschen. Beim nächsten Besuch erscheint die Frage dann erneut.
       </p>
 
       <h2 id="kontakt">Kontaktaufnahme</h2>
-      <p class="platzhalter">
-        [PLATZHALTER: Wird in Phase 7 ausformuliert. Inhalt: Verarbeitung zur
-        Bearbeitung der Anfrage nach Art. 6 Abs. 1 lit. b bzw. f DSGVO,
-        Speicherdauer. Die Speicherdauer muss noch bestätigt werden, siehe
-        OFFENE-FRAGEN Nr. 5.]
+      <p>
+        Auf dieser Website gibt es kein Kontaktformular. Wenn Sie uns
+        schreiben oder anrufen, erreichen uns Ihre Angaben direkt, ohne Umweg
+        über einen Dienstleister.
       </p>
       <p>
-        Auf dieser Website gibt es kein Kontaktformular. Anfragen erreichen uns
-        direkt per E-Mail oder Telefon, ohne Umweg über einen Dienstleister.
+        Die Anfrageknöpfe auf dieser Website öffnen lediglich Ihr eigenes
+        E-Mail-Programm mit einem vorbereiteten Betreff und Text. Es werden
+        dabei keine Daten an uns übertragen, solange Sie die Nachricht nicht
+        selbst absenden.
+      </p>
+      <p>
+        Nehmen Sie Kontakt zu uns auf, verarbeiten wir die von Ihnen
+        mitgeteilten Daten, um Ihre Anfrage zu bearbeiten. Das sind in der
+        Regel Ihr Name, Ihre E-Mail-Adresse oder Telefonnummer sowie der
+        Inhalt Ihrer Nachricht.
+      </p>
+      <p>
+        <strong>Rechtsgrundlage</strong> ist Artikel 6 Absatz 1 Buchstabe b
+        DSGVO, soweit Ihre Anfrage auf den Abschluss oder die Durchführung
+        eines Vertrags gerichtet ist, im Übrigen unser berechtigtes Interesse
+        an der Beantwortung Ihrer Anfrage nach Artikel 6 Absatz 1 Buchstabe f
+        DSGVO.
+      </p>
+      <p class="platzhalter">
+        [PLATZHALTER: Speicherdauer bestätigen. Vorschlag: „Wir speichern Ihre
+        Anfrage, bis sie vollständig bearbeitet ist, längstens jedoch sechs
+        Monate. Gesetzliche Aufbewahrungsfristen, insbesondere handels- und
+        steuerrechtliche, bleiben unberührt.“ Siehe OFFENE-FRAGEN Nr. 5.]
       </p>
 
-      <h2 id="links">Externe Links</h2>
+      <h2 id="links">Externe Links und soziale Netzwerke</h2>
       <p>
-        Wir verlinken auf Websites unserer Verkaufsstellen, auf soziale
-        Netzwerke und auf einen Routenplaner. Diese Inhalte sind nicht in
-        unsere Seite eingebettet; es wird also erst beim Klick eine Verbindung
-        aufgebaut. Ab dann gelten die Datenschutzbestimmungen der jeweiligen
-        Anbieter.
+        Wir verlinken auf die Websites unserer Verkaufsstellen, auf einen
+        Routenplaner sowie auf unsere Auftritte bei Facebook und Instagram.
+      </p>
+      <p>
+        Diese Inhalte sind <strong>nicht in unsere Seite eingebettet</strong>.
+        Es gibt keine Social-Media-Schaltflächen, die beim Seitenaufruf eine
+        Verbindung aufbauen, und keine Zählpixel. Eine Verbindung zu diesen
+        Anbietern entsteht erst, wenn Sie einen Link anklicken. Ab diesem
+        Zeitpunkt gelten die Datenschutzbestimmungen des jeweiligen Anbieters,
+        auf die wir keinen Einfluss haben.
       </p>
 
       <h2 id="rechte">Ihre Rechte</h2>
-      <p class="platzhalter">
-        [PLATZHALTER: Wird in Phase 7 ausformuliert. Inhalt: Auskunft,
-        Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit,
-        Widerspruch sowie Beschwerderecht bei der zuständigen Aufsichtsbehörde,
-        dem Bayerischen Landesamt für Datenschutzaufsicht in Ansbach.]
+      <p>Ihnen stehen gegenüber uns die folgenden Rechte zu:</p>
+      <ul>
+        <li><strong>Auskunft</strong> über die zu Ihnen gespeicherten Daten (Artikel 15 DSGVO)</li>
+        <li><strong>Berichtigung</strong> unrichtiger Daten (Artikel 16 DSGVO)</li>
+        <li><strong>Löschung</strong> (Artikel 17 DSGVO)</li>
+        <li><strong>Einschränkung der Verarbeitung</strong> (Artikel 18 DSGVO)</li>
+        <li><strong>Datenübertragbarkeit</strong> (Artikel 20 DSGVO)</li>
+        <li>
+          <strong>Widerspruch</strong> gegen Verarbeitungen, die auf unserem
+          berechtigten Interesse beruhen (Artikel 21 DSGVO)
+        </li>
+      </ul>
+      <p>
+        Für die Ausübung dieser Rechte genügt eine formlose Nachricht an
+        <a href={`mailto:${BETRIEB.email}`}>{BETRIEB.email}</a>.
+      </p>
+
+      <h2 id="beschwerde">Beschwerderecht</h2>
+      <p>
+        Sind Sie der Ansicht, dass die Verarbeitung Ihrer Daten gegen
+        geltendes Recht verstößt, können Sie sich bei einer
+        Datenschutz-Aufsichtsbehörde beschweren. Für uns zuständig ist:
+      </p>
+      <p>
+        Bayerisches Landesamt für Datenschutzaufsicht (BayLDA)<br />
+        Promenade 18<br />
+        91522 Ansbach
       </p>
 
       <h2 id="tls">Verschlüsselung</h2>
       <p>
         Diese Website wird ausschließlich verschlüsselt über HTTPS
         ausgeliefert. Sie erkennen das am Schlosssymbol in der Adresszeile
-        Ihres Browsers.
+        Ihres Browsers. Damit können die übertragenen Inhalte von Dritten
+        nicht mitgelesen werden.
       </p>
+
+      <h2 id="aenderungen">Änderungen dieser Erklärung</h2>
+      <p>
+        Wir passen diese Datenschutzerklärung an, wenn sich die Website oder
+        die Rechtslage ändert. Es gilt jeweils die hier veröffentlichte
+        Fassung.
+      </p>
+      <p class="leise">Stand: August 2026</p>
 
       <div class="hinweis-entwurf">
         <p>
-          <strong>Diese Datenschutzerklärung ist noch nicht vollständig.</strong>
-          Die markierten Abschnitte werden in Phase 7 ergänzt. Vor dem Livegang
-          muss der Text von einer Fachperson geprüft werden.
+          <strong>Hinweis zum Stand dieser Erklärung.</strong> Die oben
+          markierte Angabe zur Speicherdauer fehlt noch. Dieser Text ist ein
+          sorgfältig recherchierter Entwurf und ersetzt keine Rechtsberatung.
+          Wir empfehlen, ihn vor der Veröffentlichung von einer Fachperson
+          prüfen zu lassen.
         </p>
       </div>
     </div>
@@ -130,6 +292,10 @@ const ABSCHNITTE = [
 
 <style>
   .rechtstext h1 {
+    margin-bottom: var(--db-space-md);
+  }
+
+  .rechtstext .vorspann {
     margin-bottom: var(--db-space-lg);
   }
 
@@ -141,6 +307,13 @@ const ABSCHNITTE = [
 
   .rechtstext p {
     margin-top: var(--db-space-sm);
+  }
+
+  .rechtstext ul {
+    margin-top: var(--db-space-sm);
+    padding-left: var(--db-space-md);
+    display: grid;
+    gap: var(--db-space-3xs);
   }
 
   .rechtstext code {

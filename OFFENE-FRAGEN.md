@@ -11,6 +11,23 @@ steht an der betreffenden Stelle im Code ein `[PLATZHALTER: …]`.
 
 ## Rechtliches (Phase 7)
 
+> **Stand nach Phase 7 (04.08.2026):** Beide Rechtstexte sind ausformuliert und
+> online. Es fehlen noch **vier Angaben**, die nur der Betreiber liefern kann:
+> Nummer 1, 2, 3 und 5. Sie sind auf den Seiten als sichtbarer Platzhalter
+> markiert, damit sie beim Livegang nicht übersehen werden.
+>
+> **Recherchiert und eingearbeitet:** Die EU-Plattform zur Online-Streitbeilegung
+> wurde zum **20.07.2025 abgeschaltet**, die ODR-Verordnung ist durch die
+> Verordnung (EU) 2024/3228 vollständig aufgehoben. Der früher pflichtige Link
+> **darf nicht mehr auftauchen** und steht deshalb nirgends. Viele
+> Impressum-Generatoren liefern ihn noch mit. Geprüft: er kommt auf keiner der
+> 80 Seiten vor.
+>
+> Ebenfalls geprüft: **GitHub ist unter dem EU-U.S. Data Privacy Framework
+> zertifiziert**, die Übermittlung in die USA hat damit eine tragfähige
+> Grundlage. Der Status kann sich ändern und sollte bei größeren Änderungen
+> erneut geprüft werden.
+
 ### 1. 🔴 Impressum — Rechtsform bestätigen
 Die Altseite nennt „DEIN BIER M.Rink Brauerei, Inhaber des Unternehmens: Michael Rink“. Das deutet
 auf ein **Einzelunternehmen** hin. Bitte bestätigen — oder die korrekte Rechtsform nennen
