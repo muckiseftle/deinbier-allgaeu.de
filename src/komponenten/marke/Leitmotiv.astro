@@ -37,8 +37,6 @@ interface Props {
    * erkennen.
    */
   ueberstand?: number;
-  /** `dunkel` fuer Cremeflaechen, `hell` fuer dunkle Fotos. */
-  ton?: 'dunkel' | 'hell';
   klasse?: string;
 }
 
@@ -48,7 +46,6 @@ const {
   hoehe = 520,
   drehung = 0,
   ueberstand = 0.26,
-  ton = 'dunkel',
   klasse,
 } = Astro.props;
 
@@ -57,62 +54,99 @@ const r = (n: number) => Math.round(n * 10) / 10;
 /* ---------------------------------------------------------------------------
    Hopfendolde
 
-   Eine Dolde ist kein gestreiftes Ei. Sie besteht aus vielen sich
-   ueberlappenden Deckblaettern, die wie Schuppen versetzt uebereinander
-   liegen und nach unten spitz zulaufen. Genau diese Schuppen machen sie
-   erkennbar, deshalb werden sie einzeln gezeichnet statt als Querlinien
-   angedeutet.
+   Der entscheidende Punkt, und der Grund fuer zwei verworfene Fassungen:
+   eine Dolde hat KEINE glatte Aussenlinie. Ihr Umriss entsteht aus den
+   Spitzen der aeusseren Deckblaetter selbst. Zeichnet man erst ein Ei und
+   legt dann Schuppen hinein, kommt eine Karotte heraus — genau so hat der
+   Betreiber die zweite Fassung genannt, und er hatte recht.
+
+   Richtig ist: nur Deckblaetter. Fuenf Lagen, jede faechert nach aussen
+   auf, jede folgende sitzt tiefer und ist kleiner. Was aussen steht, bildet
+   den Rand.
 ------------------------------------------------------------------------- */
 
 /**
- * Ein Deckblatt, angedeutet durch seine Unterkante: ein nach unten
- * durchhaengender Bogen.
- *
- * Ein erster Versuch zeichnete jedes Blatt als geschlossene Form. Bei neun
- * Reihen ergab das ein Gewirr aus Schlaufen, das eher nach Draht aussah als
- * nach einer Dolde. Nur die Unterkante zu setzen ist nicht nur ruhiger,
- * es ist auch richtiger: an einem Zapfen sieht man von jeder Schuppe genau
- * diese eine Linie, alles andere liegt unter der naechsten Schuppe.
+ * Ein Deckblatt: eine an beiden Enden spitze Linse, um ihren Mittelpunkt
+ * gedreht. Die Drehung wird hier ausgerechnet und nicht als
+ * `transform`-Attribut gesetzt, damit alle Pfade im selben Koordinatenraum
+ * liegen — sonst stimmt die Rueckrechnung der Zeigerposition nicht mehr.
  */
-function schuppe(x: number, y: number, b: number) {
-  return `M${r(x - b)} ${r(y)}Q${r(x)} ${r(y + b * 0.86)} ${r(x + b)} ${r(y)}`;
+function deckblatt(cx: number, cy: number, b: number, h: number, grad: number) {
+  const a = (grad * Math.PI) / 180;
+  const cos = Math.cos(a);
+  const sin = Math.sin(a);
+  const p = (x: number, y: number) =>
+    `${r(cx + x * cos - y * sin)} ${r(cy + x * sin + y * cos)}`;
+  return (
+    `M${p(0, -h / 2)}` +
+    `C${p(b, -h / 6)} ${p(b, h / 6)} ${p(0, h / 2)}` +
+    `C${p(-b, h / 6)} ${p(-b, -h / 6)} ${p(0, -h / 2)}Z`
+  );
 }
 
-/* Je Reihe: Hoehe und halbe Doldenbreite an dieser Stelle. Die Reihen sind
-   gegeneinander versetzt — gerade Reihen drei Schuppen, ungerade zwei —,
-   damit die Schuppen wie am Zapfen auf Luecke sitzen. Die Schuppenbreite ist
-   in beiden Faellen ein Drittel der Doldenbreite, sonst waeren die Schuppen
-   der einen Reihe sichtbar groesser als die der anderen. */
-const HOPFEN_REIHEN: Array<[number, number]> = [
-  [14, 45],
-  [33, 51],
-  [52, 53],
-  [71, 52],
-  [89, 48],
-  [106, 42],
-  [122, 34],
-  [137, 25],
-  [150, 15],
+/**
+ * Eine Schuppe des Doldenkoerpers: oben breit gerundet, nach unten zur
+ * Spitze zulaufend.
+ *
+ * Der Unterschied zum Deckblatt oben ist entscheidend fuer den Gesamteindruck.
+ * Lauter beidseitig spitze Blaetter ergeben ein Lilienornament, das nach
+ * aussen aussticht. Erst breite, gerundete Schuppen, die sich stark
+ * ueberlappen, schliessen die Form zu einem Koerper — und genau daraus
+ * entsteht der Umriss der Dolde.
+ */
+function schuppe(cx: number, cy: number, b: number, h: number) {
+  return (
+    `M${r(cx - b)} ${r(cy - h * 0.22)}` +
+    `C${r(cx - b * 0.86)} ${r(cy - h * 0.62)} ${r(cx + b * 0.86)} ${r(cy - h * 0.62)} ${r(cx + b)} ${r(cy - h * 0.22)}` +
+    `C${r(cx + b * 0.78)} ${r(cy + h * 0.2)} ${r(cx + b * 0.34)} ${r(cy + h * 0.46)} ${r(cx)} ${r(cy + h * 0.5)}` +
+    `C${r(cx - b * 0.34)} ${r(cy + h * 0.46)} ${r(cx - b * 0.78)} ${r(cy + h * 0.2)} ${r(cx - b)} ${r(cy - h * 0.22)}Z`
+  );
+}
+
+/* Der Koerper: vier Lagen Schuppen, jede folgende schmaler und tiefer, die
+   Lagen gegeneinander versetzt. Der seitliche Versatz plus die halbe
+   Schuppenbreite ergibt den Umriss — es gibt keine eigene Aussenlinie. */
+const HOPFEN_LAGEN: Array<{ y: number; b: number; h: number; x: number[] }> = [
+  /* Die oberste Lage sitzt eng zusammen und ist schmaler als die darunter.
+     Das woelbt den Kopf. Beginnt man gleich mit der breitesten Lage, bekommt
+     die Dolde oben eine gerade Kante und sieht abgeschnitten aus. */
+  { y: 48, b: 26, h: 56, x: [-17, 17] },
+  { y: 78, b: 31, h: 64, x: [-32, 0, 32] },
+  { y: 110, b: 31, h: 60, x: [-25, 25] },
+  { y: 140, b: 27, h: 54, x: [-21, 0, 21] },
+  { y: 166, b: 21, h: 44, x: [-13, 13] },
 ];
 
-const hopfenSchuppen = HOPFEN_REIHEN.flatMap(([y, hw], reihe) => {
-  const b = hw / 3;
-  return reihe % 2 === 0
-    ? [schuppe(-2 * b, y, b), schuppe(0, y, b), schuppe(2 * b, y, b)]
-    : [schuppe(-b, y, b), schuppe(b, y, b)];
-});
+/* Von oben nach unten, damit die tiefer sitzenden Lagen vorn liegen.
+   `rand` markiert, was den Umriss bildet: nur die aeusserste Schuppe jeder
+   Lage. Sie leuchtet kraeftig, was dazwischen sitzt bleibt zurueck. */
+const hopfenPfade = HOPFEN_LAGEN.flatMap(({ y, b, h, x }) =>
+  x.map((dx, i) => ({
+    d: schuppe(dx, y, b, h),
+    rand: i === 0 || i === x.length - 1,
+    voll: true,
+  })),
+);
 
 const HOPFEN = {
-  /* Aussenkante: Umriss, Stiel, zwei Blaetter. Diese Linien leuchten stark. */
-  kante: [
-    'M0 2C-30 2-53 24-53 56-53 100-31 146 0 176 31 146 53 100 53 56 53 24 30 2 0 2Z',
-    'M0 2V-36',
-    'M0-26C-16-42-36-42-48-27-33-15-12-16 0-26Z',
-    'M0-26C16-42 36-42 48-27 33-15 12-16 0-26Z',
+  /* Reihenfolge ist hier Bildaufbau, nicht Geschmackssache: was spaeter
+     kommt, liegt vorn und verdeckt das Dahinterliegende. Ohne diese
+     Verdeckung kreuzen sich alle Umrisse und die Dolde wird zum Gitter. */
+  pfade: [
+    { d: deckblatt(0, -28, 7, 44, 0), rand: true, voll: true },
+    /* Die beiden Schulterblaetter. Sie stehen weiter oben als der Koerper und
+       werden von dessen oberster Lage unten verdeckt — dadurch wachsen sie
+       aus der Dolde heraus, statt seitlich angeklebt zu wirken. */
+    { d: deckblatt(-29, 20, 17, 66, -58), rand: true, voll: true },
+    { d: deckblatt(29, 20, 17, 66, 58), rand: true, voll: true },
+    /* Das aufrechte Blatt zwischen den Schultern, mit Mittelrippe. */
+    { d: deckblatt(0, 12, 14, 56, 0), rand: false, voll: true },
+    { d: 'M0-6V32', rand: false, voll: false },
+    ...hopfenPfade,
+    /* Die Spitze unten. */
+    { d: deckblatt(0, 184, 14, 42, 0), rand: true, voll: true },
   ],
-  /* Binnenzeichnung: die Schuppen. Sie leuchten deutlich schwaecher. */
-  innen: hopfenSchuppen,
-  box: '-70 -48 140 236',
+  box: '-80 -58 160 272',
 };
 
 /* ---------------------------------------------------------------------------
@@ -129,9 +163,13 @@ function korn(s: number, y: number, l: number) {
   const sx = s * l * 0.62;
   const sy = y - l * 0.42;
   return (
+    /* Die beiden Kanten muessen deutlich auseinanderlaufen. Ein erster
+       Versuch fuehrte sie zu eng: bei zwei Strichen von 2 px blieb dazwischen
+       fast nichts frei, und das Korn wirkte wie ein massiver dunkler Keil
+       statt wie eine Spindel. */
     `M0 ${r(y + l * 0.55)}` +
-    `C${r(s * l * 0.24)} ${r(y + l * 0.12)} ${r(s * l * 0.54)} ${r(y - l * 0.12)} ${r(sx)} ${r(sy)}` +
-    `C${r(s * l * 0.34)} ${r(y - l * 0.02)} ${r(s * l * 0.08)} ${r(y + l * 0.3)} 0 ${r(y + l * 0.55)}Z`
+    `C${r(s * l * 0.4)} ${r(y + l * 0.28)} ${r(s * l * 0.7)} ${r(y - l * 0.08)} ${r(sx)} ${r(sy)}` +
+    `C${r(s * l * 0.3)} ${r(y - l * 0.16)} ${r(s * l * 0.04)} ${r(y + l * 0.26)} 0 ${r(y + l * 0.55)}Z`
   );
 }
 
@@ -158,17 +196,24 @@ const GERSTE_PAARE = Array.from({ length: 7 }, (_, i) => {
 });
 
 const GERSTE = {
-  /* Kanten: Koerner und Grannen. Das ist die Silhouette der Aehre. */
-  kante: GERSTE_PAARE.flatMap(({ y, l, laenge }) => [
-    korn(-1, y, l),
-    korn(1, y, l),
-    granne(-1, y, l, laenge),
-    granne(1, y, l, laenge),
-  ]),
-  /* Binnenzeichnung: Halm und Mittelrippen. */
-  innen: [
-    'M0 6V268',
-    ...GERSTE_PAARE.flatMap(({ y, l }) => [rippe(-1, y, l), rippe(1, y, l)]),
+  /* Auch hier ist die Reihenfolge Bildaufbau: erst der Halm, dann die
+     Grannen, dann die Koerner darueber. So verschwinden die Grannenansaetze
+     hinter den Koernern, statt sie zu durchkreuzen. Die Rippen kommen
+     zuletzt, sie liegen auf dem Korn. */
+  pfade: [
+    { d: 'M0 6V268', rand: false, voll: false },
+    ...GERSTE_PAARE.flatMap(({ y, l, laenge }) => [
+      { d: granne(-1, y, l, laenge), rand: true, voll: false },
+      { d: granne(1, y, l, laenge), rand: true, voll: false },
+    ]),
+    ...GERSTE_PAARE.flatMap(({ y, l }) => [
+      { d: korn(-1, y, l), rand: true, voll: true },
+      { d: korn(1, y, l), rand: true, voll: true },
+    ]),
+    ...GERSTE_PAARE.flatMap(({ y, l }) => [
+      { d: rippe(-1, y, l), rand: false, voll: false },
+      { d: rippe(1, y, l), rand: false, voll: false },
+    ]),
   ],
   box: '-104 -158 208 442',
 };
@@ -185,7 +230,7 @@ const verhaeltnis = `${boxB} / ${boxH}`;
 ---
 
 <div
-  class:list={['leitmotiv', `leitmotiv-${seite}`, `leitmotiv-${ton}`, klasse]}
+  class:list={['leitmotiv', `leitmotiv-${seite}`, klasse]}
   style={`--motiv-hoehe: ${hoeheCss}; --motiv-verhaeltnis: ${verhaeltnis}; --motiv-drehung: ${drehung}deg; --motiv-ueberstand: ${r(ueberstand * 100)}%;`}
   aria-hidden="true"
 >
@@ -193,21 +238,32 @@ const verhaeltnis = `${boxB} / ${boxH}`;
   <svg
     class="leitmotiv-grund"
     viewBox={motiv.box}
-    fill="none"
     stroke="currentColor"
     stroke-linecap="round"
     stroke-linejoin="round"
   >
-    <g stroke-width="2.6">{motiv.kante.map((d) => <path d={d} />)}</g>
-    <g stroke-width="2">{motiv.innen.map((d) => <path d={d} />)}</g>
+    {
+      motiv.pfade.map((p) => (
+        <path d={p.d} class:list={[p.rand ? 'rand' : 'innen', p.voll && 'voll']} />
+      ))
+    }
   </svg>
 
   {/* Goldkopie. Die Maske am umgebenden Element laesst nur den Bereich um
       den Zeiger stehen, alles andere blendet weich aus. */}
   <div class="leitmotiv-licht">
-    <svg viewBox={motiv.box} fill="none" stroke-linecap="round" stroke-linejoin="round">
-      <g class="licht-innen" stroke-width="2">{motiv.innen.map((d) => <path d={d} />)}</g>
-      <g class="licht-kante" stroke-width="3.2">{motiv.kante.map((d) => <path d={d} />)}</g>
+    <svg viewBox={motiv.box} stroke-linecap="round" stroke-linejoin="round">
+      {/* Der Hof. Ungefuellt und weichgezeichnet: dass sich die Umrisse hier
+          kreuzen, sieht man nach dem Weichzeichnen nicht mehr, und nur so
+          entsteht ein Schein, der ueber den Umriss hinausreicht. */}
+      <g class="licht-hof">{motiv.pfade.map((p) => <path d={p.d} />)}</g>
+      {/* Die scharfe Zeichnung, gefuellt und in derselben Reihenfolge wie
+          der Grund — sonst deckt sie ihn nicht sauber ab. */}
+      {
+        motiv.pfade.map((p) => (
+          <path d={p.d} class:list={[p.rand ? 'rand' : 'innen', p.voll && 'voll']} />
+        ))
+      }
     </svg>
   </div>
 </div>
@@ -264,25 +320,42 @@ const verhaeltnis = `${boxB} / ${boxH}`;
     overflow: visible;
   }
 
+  /* Verdeckung. Die Fuellung hat die Farbe der Seitenflaeche, damit ein
+     Deckblatt alles verbirgt, was hinter ihm liegt. Genau das trennt eine
+     Zeichnung von einem Liniengitter. Offene Pfade — Halm, Grannen, Rippen —
+     bleiben ungefuellt, sonst entstehen Fantasieflaechen zwischen ihren
+     Enden. */
+  .leitmotiv path {
+    fill: none;
+  }
+
+  .leitmotiv path.voll {
+    fill: var(--db-flaeche);
+  }
+
+  .leitmotiv-grund .rand {
+    stroke-width: 2.6;
+  }
+
+  .leitmotiv-grund .innen {
+    stroke-width: 2;
+  }
+
   .leitmotiv-grund {
     transition: opacity var(--db-dauer-ruhig) var(--db-easing-standard);
   }
 
-  /* Auf Creme: warmes Braun, sehr blass. Kraeftig genug, dass man das Motiv
-     findet, ohne dass es mit dem Text konkurriert. */
-  .leitmotiv-dunkel .leitmotiv-grund {
+  /* Warmes Braun, sehr blass. Kraeftig genug, dass man das Motiv findet,
+     ohne dass es mit dem Text konkurriert.
+
+     Es gab zwischenzeitlich eine helle Fassung fuer Motive auf Fotos. Sie
+     ist entfallen: seit die Deckblaetter sich gegenseitig verdecken, ist die
+     Fuellung die Farbe der Seitenflaeche, und die stimmt auf einem Foto
+     nicht. Ein Motiv gehoert damit auf eine ruhige Flaeche — was ohnehin die
+     bessere Wahl ist, wie der Versuch im Hero-Bild gezeigt hat. */
+  .leitmotiv-grund {
     color: var(--db-malz-700);
     opacity: 0.15;
-  }
-
-  /* Auf einem Foto: helle Linie. Dunkles Braun waere dort unsichtbar.
-     Der Schlagschatten ist noetig, weil ein Foto helle und dunkle Stellen
-     hat: ohne ihn verschwindet die Linie ueber jeder hellen Flaeche. Mit ihm
-     wirkt sie wie in das Bild gepraegt. */
-  .leitmotiv-hell .leitmotiv-grund {
-    color: var(--db-creme-50);
-    opacity: 0.55;
-    filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.45));
   }
 
   /* -------------------------------------------------------------------------
@@ -327,31 +400,37 @@ const verhaeltnis = `${boxB} / ${boxH}`;
     opacity: 0.18;
   }
 
-  .leitmotiv-hell[data-licht] .leitmotiv-grund {
-    opacity: 0.62;
+
+  /* Der weiche Hof um die Linien. Bewusst als eigene, weichgezeichnete Lage
+     und nicht als `drop-shadow` auf den gefuellten Pfaden: ein Schlagschatten
+     nimmt die Deckkraft der ganzen Form, ergaebe also einen verwaschenen
+     Klecks in Doldenform statt eines Scheins entlang der Linien. */
+  .licht-hof {
+    fill: none;
+    stroke: #e8b871;
+    stroke-width: 7;
+    opacity: 0.4;
+    filter: blur(7px);
   }
 
-  /* Die Kanten tragen den Effekt: goldener Strich mit einem weiten, weichen
-     Hof. Der Strich ist nicht breiter als die Grundzeichnung — er soll die
-     Linie zum Glimmen bringen, nicht verdicken. Ein erster Versuch mit
-     3,4 px und drei kraeftigen Schatten sah aus wie eine Leuchtreklame. */
-  .licht-kante {
+  /* Die Kanten tragen den Effekt. Der Strich ist nicht breiter als in der
+     Grundzeichnung — er soll die Linie zum Glimmen bringen, nicht verdicken.
+     Ein erster Versuch mit 3,4 px und drei kraeftigen Schatten sah aus wie
+     eine Leuchtreklame. */
+  .leitmotiv-licht .rand {
     /* Goldgelb, nicht Creme. Eine sehr helle Linie liest sich als weiss,
        sobald ein Schein darum liegt; erst mit Farbe im Strich selbst wirkt
        es wie Metall. */
-    stroke: #edc169;
+    stroke: #e5b455;
     stroke-width: 2.6;
-    /* Ein enger Schein fuer die Linie selbst, ein weiter fuer die Waerme
-       darum. Beide bewusst schwach: die Summe soll ein Glimmen ergeben. */
-    filter: drop-shadow(0 0 4px rgb(240 194 100 / 0.5))
-      drop-shadow(0 0 18px rgb(214 152 44 / 0.28));
   }
 
   /* Die Binnenzeichnung bleibt deutlich zurueck. Sonst leuchtet die ganze
      Flaeche und der Umriss geht darin unter. */
-  .licht-innen {
+  .leitmotiv-licht .innen {
     stroke: var(--db-bernstein-300);
-    opacity: 0.22;
+    stroke-width: 2;
+    stroke-opacity: 0.45;
   }
 
   @media (max-width: 899px) {

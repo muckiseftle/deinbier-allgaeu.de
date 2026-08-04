@@ -73,13 +73,14 @@ Blockierzeit 0 ms — alles unverändert. Die vier Prüfläufe (`qa-statisch`,
 `qa-browser`, `qa-bildpunkte`, `bewegung-pruefen`) liefen ohne Fehler durch.
 
 Das HTML der Startseite ist durch die Pfaddaten der drei Motive von 55,5 auf
-68,0 KB gewachsen. Übertragen werden davon **9,9 KB**: die Pfade wiederholen
+79,4 KB gewachsen. Übertragen werden davon **10,2 KB**: die Pfade wiederholen
 sich, und genau das komprimiert sehr gut.
 
 Der Lichteffekt ist objektiv nachgemessen, indem goldene Bildpunkte im
-Motivbereich gezählt werden. An der Gerstenähre: **4703 in Ruhe, 11997 unter
-dem Zeiger.** Vor der Abschwächung waren es 38034 — der Effekt ist also auf
-etwa ein Drittel zurückgenommen und trotzdem klar messbar vorhanden.
+Motivbereich gezählt werden. An der Hopfendolde im Hero: **585 in Ruhe, 5754
+unter dem Zeiger** — Faktor 10. An der Gerstenähre 8951 zu 18854; dort ist der
+Ruhewert höher, weil die Ähre viel mehr Linie auf der Fläche hat. Vor der
+Abschwächung lag die Ähre bei 38034 unter dem Zeiger.
 
 ---
 
@@ -242,7 +243,7 @@ Platzhalter, keine kaputte Fläche.
 
 | | Altseite | Neu |
 |---|---|---|
-| HTML der Startseite | 281 KB | **68,0 KB** (9,9 KB komprimiert) |
+| HTML der Startseite | 281 KB | **79,4 KB** (10,2 KB komprimiert) |
 | Externe Requests | Google reCAPTCHA, Facebook, Instagram | **0** |
 | Cookies | reCAPTCHA + Consent-Speicher | **0** |
 | Einwilligungsbanner | nötig | **nicht nötig** |

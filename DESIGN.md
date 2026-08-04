@@ -1231,7 +1231,7 @@ jedes am Rand angeschnitten:
 
 | Abschnitt | Motiv | Lage | Größe |
 |---|---|---|---|
-| Hero, **ganz oben** | Hopfendolde | rechts, hinter dem Foto | 640 px |
+| Hero, **ganz oben** | Hopfendolde | rechts, hinter dem Foto | 640 px, Überstand 12 % |
 | Die Biere | Gerstenähre | rechts | 780 px |
 | Verkaufsstellen | Hopfendolde | rechts | 520 px |
 
@@ -1242,8 +1242,10 @@ sie in das Hero-Foto: helle Linie, Schlagschatten, von der Etikettenfassung
 angeschnitten. Technisch sauber, aber sie ging in den Bilddetails unter — der
 Betreiber hat sie schlicht nicht gefunden. Auf der ruhigen Fläche daneben trägt
 die Form. Sie steht jetzt hinter dem Foto und schaut rechts daran vorbei.
-Der Ton `hell` bleibt in der Komponente: er ist richtig, sobald ein Motiv
-einmal auf einem dunklen Grund landen soll.
+Den hellen Ton für Motive auf Fotos gibt es nicht mehr: seit die Deckblätter
+sich gegenseitig verdecken, ist ihre Füllung die Farbe der Seitenfläche, und
+die stimmt auf einem Foto nicht. Ein Motiv gehört damit ohnehin auf eine
+ruhige Fläche.
 
 **Angeschnitten, nicht vollständig.** Ein Motiv, das über den Rand hinausragt,
 wirkt wie ein Ausschnitt aus etwas Größerem. Ein vollständig sichtbares wirkt
@@ -1259,25 +1261,36 @@ abgeschaltet, ebenso bei `prefers-contrast: more`.
 
 ### 16.3 Die Zeichnungen
 
-Beide sind zweimal entstanden. Die erste Fassung war in beiden Fällen zu
-abstrakt, um erkannt zu werden — der Betreiber hat die Ähre schlicht nicht
-gefunden und die Dolde als „nicht gut" bezeichnet. Was gefehlt hat:
+Die Dolde ist dreimal entstanden. Der Betreiber hat die Zwischenstände klar
+benannt — „sieht nicht gut aus", dann „sieht aus wie eine Karotte" — und als
+Vorlage ein Strichsymbol geschickt. Drei Einsichten daraus, in der
+Reihenfolge, in der sie aufgefallen sind:
 
-**Die Dolde ist kein gestreiftes Ei.** Sie besteht aus überlappenden
-Deckblättern, die wie Schuppen versetzt übereinanderliegen. Der zweite Versuch
-zeichnete jedes Blatt als geschlossene Form — bei neun Reihen ergab das ein
-Gewirr aus Schlaufen, das nach Draht aussah. Richtig ist, von jeder Schuppe
-nur die **Unterkante** zu setzen: ein nach unten durchhängender Bogen. Das ist
-nicht nur ruhiger, es ist auch das, was man am Zapfen tatsächlich sieht — alles
-andere liegt unter der nächsten Schuppe. Gerade Reihen tragen drei Schuppen,
-ungerade zwei, damit sie auf Lücke sitzen. Die Schuppenbreite ist in beiden
-Fällen ein Drittel der Doldenbreite, sonst wären die Schuppen der einen Reihe
-sichtbar größer als die der anderen.
+**Eine Dolde hat keine glatte Außenlinie.** Das war der eigentliche Fehler.
+Zeichnet man erst ein Ei und legt dann Schuppen hinein, kommt eine Karotte
+heraus — der Umriss stammt dann vom Ei und nicht von der Pflanze. Richtig ist:
+nur Deckblätter zeichnen. Der Umriss entsteht aus den äußersten von ihnen.
 
-**Die Ähre lebt von den Grannen.** Ohne die langen Bortsten sieht sie aus wie
+**Die vorderen Blätter müssen die hinteren verdecken.** Ohne Verdeckung
+kreuzen sich alle Umrisse und es wird ein Liniengitter. Die Blätter sind
+deshalb mit der Farbe der Seitenfläche gefüllt und werden von hinten nach
+vorn gezeichnet. Das ist auch der Grund, warum ein Motiv auf eine ruhige
+Fläche gehört und nicht auf ein Foto: die Füllung müsste sonst die Farbe des
+Fotos haben.
+
+**Spitze Blätter allein ergeben ein Lilienornament.** Es braucht zweierlei
+Formen: an beiden Enden spitze Blätter für Stiel, Schultern und Spitze, und
+breite, gerundete Schuppen für den Körper. Die oberste Schuppenlage sitzt
+enger und schmaler als die darunter — das wölbt den Kopf. Beginnt man gleich
+mit der breitesten Lage, sieht die Dolde oben abgeschnitten aus.
+
+**Die Ähre lebt von den Grannen.** Ohne die langen Borsten sieht sie aus wie
 ein Grashalm. Sieben Kornpaare, jedes mit einer Granne, die etwa doppelt so
-lang ist wie das Korn selbst. Die mittleren Paare sind am größten, oben und
-unten läuft die Ähre aus — sonst wirkt sie wie ein Rechteck.
+lang ist wie das Korn. Die mittleren Paare sind am größten, oben und unten
+läuft die Ähre aus — sonst wirkt sie wie ein Rechteck. Die beiden Kanten
+eines Korns müssen dabei deutlich auseinanderlaufen: liegen sie zu eng, bleibt
+zwischen zwei Strichen von 2 px fast nichts frei und das Korn wirkt wie ein
+massiver dunkler Keil statt wie eine Spindel.
 
 ### 16.4 Der Zeiger ist ein Lichtpunkt
 
@@ -1299,9 +1312,15 @@ Vier Details, ohne die es nicht funktioniert:
   der wie ein Loch aussieht statt wie Licht.
 - **Rücktransformation der Zeigerposition.** Die Motive sind gedreht; die Maske
   liegt im gedrehten Raum. Ohne Umrechnung säße das Licht schief zum Zeiger.
-- **Nur die Kanten leuchten.** Umriss, Stiel und Blätter der Dolde, Körner und
-  Grannen der Ähre bekommen den Goldstrich; die Binnenzeichnung liegt bei 22 %
-  Deckkraft. Leuchtet alles gleich stark, geht die Form darin unter.
+- **Nur die Kanten leuchten.** Stiel, Schultern, Spitze und die äußerste
+  Schuppe jeder Lage bekommen den Goldstrich; was innen liegt, bleibt bei
+  45 % Strichdeckung. Leuchtet alles gleich stark, geht die Form darin unter.
+- **Der Hof ist eine eigene, weichgezeichnete Lage** und kein `drop-shadow`.
+  Ein Schlagschatten nimmt die Deckkraft der ganzen Form; bei gefüllten
+  Blättern ergäbe er einen verwaschenen Klecks in Doldenform statt eines
+  Scheins entlang der Linien. Die Hof-Lage ist ungefüllt, 7 px breit und mit
+  7 px weichgezeichnet — dass sich die Umrisse dort kreuzen, sieht man nach
+  dem Weichzeichnen nicht mehr.
 
 **Die Stärke ist zweimal nachjustiert worden.** Die erste Fassung ging in der
 Maske bis 1,0 Deckkraft, hatte 3,4 px Goldstrich und drei kräftige Schatten.
