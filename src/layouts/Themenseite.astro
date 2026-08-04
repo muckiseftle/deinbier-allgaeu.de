@@ -2,12 +2,23 @@
 import Basis from './Basis.astro';
 import Bild from '../komponenten/basis/Bild.astro';
 import Knopf from '../komponenten/basis/Knopf.astro';
+import Leitmotiv from '../komponenten/marke/Leitmotiv.astro';
 import { BETRIEB } from '../daten/betrieb';
 import { anfrageLink, type AnfrageArt } from '../daten/anfragen';
 
 interface Props {
   titel: string;
   beschreibung: string;
+  /**
+   * Hintergrundmotiv im Seitenkopf. Bewusst je Seite gesetzt und nicht
+   * automatisch abgeleitet: die Reihenfolge im Menue soll sich als Wechsel
+   * lesen, und die Wahl passt zum Thema (Gerste zum Brauen und Wohnen,
+   * Hopfen zu Bier und Verkauf).
+   *
+   * Ohne Angabe bleibt der Kopf leer — richtig fuer Rechtstexte, wo eine
+   * Zeichnung hinter dem Text nur stoert.
+   */
+  motiv?: 'hopfen' | 'gerste';
   /** Ueberschrift auf der Seite, falls sie vom Seitentitel abweicht. */
   ueberschrift?: string;
   vorspann?: string;
@@ -23,6 +34,7 @@ interface Props {
 const {
   titel,
   beschreibung,
+  motiv,
   ueberschrift,
   vorspann,
   leitbild,
@@ -36,6 +48,10 @@ const {
 
 <Basis titel={titel} beschreibung={beschreibung} jsonLdZusatz={jsonLdZusatz}>
   <section class="seitenkopf">
+    {/* Am rechten Rand, angeschnitten, hinter dem Inhalt. Nur im Kopf und
+        nicht ueber die ganze Seite: einmal gesetzt wirkt es als Auftakt,
+        mehrfach wiederholt als Tapete. */}
+    {motiv && <Leitmotiv art={motiv} seite="rechts" hoehe={430} drehung={motiv === "hopfen" ? 12 : -9} />}
     <div class="container raster seitenkopf-raster">
       <div class="spalte-7">
         <h1>{ueberschrift ?? titel}</h1>
@@ -78,6 +94,16 @@ const {
 <style>
   .seitenkopf {
     padding-block: var(--db-space-2xl) var(--db-space-xl);
+    /* Bezugsrahmen fuer das Motiv, und es darf nicht seitlich herausragen:
+       sonst entsteht ein waagerechter Scrollbalken. */
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Inhalt ueber das Motiv legen. */
+  .seitenkopf > .container {
+    position: relative;
+    z-index: 1;
   }
 
   .seitenkopf-raster {

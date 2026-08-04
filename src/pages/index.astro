@@ -76,8 +76,8 @@ const BENTO_SPALTEN: Record<string, string> = {
         Am Fuss ausgerichtet und nicht mittig — zwei Pflanzen wachsen aus
         einem Boden, sie schweben nicht auf gleicher Hoehe. */}
     <div class="motiv-paar">
-      <Leitmotiv art="gerste" seite="frei" hoehe={520} drehung={-7} />
-      <Leitmotiv art="hopfen" seite="frei" hoehe={400} drehung={11} />
+      <Leitmotiv art="gerste" seite="frei" hoehe={470} drehung={-7} />
+      <Leitmotiv art="hopfen" seite="frei" hoehe={370} drehung={11} />
     </div>
     <div class="container raster hero-raster">
       <div class="spalte-7 hero-text">
@@ -353,7 +353,7 @@ const BENTO_SPALTEN: Record<string, string> = {
   .motiv-paar {
     position: absolute;
     right: 3rem;
-    bottom: -1rem;
+    bottom: 1.5rem;
     z-index: 0;
     display: flex;
     align-items: flex-end;
@@ -373,10 +373,23 @@ const BENTO_SPALTEN: Record<string, string> = {
 
   /* Inhalt ueber das Motiv legen, damit es nicht ueber Text und Bildern
      liegt. Im Hero ist das Motiv ein Geschwister des Containers, im
-     Abschnitt liegt es darin: deshalb zwei Regeln. */
+     Abschnitt liegt es darin: deshalb zwei Regeln.
+
+     Der Container gibt Zeigerereignisse durch. Er ist durchsichtig, sein
+     Kasten deckt aber die ganze Hero-Flaeche ab — und damit auch das
+     Motivpaar unten rechts, das dadurch nicht mehr ueberfahren werden
+     konnte und den Lichtpunkt nie ausgeloest hat. Die beiden Spalten
+     bekommen die Ereignisse zurueck, sonst liesse sich der Text nicht mehr
+     markieren. */
   .hero > :global(.container) {
     position: relative;
     z-index: 1;
+    pointer-events: none;
+  }
+
+  .hero :global(.hero-text),
+  .hero :global(.hero-bild) {
+    pointer-events: auto;
   }
 
   :global(.abschnitt-motiv .container > *:not(.leitmotiv)) {

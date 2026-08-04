@@ -313,6 +313,37 @@ Browser-Tab zeigt ein erkennbares, aber leicht weiches Symbol.
 
 ---
 
+## Neu aus Phase 4 (Hintergrundmotive)
+
+### 34. 🔴 Lizenz der beiden Motivdateien ungeklärt
+
+Am 04.08.2026 wurden zwei SVG-Dateien bereitgestellt:
+`hop_5381095.svg` und `wheat_1748176.svg`. Sie sind jetzt die
+Hintergrundmotive der Startseite und der sechs Themenseiten
+(`public/motive/hopfen.svg`, `public/motive/gerste.svg`).
+
+**Die Dateinamen tragen Kennnummern, wie sie Icon-Portale vergeben.** Bei
+den gängigen Portalen gilt für die kostenlose Nutzung:
+
+- Eine **Namensnennung** ist Pflicht, meist als Zeile im Impressum oder
+  Footer („Icon von … über …").
+- Das Icon darf **nicht als Hauptelement** auftreten und nicht
+  weitergegeben werden.
+- Mit einer bezahlten Lizenz entfällt die Namensnennung.
+
+**Zu klären, vor dem Livegang:**
+
+1. Woher stammen die beiden Dateien?
+2. Liegt eine bezahlte Lizenz vor — dann bitte den Nachweis ablegen.
+3. Falls nicht: Welcher Nennungstext ist gefordert? Ich setze ihn ins
+   Impressum.
+
+**Warum das blockiert:** Eine fehlende Namensnennung ist bei kommerzieller
+Nutzung ein Abmahnrisiko. Der Aufwand für die Lösung ist klein — eine Zeile
+im Impressum —, aber sie muss vor dem Livegang stehen.
+
+---
+
 ## Erledigt
 
 ### ✅ 6 · Preise auf der Website — **nein** (entschieden 03.08.2026)

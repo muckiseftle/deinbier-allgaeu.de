@@ -72,9 +72,12 @@ Startseite mobil 98 / Desktop 100, LCP 2,3 s mobil und 0,5 s Desktop, CLS 0,
 Blockierzeit 0 ms — alles unverändert. Die vier Prüfläufe (`qa-statisch`,
 `qa-browser`, `qa-bildpunkte`, `bewegung-pruefen`) liefen ohne Fehler durch.
 
-Das HTML der Startseite ist durch die Pfaddaten der vier Motive von 55,5 auf
-86,5 KB gewachsen. Übertragen werden davon **10,2 KB**: die Pfade wiederholen
-sich, und genau das komprimiert sehr gut.
+Das HTML der Startseite liegt bei **55,8 KB**, übertragen **9,5 KB**. Die
+Motive kosten dort nichts mehr: sie liegen als zwei Dateien unter
+`public/motive/` und werden einmal geladen (je 1,8 KB übertragen), statt auf
+jeder Seite erneut im Quelltext zu stehen. Ein Zwischenstand mit inline
+eingebetteten Pfaden lag bei 86,5 KB roh und kostete 0,2 s auf den größten
+Inhalt — messbar an Lighthouse: 97 statt 98, zweimal reproduziert.
 
 Der Lichteffekt ist objektiv nachgemessen, indem goldene Bildpunkte im
 Motivbereich gezählt werden. An der Hopfendolde im Hero: **585 in Ruhe, 5754
@@ -300,7 +303,7 @@ Platzhalter, keine kaputte Fläche.
 
 | | Altseite | Neu |
 |---|---|---|
-| HTML der Startseite | 281 KB | **86,5 KB** (10,2 KB komprimiert) |
+| HTML der Startseite | 281 KB | **55,8 KB** (9,5 KB komprimiert) |
 | Externe Requests | Google reCAPTCHA, Facebook, Instagram | **0** |
 | Cookies | reCAPTCHA + Consent-Speicher | **0** |
 | Einwilligungsbanner | nötig | **nicht nötig** |

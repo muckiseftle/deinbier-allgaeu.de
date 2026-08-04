@@ -1226,86 +1226,65 @@ dunklere Wert bleibt, obwohl das Muster weg ist — er ist schlicht der bessere 
 
 ### 16.2 Umgesetzt: einzelne, sehr große Motive
 
-Statt vieler kleiner Kacheln stehen auf der Startseite große Motive, jedes am
-Rand angeschnitten:
-
-| Abschnitt | Motiv | Lage | Größe |
+| Seite | Motiv | Lage | Größe |
 |---|---|---|---|
-| Hero, **ganz oben** | Gerstenähre **und** Hopfendolde nebeneinander | rechts unten, hinter dem Foto | 520 px / 400 px |
-| Die Biere | Gerstenähre | rechts | 780 px |
-| Verkaufsstellen | Hopfendolde | rechts | 520 px |
+| Startseite, Hero | Gerstenähre **und** Hopfendolde nebeneinander | rechts unten | 470 / 370 px |
+| Startseite, Die Biere | Gerstenähre | rechts | 780 px |
+| Startseite, Verkaufsstellen | Hopfendolde | rechts | 520 px |
+| Brauerei | Gerstenähre | Seitenkopf rechts | 430 px |
+| Biere | Hopfendolde | Seitenkopf rechts | 430 px |
+| Brauseminare | Gerstenähre | Seitenkopf rechts | 430 px |
+| Events & Verleih | Hopfendolde | Seitenkopf rechts | 430 px |
+| Ferienwohnung | Gerstenähre | Seitenkopf rechts | 430 px |
+| Verkaufsstellen | Hopfendolde | Seitenkopf rechts | 430 px |
 
-Vier Entscheidungen dahinter:
+Fünf Entscheidungen dahinter:
 
-**Oben stehen beide Pflanzen, nebeneinander.** Auf Wunsch des Betreibers.
-Gerste und Hopfen sind die zwei Zutaten, aus denen das Bier kommt; sie
-zusammen zu zeigen ist inhaltlich richtiger als eine allein. Sie sind **am Fuß
-ausgerichtet und überschneiden sich leicht** — zwei Pflanzen wachsen aus einem
-Boden, sie schweben nicht auf gleicher Höhe nebeneinander. Ein Zwischenschritt
-legte die Dolde in das Hero-Foto: technisch sauber, aber sie ging in den
-Bilddetails unter, und der Betreiber hat sie schlicht nicht gefunden. Auf der
-ruhigen Fläche trägt die Form.
+**Oben stehen beide Pflanzen, nebeneinander.** Gerste und Hopfen sind die zwei
+Zutaten, aus denen das Bier kommt; sie zusammen zu zeigen ist inhaltlich
+richtiger als eine allein. Am Fuß ausgerichtet und leicht überschneidend —
+zwei Pflanzen wachsen aus einem Boden, sie schweben nicht auf gleicher Höhe
+nebeneinander.
+
+**Auf den Themenseiten je eines im Seitenkopf**, im Wechsel Gerste/Hopfen in
+der Reihenfolge des Menüs. Nur im Kopf und nicht über die ganze Seite: einmal
+gesetzt wirkt es als Auftakt, mehrfach wiederholt als Tapete. Die Zuordnung
+folgt dem Thema, wo sie passt — Gerste zum Brauen und Wohnen, Hopfen zu Bier
+und Verkauf.
+
+**Rechtstexte bleiben leer.** Impressum und Datenschutz bekommen kein Motiv:
+hinter einem Text, den man lesen muss, stört eine Zeichnung nur.
 
 **Angeschnitten, nicht vollständig.** Ein Motiv, das über den Rand hinausragt,
 wirkt wie ein Ausschnitt aus etwas Größerem. Ein vollständig sichtbares wirkt
-wie ein aufgeklebtes Bild. Wie weit, steuert `ueberstand` — voreingestellt
-26 % der eigenen Breite. Für Paare gibt es `seite="frei"`: dann positioniert
-sich die Komponente gar nicht selbst, das übernimmt die Seite.
-
-**Nur die Startseite.** Auf Unterseiten würde dasselbe Mittel zur Manier. Die
-Startseite darf großzügig sein, eine Rechtstextseite nicht.
+wie ein aufgeklebtes Bild.
 
 **Ab 900 px aufwärts.** Darunter gibt es keinen Rand, an dem ein großes Motiv
 stehen könnte — es läge hinter dem Text statt daneben. Unter 900 px ist es
 abgeschaltet, ebenso bei `prefers-contrast: more`.
 
-### 16.3 Die Zeichnungen
+### 16.3 Die Zeichnungen kommen jetzt vom Betreiber
 
-Die Dolde ist dreimal entstanden. Der Betreiber hat die Zwischenstände klar
-benannt — „sieht nicht gut aus", dann „sieht aus wie eine Karotte" — und als
-Vorlage ein Strichsymbol geschickt. Drei Einsichten daraus, in der
-Reihenfolge, in der sie aufgefallen sind:
+Beide Motive waren zuerst von Hand nachgezeichnet. Die Hopfendolde ist dabei
+**sechsmal** entstanden, keine Fassung war gut genug, und der Betreiber hat
+das jedes Mal deutlich gesagt. Am Ende hat er zwei SVG-Dateien geliefert.
+Die sind jetzt die Grundlage — das ist der bessere Weg und spart rund 200
+Zeilen Zeichencode.
 
-**Eine Dolde hat keine glatte Außenlinie.** Das war der erste Fehler.
-Zeichnet man erst ein Ei und legt dann Schuppen hinein, kommt eine Karotte
-heraus — der Umriss stammt dann vom Ei und nicht von der Pflanze. Der Umriss
-muss aus den äußersten Deckblättern selbst entstehen.
-
-**Die vorderen Blätter müssen die hinteren verdecken.** Ohne Verdeckung
-kreuzen sich alle Umrisse und es wird ein Liniengitter. Die Blätter sind
-deshalb mit der Farbe der Seitenfläche gefüllt und werden von hinten nach
-vorn gezeichnet. Das ist auch der Grund, warum ein Motiv auf eine ruhige
-Fläche gehört und nicht auf ein Foto: die Füllung müsste sonst die Farbe des
-Fotos haben.
-
-**Die Dolde besteht aus Reihen.** Das war der Punkt, an dem fünf Fassungen
-gescheitert sind. Jede Reihe hat ein Blatt links, eines in der Mitte, eines
-rechts; die seitlichen sind nach außen aufgefächert, und ihre Außenkanten
-ergeben zusammen den Umriss. Nach unten werden die Reihen kleiner und die
-Fächerung flacher. Ohne diesen Rhythmus zerfällt die Form — ein Mittelstreifen
-mit zwei Klumpen daneben ist keine Dolde.
-
-**Spitze Blätter, nicht runde Becher.** Eine Stapelung gerundeter Schuppen
-liest sich als Eisbecher. Die Spitze nach unten ist das Erkennungsmerkmal.
-
-**Der Umriss ist ein Ei, oben und unten rund.** Fassungen, die nach unten
-spitz zulaufen, werden zum Tannenzapfen.
-
-**Wie das gefunden wurde, ist die eigentliche Lehre:** Ich habe die Zeichnung
-fünfmal nur für sich betrachtet und jedes Mal für richtig gehalten. Einzeln
+**Die Lehre aus den sechs Fassungen** steht in QA.md § 4b: ich habe die
+Zeichnung immer nur für sich betrachtet und für richtig gehalten. Einzeln
 sieht fast jede Zeichnung „irgendwie passend" aus, weil das Auge ergänzt, was
-es erwartet. Erst als Vorlage und eigene Zeichnung **nebeneinander auf einer
-Fläche** lagen, waren alle drei Fehler in Sekunden sichtbar. Dafür gibt es
-jetzt `werkzeuge/vergleich.mjs`. Die Regel gilt über die Dolde hinaus: was
-einer Vorlage folgen soll, nie einzeln beurteilen.
+es erwartet. Erst als Vorlage und eigene Zeichnung nebeneinander auf einer
+Fläche lagen, waren die Fehler in Sekunden sichtbar. Dafür gibt es jetzt
+`werkzeuge/vergleich.mjs`.
 
-**Die Ähre lebt von den Grannen.** Ohne die langen Borsten sieht sie aus wie
-ein Grashalm. Sieben Kornpaare, jedes mit einer Granne, die etwa doppelt so
-lang ist wie das Korn. Die mittleren Paare sind am größten, oben und unten
-läuft die Ähre aus — sonst wirkt sie wie ein Rechteck. Die beiden Kanten
-eines Korns müssen dabei deutlich auseinanderlaufen: liegen sie zu eng, bleibt
-zwischen zwei Strichen von 2 px fast nichts frei und das Korn wirkt wie ein
-massiver dunkler Keil statt wie eine Spindel.
+**Lizenz offen:** Die Dateinamen tragen Kennnummern, wie sie Icon-Portale
+vergeben. Vor dem Livegang muss geklärt sein, ob eine Namensnennung nötig ist
+(OFFENE-FRAGEN Nr. 34).
+
+**Die Ähre lebt von den Grannen.** Das gilt weiter als Beobachtung: ohne die
+langen Borsten sieht eine Ähre aus wie ein Grashalm. Die gelieferte Datei hat
+sie reichlich.
 
 ### 16.4 Der Zeiger ist ein Lichtpunkt
 
@@ -1314,17 +1293,28 @@ ausgelöst durch `:hover`. Das war eine Animation, keine Beleuchtung: sie lief
 immer gleich ab, egal wo der Zeiger stand. Der Betreiber wollte etwas anderes —
 Licht, das dort ist, wo die Maus ist.
 
-Umgesetzt als radiale Maske. Die Zeichnung liegt zweimal übereinander: unten
-der blasse Grund, darüber eine goldene Kopie, deren umgebendes Element mit
-einem `radial-gradient` maskiert ist. Zwei eigene Eigenschaften — `--licht-x`
-und `--licht-y` — führen den Mittelpunkt dem Zeiger nach.
+Umgesetzt als radiale Maske. Die Zeichnung liegt **nicht im HTML**, sondern
+als Datei unter `public/motive/`. Jede Lage ist ein eingefärbtes Rechteck,
+das mit dieser Datei maskiert wird — drei Lagen übereinander: blasser Grund,
+weichgezeichneter Goldhof, scharfe Goldzeichnung. Die beiden Goldlagen
+stecken zusätzlich in einem Element mit radialer Maske; zwei eigene
+Eigenschaften — `--licht-x` und `--licht-y` — führen deren Mittelpunkt dem
+Zeiger nach.
+
+Warum als Datei und nicht inline: die Pfade standen sonst auf **jeder** Seite
+erneut im Quelltext, rund 5 KB je Motiv, und echte Koordinaten komprimieren
+schlecht. Gemessen: 3 KB mehr Übertragung auf der Startseite und 0,2 s auf
+den größten Inhalt. Als Datei wird jedes Motiv einmal geladen und gilt für
+die ganze Seite — 1,8 KB übertragen statt 5 KB je Seite.
 
 Vier Details, ohne die es nicht funktioniert:
 
-- **Die Maske sitzt an einem HTML-Element**, nicht an einer SVG-Gruppe. CSS-
-  Masken auf SVG-Kindern greifen je nach Browser unterschiedlich.
-- **Sechs Farbstopps statt zwei.** Mit nur zwei entsteht ein harter Kreisrand,
-  der wie ein Loch aussieht statt wie Licht.
+- **Formmaske und Lichtmaske sitzen an verschiedenen Elementen**, nicht als
+  zwei Masken an einem. Zwei Masken bräuchten `mask-composite`; fällt das
+  aus, liegt statt des Motivs ein Rechteck da.
+- **Der Weichzeichner sitzt am Elternelement** des maskierten Kindes. Ein
+  Filter greift **vor** der Maske: am selben Element würde der Schein wieder
+  auf die Form zurückgeschnitten und der Hof wäre weg.
 - **Rücktransformation der Zeigerposition.** Die Motive sind gedreht; die Maske
   liegt im gedrehten Raum. Ohne Umrechnung säße das Licht schief zum Zeiger.
 - **Nur die Kanten leuchten.** Stiel, Schultern, Spitze und die äußerste
