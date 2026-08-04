@@ -9,6 +9,7 @@ import Wagen from '../komponenten/marke/Wagen.astro';
 import Wegstrecke from '../komponenten/marke/Wegstrecke.astro';
 import Etikettenrahmen from '../komponenten/marke/Etikettenrahmen.astro';
 import Zitatband from '../komponenten/marke/Zitatband.astro';
+import Leitmotiv from '../komponenten/marke/Leitmotiv.astro';
 
 import { BETRIEB } from '../daten/betrieb';
 import { formatDatum, isoDatum } from '../lib/datum';
@@ -70,6 +71,10 @@ const BENTO_SPALTEN: Record<string, string> = {
 >
   {/* ===== A · HERO, asymmetrisch 7/5 ===== */}
   <section class="hero">
+    {/* Grosses Leitmotiv statt gekacheltem Muster: gibt der Flaeche Tiefe,
+        ohne zur Tapete zu werden. Beim Ueberfahren laeuft ein goldener
+        Schimmer an den Konturen entlang. */}
+    <Leitmotiv art="hopfen" seite="links" hoehe={560} drehung={-8} />
     <div class="container raster hero-raster">
       <div class="spalte-7 hero-text">
         <p class="etikettenzeile hero-etikett">{BETRIEB.signatur}</p>
@@ -124,7 +129,8 @@ const BENTO_SPALTEN: Record<string, string> = {
   </section>
 
   {/* ===== C · DIE BIERE, Bento mit exakter Zellenzahl ===== */}
-  <Abschnitt etikett="Fünf Biere" titel="Was bei uns im Tank liegt.">
+  <Abschnitt etikett="Fünf Biere" titel="Was bei uns im Tank liegt." klasse="abschnitt-motiv">
+    <Leitmotiv art="gerste" seite="rechts" hoehe={620} drehung={9} />
     <div class="raster bento">
       {
         biere.map((bier, i) => (
@@ -268,7 +274,8 @@ const BENTO_SPALTEN: Record<string, string> = {
   <Wegstrecke />
 
   {/* ===== H · VERKAUFSSTELLEN, gruppierte Ortsliste ===== */}
-  <Abschnitt titel="Wo es DEIN BIER gibt">
+  <Abschnitt titel="Wo es DEIN BIER gibt" klasse="abschnitt-motiv">
+    <Leitmotiv art="hopfen" seite="rechts" hoehe={420} drehung={14} />
     <div class="stellen">
       {
         stellenGruppen.map((gruppe, i) => (
@@ -325,6 +332,27 @@ const BENTO_SPALTEN: Record<string, string> = {
 </Basis>
 
 <style>
+  /* Ein Motiv braucht einen Bezugsrahmen und darf nicht seitlich
+     herausragen, sonst entsteht ein waagerechter Scrollbalken. */
+  .hero,
+  :global(.abschnitt-motiv) {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Inhalt ueber das Motiv legen, damit es nicht ueber Text und Bildern
+     liegt. Im Hero ist das Motiv ein Geschwister des Containers, im
+     Abschnitt liegt es darin: deshalb zwei Regeln. */
+  .hero > :global(.container) {
+    position: relative;
+    z-index: 1;
+  }
+
+  :global(.abschnitt-motiv .container > *:not(.leitmotiv)) {
+    position: relative;
+    z-index: 1;
+  }
+
   /* ---------- A · Hero ---------- */
   .hero {
     /* Warmes Licht dahinter: radial, nicht der uebliche 45-Grad-Verlauf. */

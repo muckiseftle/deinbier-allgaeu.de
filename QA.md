@@ -64,11 +64,18 @@ Headless-Betrieb. Mobil mit der Standarddrosselung von Lighthouse.
 
 **Niedrigster Einzelwert: 98.** Ziel war 95.
 
+**Nachgemessen am 04.08.2026**, nach dem Einbau der Hintergrundmotive
+(DESIGN.md § 16). Die Motive bringen `overflow: hidden` und neue
+Stapelkontexte mit, beides kann Überlauf- und Kontrastprüfungen kippen.
+Startseite mobil 98 / Desktop 100, LCP 2,3 s mobil und 0,5 s Desktop,
+CLS 0 — alles unverändert. Die vier Prüfläufe (`qa-statisch`, `qa-browser`,
+`qa-bildpunkte`, `bewegung-pruefen`) liefen ohne Fehler durch.
+
 ---
 
 ## 3 · Was die Prüfung gefunden hat
 
-Vier echte Fehler, alle behoben. Sie stehen hier vollständig, weil eine
+Fünf echte Fehler, alle behoben. Sie stehen hier vollständig, weil eine
 QA-Dokumentation ohne Fundstellen wertlos ist.
 
 ### 3.1 Text auf dem Foto war zu kontrastarm
@@ -119,6 +126,26 @@ wohin er führt.
 **Behoben:** Der sichtbare Text bleibt „Weiterlesen“ (ein Wortlaut je Absicht,
 `DESIGN.md` 15.1), ergänzt um einen nur für Screenreader und Suchmaschinen
 sichtbaren Zusatz mit dem Beitragstitel. **SEO 92 → 100.**
+
+### 3.5 Der Goldschimmer konnte gar nicht auslösen
+
+**Gefunden von:** einer Instrumentierung mit `elementFromPoint`, nachträglich
+zur Abnahme, beim Einbau der Hintergrundmotive (DESIGN.md § 16).
+
+Die Motive lagen auf `z-index: -1`. Damit liegen sie hinter der Fläche des
+Abschnitts: `elementFromPoint` über der Hopfendolde lieferte `SECTION.hero`,
+nicht das SVG. Der Zeiger erreichte das Motiv nie, `:hover` griff nie, der
+Schimmer war unerreichbar.
+
+Auf einem Bildschirmfoto sah alles richtig aus — das blasse Motiv stand an
+seinem Platz. Nur eine Zeigermessung konnte das finden.
+
+**Behoben:** `z-index: 0` am Motiv, `z-index: 1` am Inhalt.
+
+**Belegt:** `elementFromPoint` liefert jetzt `svg`. Gezählte goldene
+Bildpunkte im Motivbereich: 290 im Ruhezustand, im Verlauf des Überfahrens
+bis 5048. Die Überschrift bleibt dabei oberstes Element, der Inhalt wird
+also nicht verdeckt.
 
 ---
 
@@ -191,7 +218,7 @@ Platzhalter, keine kaputte Fläche.
 
 | | Altseite | Neu |
 |---|---|---|
-| HTML der Startseite | 281 KB | **49,9 KB** |
+| HTML der Startseite | 281 KB | **55,5 KB** |
 | Externe Requests | Google reCAPTCHA, Facebook, Instagram | **0** |
 | Cookies | reCAPTCHA + Consent-Speicher | **0** |
 | Einwilligungsbanner | nötig | **nicht nötig** |

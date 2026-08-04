@@ -1,0 +1,178 @@
+---
+/**
+ * Grosses Hintergrundmotiv: Hopfendolde oder Gerstenaehre.
+ *
+ * Bewusst KEIN gekacheltes Muster. Ein Muster wird zur Tapete und macht die
+ * Flaeche unruhig; ein einzelnes, sehr grosses und sehr blasses Motiv gibt
+ * der Flaeche Tiefe, ohne sich in den Vordergrund zu draengen.
+ *
+ * Beim Ueberfahren laeuft ein goldener Schimmer an den Konturen entlang.
+ * Umgesetzt mit stroke-dashoffset auf einer zweiten, goldenen Kopie der
+ * Pfade: ein kurzes helles Segment wandert die Umrisslinie ab. Das ist
+ * genau der Effekt, den man an einer angestrahlten Kante sieht.
+ *
+ * Nur auf der Startseite. Auf Unterseiten wuerde es zur Manier.
+ */
+interface Props {
+  art: 'hopfen' | 'gerste';
+  /** Position: an welcher Seite das Motiv aus dem Rand ragt. */
+  seite?: 'links' | 'rechts';
+  /** Hoehe in Pixeln. Gedacht sind 380 bis 620. */
+  hoehe?: number;
+  /** Zusaetzliche Drehung in Grad. */
+  drehung?: number;
+  klasse?: string;
+}
+
+const { art, seite = 'rechts', hoehe = 520, drehung = 0, klasse } = Astro.props;
+
+/* Die Pfade liegen einmal hier und werden zweimal gezeichnet: blass in
+   Malzbraun als Grundzustand, golden als Schimmerkopie darueber. */
+const HOPFEN = [
+  'M0 0C-42 11-58 42-53 74-48 111-27 148 0 174 27 148 48 111 53 74 58 42 42 11 0 0Z',
+  'M-50 45C-21 63 21 63 50 45',
+  'M-51 79C-21 98 21 98 48 79',
+  'M-43 111C-19 127 19 127 40 111',
+  'M-29 140C-11 151 11 151 27 140',
+  'M0 0V-34',
+  'M0-24C-19-37-34-34-45-18',
+  'M0-24C19-37 34-34 45-18',
+];
+
+const GERSTE = [
+  'M0 0V252',
+  'M0 58C-26 42-37 18-37-8-16-5 0 14 5 34Z',
+  'M0 58C26 42 37 18 37-8 16-5 0 14-5 34Z',
+  'M0 121C-26 105-37 81-37 55-16 58 0 77 5 97Z',
+  'M0 121C26 105 37 81 37 55 16 58 0 77-5 97Z',
+  'M0 184C-24 168-34 145-34 120-15 123 0 141 5 159Z',
+  'M0 184C24 168 34 145 34 120 15 123 0 141-5 159Z',
+  'M-8-16C-21-63-34-100-52-132',
+  'M8-16C21-63 34-100 52-132',
+  'M0-20V-148',
+];
+
+const pfade = art === 'hopfen' ? HOPFEN : GERSTE;
+const box = art === 'hopfen' ? '-70 -40 140 220' : '-60 -155 120 415';
+const breite = art === 'hopfen' ? Math.round(hoehe * 0.62) : Math.round(hoehe * 0.32);
+---
+
+<div
+  class:list={['leitmotiv', `leitmotiv-${seite}`, klasse]}
+  style={`--motiv-hoehe: ${hoehe}px; --motiv-breite: ${breite}px; --motiv-drehung: ${drehung}deg;`}
+  aria-hidden="true"
+>
+  <svg viewBox={box} fill="none" stroke-linecap="round" stroke-linejoin="round">
+    {/* Grundzustand: sehr blass, nur Tiefe fuer die Flaeche. */}
+    <g class="leitmotiv-grund" stroke="currentColor" stroke-width="2.4">
+      {pfade.map((d) => <path d={d} />)}
+    </g>
+    {/* Schimmerkopie: liegt genau darueber und ist im Ruhezustand
+        unsichtbar. */}
+    <g class="leitmotiv-schimmer" stroke-width="3">
+      {/* pathLength normiert jeden Pfad auf 100 Einheiten. Ohne das waere
+          das Schimmersegment auf einer kurzen Linie sofort vollstaendig
+          und auf einer langen kaum zu sehen: der Effekt wirkte zufaellig. */}
+      {pfade.map((d) => <path d={d} pathLength="100" />)}
+    </g>
+  </svg>
+</div>
+
+<style>
+  .leitmotiv {
+    position: absolute;
+    top: 50%;
+    /* Bewusst 0 und nicht negativ: bei negativem z-index liegt das Motiv
+       hinter der Flaeche des Abschnitts und ist fuer den Zeiger gar nicht
+       erreichbar, der Schimmer koennte nie ausloesen. Der Inhalt bekommt
+       stattdessen z-index 1 und liegt damit darueber. */
+    z-index: 0;
+    width: var(--motiv-breite);
+    height: var(--motiv-hoehe);
+    transform: translateY(-50%) rotate(var(--motiv-drehung));
+    color: var(--db-malz-700);
+  }
+
+  /* Das Hochlegen des Inhalts passiert in der jeweiligen Seite, weil die
+     Verschachtelung dort unterschiedlich ist: im Hero ist das Motiv ein
+     Geschwister des Containers, im Abschnitt liegt es darin. */
+
+  /* Ragt bewusst ueber den Rand hinaus: ein angeschnittenes Motiv wirkt
+     wie ein Ausschnitt aus etwas Groesserem, ein vollstaendiges wie ein
+     aufgeklebtes Bild. */
+  .leitmotiv-rechts {
+    right: calc(var(--motiv-breite) * -0.28);
+  }
+
+  .leitmotiv-links {
+    left: calc(var(--motiv-breite) * -0.3);
+  }
+
+  .leitmotiv svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .leitmotiv-grund {
+    opacity: 0.085;
+    transition: opacity var(--db-dauer-ruhig) var(--db-easing-standard);
+  }
+
+  .leitmotiv-schimmer {
+    stroke: var(--db-bernstein-300);
+    opacity: 0;
+    /* In normierten Einheiten: ein Segment ueber 26 Prozent der Laenge,
+       der Rest Luecke. Beim Verschieben des Versatzes wandert es die
+       Kontur entlang, auf jedem Pfad gleichmaessig.
+       Die Luecke ist mit 200 groesser als der Pfad selbst. Nur so gibt es
+       Versatzwerte, bei denen ueberhaupt kein Segment auf der Kontur liegt:
+       bei 26 steht es komplett davor, bei -100 komplett dahinter. Genau
+       diese beiden Werte sind Anfang und Ende der Bewegung. */
+    stroke-dasharray: 26 200;
+    stroke-dashoffset: 26;
+    filter: drop-shadow(0 0 6px rgb(232 184 113 / 0.55));
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .leitmotiv:hover .leitmotiv-grund {
+      opacity: 0.14;
+    }
+
+    .leitmotiv:hover .leitmotiv-schimmer {
+      opacity: 0.9;
+      animation: schimmer 1.9s var(--db-easing-standard);
+    }
+  }
+
+  @keyframes schimmer {
+    from {
+      stroke-dashoffset: 26;
+    }
+    to {
+      stroke-dashoffset: -100;
+    }
+  }
+
+  @media (max-width: 899px) {
+    /* Auf schmalen Bildschirmen ist kein Platz fuer ein grosses Motiv am
+       Rand: es wuerde hinter dem Text stehen statt daneben. */
+    .leitmotiv {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .leitmotiv-grund,
+    .leitmotiv-schimmer {
+      transition: none;
+    }
+    /* Der Schimmer erscheint, wandert aber nicht. */
+    .leitmotiv:hover .leitmotiv-schimmer {
+      animation: none;
+      stroke-dasharray: none;
+      stroke-dashoffset: 0;
+      opacity: 0.45;
+    }
+  }
+</style>

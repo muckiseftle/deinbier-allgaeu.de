@@ -25,7 +25,12 @@
   --db-sand-200: #e8dfc8;   /* ruhige Abschnitte, Bildrahmen                     */
   --db-sand-300: #d6c9a8;   /* DEKORATIV. 1,54:1 — nie Text, nie Bedienrahmen    */
   --db-holz-400: #a8916b;   /* DEKORATIV. 2,83:1 — nie Text, nie Bedienrahmen    */
-  --db-holz-500: #7c6844;   /* Sekundaertext (5,00:1), kleinster Bedienrahmen    */
+  /* Sekundaertext. Frueher #7c6844 mit 5,00:1 auf reiner Cremeflaeche.
+     Das war zu knapp: schon eine leicht abgedunkelte Flaeche drueckte den
+     Wert auf 4,43:1, also unter AA. Jetzt dunkler, mit Spielraum fuer
+     getoente Untergruende und Hintergrundmotive. Gemessen am
+     unguenstigsten Bildpunkt: siehe QA.md. */
+  --db-holz-500: #6b5836;   /* Sekundaertext, kleinster Bedienrahmen             */
   --db-malz-700: #523816;   /* LOGOFARBE. Ueberschriften, Primaerflaeche          */
   --db-malz-800: #3d2911;   /* Fliesstext (12,87:1)                              */
   --db-nacht-900: #241809;  /* dunkle Abschnitte, Footer, Hero-Abdunklung        */

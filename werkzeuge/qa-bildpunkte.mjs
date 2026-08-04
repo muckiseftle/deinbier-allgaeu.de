@@ -19,6 +19,41 @@ const STELLEN = [
   { pfad: '/', auswahl: '.band-text h2', name: 'Bildband, Ueberschrift' },
   { pfad: '/', auswahl: '.band-text p', name: 'Bildband, Fliesstext' },
   { pfad: '/', auswahl: '.band-text a', name: 'Bildband, Link' },
+
+  /* Text ueber den grossen Hintergrundmotiven der Startseite. Die Motive
+     stehen an den Raendern und ragen unter den Textspalten hindurch; sie
+     dunkeln die Cremeflaeche dort leicht ab. Ob der Text darueber noch AA
+     erfuellt, laesst sich nur am gerenderten Bildpunkt entscheiden.
+     Beim Ueberfahren wird der Grund noch etwas kraeftiger (0,085 auf 0,14),
+     deshalb misst der Lauf weiter unten zusaetzlich im Hoverzustand. */
+  { pfad: '/', auswahl: '.hero-etikett', name: 'Motiv, Etikettenzeile' },
+  { pfad: '/', auswahl: '.hero h1', name: 'Motiv, Ueberschrift' },
+  { pfad: '/', auswahl: '.hero-vorspann', name: 'Motiv, Vorspann' },
+  { pfad: '/', auswahl: '.stellen-gruppe h3', name: 'Motiv, Ortsueberschrift' },
+
+  /* Leiser Sekundaertext auf reiner Cremeflaeche. Das ist die Farbe mit dem
+     knappsten Abstand im ganzen System, deshalb bleibt sie unter Beobachtung. */
+  { pfad: '/kontakt/', auswahl: '.anfragen-hinweis', name: 'Creme, leiser Fliesstext' },
+  { pfad: '/kontakt/', auswahl: '.social-hinweis', name: 'Creme, leiser Nebentext' },
+  { pfad: '/datenschutz/', auswahl: '.rechtstext p', name: 'Creme, Fliesstext' },
+  { pfad: '/verkaufsstellen/', auswahl: '.region-titel', name: 'Creme, Etikettenzeile' },
+  { pfad: '/biere/', auswahl: '.bier-saison', name: 'Creme, Saisonhinweis' },
+
+  /* Derselbe Text noch einmal, waehrend das Motiv ueberfahren wird: dann ist
+     der Grund am kraeftigsten und der Goldschimmer liegt zusaetzlich darauf.
+     Das ist der wirklich unguenstigste Zustand. */
+  {
+    pfad: '/',
+    auswahl: '.hero-etikett',
+    ueberfahre: '.hero .leitmotiv',
+    name: 'Motiv beim Ueberfahren, Etikettenzeile',
+  },
+  {
+    pfad: '/',
+    auswahl: '.hero-vorspann',
+    ueberfahre: '.hero .leitmotiv',
+    name: 'Motiv beim Ueberfahren, Vorspann',
+  },
 ];
 
 function leuchtdichte(r, g, b) {
@@ -70,6 +105,16 @@ for (const stelle of STELLEN) {
      nicht fotografieren. */
   await el.scrollIntoViewIfNeeded();
   await seite.waitForTimeout(250);
+
+  /* Falls gefordert: erst ein anderes Element ueberfahren, damit dessen
+     Hoverzustand im Bild landet. Die Wartezeit deckt den Uebergang ab. */
+  if (stelle.ueberfahre) {
+    await seite.locator(stelle.ueberfahre).first().hover();
+    await seite.waitForTimeout(700);
+  } else {
+    /* Zeiger aus dem Weg, sonst faerbt ein zufaelliger Hover das Bild. */
+    await seite.mouse.move(1430, 890);
+  }
 
   /* Den Bereich hinter dem Text fotografieren: Text unsichtbar schalten,
      damit nur der Hintergrund im Bild landet. */

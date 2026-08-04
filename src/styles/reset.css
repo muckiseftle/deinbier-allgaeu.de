@@ -126,3 +126,19 @@ ol {
   background-image: var(--db-korn);
   mix-blend-mode: multiply;
 }
+
+/* -----------------------------------------------------------------------------
+   Hintergrundmotive: siehe komponenten/marke/Leitmotiv.astro
+
+   Ein gekacheltes Muster ueber die ganze Seite war der erste Versuch und
+   wurde verworfen: es wirkte wie Tapete und machte die Flaeche unruhig.
+   Stattdessen stehen auf der Startseite einzelne, sehr grosse Motive an
+   den Raendern, die beim Ueberfahren golden aufschimmern.
+   -------------------------------------------------------------------------- */
+
+/* Bei erhoehtem Kontrast stoert jede Zeichnung hinter dem Text. */
+@media (prefers-contrast: more) {
+  .leitmotiv {
+    display: none;
+  }
+}

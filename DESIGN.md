@@ -1202,3 +1202,80 @@ Nie: „Mehr erfahren", „Hier klicken", „Absenden", „Jetzt anfragen", „L
 8. Alle Zahlen mit Maßeinheit ohne Umbruch dazwischen (`12&nbsp;m`, `113&nbsp;m²`).
 9. Keine Preise. Siehe OFFENE-FRAGEN Nr. 6.
 10. Jede Abweichung von diesem Dokument wird in `QA.md` vermerkt, nicht stillschweigend gemacht.
+
+---
+
+## 16 · Nachtrag: Hintergrundmotive auf der Startseite (04.08.2026)
+
+Nachträglich zu diesem Dokument, auf Wunsch des Betreibers: die Cremefläche war ihm zu
+leer. Der Nachtrag hält fest, was daraus wurde und was verworfen wurde, damit der Weg
+später nachvollziehbar ist.
+
+### 16.1 Verworfen: das gekachelte Muster
+
+Der erste Versuch war ein kleines Muster aus Hopfendolde und Gerstenähre, als
+`background-image` über die ganze Seite gekachelt. Es hat die Fläche zwar gefüllt, aber
+wie eine Tapete: die Wiederholung zieht das Auge auf das Raster statt auf den Inhalt, und
+auf langen Textseiten wird sie unruhig. Der Betreiber hat es genau so benannt
+(„nicht so einen Tapeteneffekt") und damit die Änderung ausgelöst.
+
+Das Muster hinterlässt eine bleibende Spur im Farbsystem: es hat `--db-holz-500` von
+`#7c6844` auf `#6b5836` gedrückt. Der alte Wert lag mit 5,00:1 auf reiner Cremefläche zu
+knapp; sobald etwas den Untergrund abdunkelte, fiel er auf 4,43:1 und damit unter AA. Der
+dunklere Wert bleibt, obwohl das Muster weg ist — er ist schlicht der bessere Wert.
+
+### 16.2 Umgesetzt: einzelne, sehr große Motive
+
+Statt vieler kleiner Kacheln stehen auf der Startseite drei einzelne Motive, jedes
+420 bis 620 px hoch, an den Rändern angeschnitten:
+
+| Abschnitt | Motiv | Seite | Höhe | Drehung |
+|---|---|---|---|---|
+| Hero | Hopfendolde | links | 560 px | −8° |
+| Die Biere | Gerstenähre | rechts | 620 px | +9° |
+| Verkaufsstellen | Hopfendolde | rechts | 420 px | +14° |
+
+Drei Entscheidungen dahinter:
+
+**Angeschnitten, nicht vollständig.** Ein Motiv, das über den Rand hinausragt, wirkt wie
+ein Ausschnitt aus etwas Größerem. Ein vollständig sichtbares wirkt wie ein aufgeklebtes
+Bild.
+
+**Nur die Startseite.** Auf Unterseiten würde dasselbe Mittel zur Manier. Die Startseite
+darf großzügig sein, eine Rechtstextseite nicht.
+
+**Ab 900 px aufwärts.** Darunter gibt es keinen Rand, an dem ein großes Motiv stehen
+könnte — es läge hinter dem Text statt daneben. Unter 900 px ist es abgeschaltet, ebenso
+bei `prefers-contrast: more`.
+
+### 16.3 Der Goldschimmer
+
+Beim Überfahren läuft ein warmgoldenes Segment (`--db-bernstein-300`) an den Konturen
+entlang. Technisch: dieselben Pfade ein zweites Mal, in Gold, mit
+`stroke-dasharray` / `stroke-dashoffset`.
+
+Zwei Details, ohne die es nicht funktioniert:
+
+- **`pathLength="100"` auf jedem Pfad.** Die Pfade sind unterschiedlich lang. Ohne
+  Normierung wäre ein festes Segment auf einer kurzen Linie sofort vollständig und auf
+  einer langen kaum zu sehen — der Schimmer wirkte zufällig statt geführt.
+- **Lücke größer als der Pfad** (`26 200`). Nur so gibt es Versatzwerte, bei denen gar
+  kein Segment auf der Kontur liegt. Die Bewegung läuft von 26 (komplett davor) bis −100
+  (komplett dahinter), fängt also im Nichts an und hört im Nichts auf.
+
+Einmaliger Durchlauf je Überfahren, 1,9 s, kein Dauerflackern. Bei
+`prefers-reduced-motion` erscheint der Schimmer als ruhige Kontur, ohne zu wandern.
+
+**Gemessen** (`werkzeuge/qa-bildpunkte.mjs` und eine Zählung goldener Bildpunkte im
+Motivbereich): Ruhezustand 290 Punkte, im Verlauf des Überfahrens bis 5048. Der Text über
+den Motiven bleibt auch im Hoverzustand über AA; engste Stelle ist die Etikettenzeile im
+Hero mit 5,42:1 bei nötigen 4,5.
+
+### 16.4 Eine Falle, die zweimal zugeschnappt ist
+
+Das Motiv lag zuerst auf `z-index: -1`. Damit liegt es hinter der Fläche des Abschnitts,
+ist für den Zeiger gar nicht erreichbar, und der Schimmer konnte nie auslösen — sichtbar
+war das nur mit `elementFromPoint`, nicht auf einem Bildschirmfoto. Richtig ist
+`z-index: 0` am Motiv und `z-index: 1` am Inhalt. Die Regel dafür steht in der jeweiligen
+Seite und nicht in der Komponente, weil die Verschachtelung sich unterscheidet: im Hero
+ist das Motiv ein Geschwister des Containers, im Abschnitt liegt es darin.
