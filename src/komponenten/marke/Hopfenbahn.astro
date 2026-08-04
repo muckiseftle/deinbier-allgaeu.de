@@ -1,0 +1,166 @@
+---
+/**
+ * Eine senkrechte Strecke am linken Rand, an der eine Hopfendolde beim
+ * Scrollen von Abschnitt zu Abschnitt purzelt.
+ *
+ * Sie umschliesst die Abschnitte, die sie begleiten soll:
+ *
+ *     <Hopfenbahn>
+ *       <Abschnitt …/>
+ *       <Abschnitt …/>
+ *     </Hopfenbahn>
+ *
+ * Umgesetzt mit einer scrollgebundenen CSS-Animation
+ * (`view-timeline-name` an der Strecke, `animation-timeline` an der Dolde).
+ * Damit laeuft sie ohne einen einzigen Ereignisempfaenger und ausserhalb des
+ * Hauptstrangs — PROJEKT.md verbietet `scroll`-Empfaenger, und zu Recht: der
+ * feuert bei jedem Bildaufbau erneut.
+ *
+ * Kann der Browser scrollgebundene Animationen nicht, laeuft die Animation
+ * einfach nicht. Die Dolde steht dann still an ihrem Platz — kein Fehlbild,
+ * nur weniger Bewegung.
+ */
+interface Props {
+  /** Wie oft die Dolde auf der Strecke ueberschlaegt. */
+  purzel?: number;
+}
+
+const { purzel = 4 } = Astro.props;
+---
+
+<div class="hopfenbahn" style={`--purzel: ${purzel};`}>
+  <div class="hopfenbahn-spur" aria-hidden="true">
+    <div class="hopfenbahn-linie"></div>
+    <div class="hopfenbahn-laeufer">
+      <div class="hopfenbahn-dolde"></div>
+    </div>
+  </div>
+
+  <div class="hopfenbahn-inhalt">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .hopfenbahn {
+    position: relative;
+    /* Der Name der Zeitachse. Der Fortschritt laeuft von "Strecke beginnt
+       ins Bild zu kommen" bis "Strecke hat es vollstaendig verlassen". */
+    view-timeline-name: --hopfenbahn;
+    view-timeline-axis: block;
+  }
+
+  .hopfenbahn-spur {
+    position: absolute;
+    inset-block: 0;
+    /* Im linken Seitenrand, ausserhalb des Textbereichs. Rechts stehen die
+       grossen Hintergrundmotive; beides auf einer Seite waere zu viel. */
+    left: max(0px, calc((100vw - var(--db-breite-inhalt)) / 2 - 3.25rem));
+    width: 2.5rem;
+    pointer-events: none;
+  }
+
+  .hopfenbahn-linie {
+    position: absolute;
+    inset-block: 0;
+    left: 50%;
+    width: var(--weg-staerke);
+    background: var(--weg-linie);
+    transform: translateX(-50%);
+  }
+
+  /* Bleibt beim Scrollen auf halber Hoehe stehen, waehrend die Strecke
+     darunter durchlaeuft. */
+  .hopfenbahn-laeufer {
+    position: sticky;
+    top: 45vh;
+    height: 0;
+  }
+
+  .hopfenbahn-dolde {
+    width: 2.5rem;
+    aspect-ratio: 313 / 512;
+    /* Dieselbe Datei wie bei den grossen Hintergrundmotiven: einmal geladen,
+       hier nur kleiner. */
+    -webkit-mask-image: url('/motive/hopfen.svg');
+    mask-image: url('/motive/hopfen.svg');
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    background: var(--db-malz-700);
+    opacity: 0.55;
+
+    /* Deckend hinterlegt, damit die Linie nicht durch die Dolde laeuft. */
+    outline: 0.5rem solid var(--db-flaeche);
+    outline-offset: -0.05rem;
+
+    animation: purzeln linear both;
+    animation-timeline: --hopfenbahn;
+  }
+
+  /* Vier Ueberschlaege mit Ruhe dazwischen: die Dolde faellt ein Stueck,
+     bleibt liegen, faellt weiter. Eine gleichmaessige Drehung ueber die
+     ganze Strecke sieht dagegen aus wie ein Zeiger, nicht wie etwas, das
+     purzelt. */
+  @keyframes purzeln {
+    0% {
+      rotate: -8deg;
+      translate: 0 0;
+    }
+    11% {
+      rotate: calc(360deg / var(--purzel) * 1);
+      translate: 0.35rem 0;
+    }
+    25% {
+      rotate: calc(360deg / var(--purzel) * 1);
+      translate: 0 0;
+    }
+    36% {
+      rotate: calc(360deg / var(--purzel) * 2);
+      translate: -0.35rem 0;
+    }
+    50% {
+      rotate: calc(360deg / var(--purzel) * 2);
+      translate: 0 0;
+    }
+    61% {
+      rotate: calc(360deg / var(--purzel) * 3);
+      translate: 0.35rem 0;
+    }
+    75% {
+      rotate: calc(360deg / var(--purzel) * 3);
+      translate: 0 0;
+    }
+    86% {
+      rotate: 360deg;
+      translate: -0.35rem 0;
+    }
+    100% {
+      rotate: 360deg;
+      translate: 0 0;
+    }
+  }
+
+  /* Unter 1100 px gibt es keinen Seitenrand mehr, in dem die Spur stehen
+     koennte: sie laege ueber dem Text. */
+  @media (max-width: 1099px) {
+    .hopfenbahn-spur {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hopfenbahn-dolde {
+      animation: none;
+      rotate: -8deg;
+    }
+  }
+
+  /* Bei erhoehtem Kontrast stoert jede Zeichnung neben dem Text. */
+  @media (prefers-contrast: more) {
+    .hopfenbahn-spur {
+      display: none;
+    }
+  }
+</style>

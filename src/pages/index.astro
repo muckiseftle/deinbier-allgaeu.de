@@ -10,6 +10,7 @@ import Wegstrecke from '../komponenten/marke/Wegstrecke.astro';
 import Etikettenrahmen from '../komponenten/marke/Etikettenrahmen.astro';
 import Zitatband from '../komponenten/marke/Zitatband.astro';
 import Leitmotiv from '../komponenten/marke/Leitmotiv.astro';
+import Hopfenbahn from '../komponenten/marke/Hopfenbahn.astro';
 
 import { BETRIEB } from '../daten/betrieb';
 import { formatDatum, isoDatum } from '../lib/datum';
@@ -20,6 +21,7 @@ import { nachSchluessel } from '../lib/gruppieren';
  * nur fuer Texturen und Platzhalter, niemals fuer Brauerei- oder
  * Produktaufnahmen. */
 import heroMobil from '../bilder/brauen-auswaerts-1.jpg';
+import bierHell from '../bilder/bier-hell.png';
 import brauscheuneInnen from '../bilder/gaertanks.jpg';
 import seminarBrauerei from '../bilder/brauseminar-runde.jpg';
 import seminarMobil from '../bilder/brauen-auswaerts-2.jpg';
@@ -69,27 +71,72 @@ const BENTO_SPALTEN: Record<string, string> = {
   titel={BETRIEB.kurzname}
   beschreibung="Handwerklich gebrautes Bier aus Hausen im Ostallgäu. Die mobile Brauerei kommt zu Eurem Fest. Brauseminare, Verleih, Ferienwohnung."
 >
-  {/* ===== A · HERO, asymmetrisch 7/5 ===== */}
-  <section class="hero">
-    {/* Ganz oben auf der Seite, gross und sichtbar. Hopfen und Gerste stehen
-        nebeneinander: die beiden Zutaten, aus denen das Bier kommt.
-        Am Fuss ausgerichtet und nicht mittig — zwei Pflanzen wachsen aus
-        einem Boden, sie schweben nicht auf gleicher Hoehe. */}
-    <div class="motiv-paar">
-      <Leitmotiv art="gerste" seite="frei" hoehe={470} drehung={-7} />
-      <Leitmotiv art="hopfen" seite="frei" hoehe={370} drehung={11} />
+  {/* ===== A · AUFTAKT, die Flasche =====
+      Auf Wunsch des Betreibers steht das Produkt ganz vorn. Der Abschnitt
+      fuellt fast den ersten Bildschirm: eine Landingpage muss beim ersten
+      Blick sagen, worum es geht, und dafuer Platz haben.
+
+      Die Aufnahme ist freigestellt und auf die Flasche beschnitten. Die
+      Originaldatei hatte breite durchsichtige Raender; damit wirkte die
+      Flasche klein und alle Abstaende lagen daneben.
+
+      Hopfen und Gerste stehen hinter der Flasche und rahmen sie. Sie sind
+      hier kein Hintergrundmuster, sondern Teil eines Stilllebens. */}
+  <section class="auftakt">
+    <div class="container raster auftakt-raster">
+      <div class="spalte-7 auftakt-text">
+        <p class="etikettenzeile">{BETRIEB.signatur}</p>
+        <h1>Handwerklich gebraut in Hausen.</h1>
+        <p class="vorspann auftakt-vorspann">
+          Fünf Sorten nach dem Reinheitsgebot, gebraut in einer umgebauten
+          Scheune im Ostallgäu.
+        </p>
+        <div class="auftakt-knoepfe">
+          <Knopf href="/biere/">Unsere Biere</Knopf>
+          <Knopf href="/verkaufsstellen/" art="still">Alle Verkaufsstellen</Knopf>
+        </div>
+        <ul class="auftakt-fakten">
+          <li>Seit {BETRIEB.gegruendet}</li>
+          <li>{stellen.length} Verkaufsstellen</li>
+          <li>Brauerei zum Mitnehmen</li>
+        </ul>
+      </div>
+
+      <div class="spalte-5 auftakt-buehne">
+        <div class="auftakt-glanz" aria-hidden="true"></div>
+        <Leitmotiv art="gerste" seite="frei" hoehe={520} drehung={-9} klasse="buehne-gerste" />
+        <Leitmotiv art="hopfen" seite="frei" hoehe={330} drehung={13} klasse="buehne-hopfen" />
+        <div class="auftakt-flasche">
+          <Bild
+            quelle={bierHell}
+            alt="Flasche DEIN BIER Hell mit grün-goldenem Etikett, beschlagen"
+            sizes="(max-width: 767px) 45vw, 22vw"
+            breiten={[220, 340, 440]}
+            rueckfall="webp"
+            laden="eager"
+          />
+        </div>
+      </div>
     </div>
+  </section>
+
+  <Wegstrecke />
+
+  {/* ===== B · DIE MOBILE BRAUEREI, asymmetrisch 7/5 =====
+      Frueher der Auftakt der Seite. Auf Wunsch des Betreibers nach unten
+      gerueckt, damit oben das Produkt steht. Die Ueberschrift ist damit
+      eine h2 — es gibt genau eine h1 je Seite. */}
+  <section class="hero">
     <div class="container raster hero-raster">
       <div class="spalte-7 hero-text">
-        <p class="etikettenzeile hero-etikett">{BETRIEB.signatur}</p>
-        <h1>Die Brauerei<br />kommt zu Euch.</h1>
+        <h2 class="hero-titel">Die Brauerei<br />kommt zu Euch.</h2>
         <p class="vorspann hero-vorspann">
           Kleine Brauerei aus Hausen im Ostallgäu. Sie passt auf einen Anhänger
           und kommt zu Eurem Fest.
         </p>
         <div class="hero-knoepfe">
           <Knopf href="/brauseminare/">Seminar anfragen</Knopf>
-          <Knopf href="/biere/" art="still">Unsere Biere</Knopf>
+          <Knopf href="/events-verleih/" art="still">Verleih anfragen</Knopf>
         </div>
         <div class="hero-wagen"><Wagen breite={140} einfahrt={true} /></div>
       </div>
@@ -100,16 +147,15 @@ const BENTO_SPALTEN: Record<string, string> = {
             quelle={heroMobil}
             alt="Die mobile Brauanlage aufgebaut bei einem Kunden, Gäste stehen darum herum"
             sizes="(max-width: 767px) 100vw, 40vw"
-            laden="eager"
           />
         </Etikettenrahmen>
       </div>
     </div>
   </section>
 
-  <Wegstrecke />
+  <Wegstrecke mitWagen={false} />
 
-  {/* ===== B · DIE BRAUEREI, vollbreites Band ===== */}
+  {/* ===== C · DIE BRAUEREI, vollbreites Band ===== */}
   <section class="abschnitt band">
     <div class="container-weit">
       <div class="band-rahmen einblenden">
@@ -132,209 +178,215 @@ const BENTO_SPALTEN: Record<string, string> = {
     </div>
   </section>
 
-  {/* ===== C · DIE BIERE, Bento mit exakter Zellenzahl ===== */}
-  <Abschnitt etikett="Fünf Biere" titel="Was bei uns im Tank liegt." klasse="abschnitt-motiv">
-    {/* Die Aehre soll man finden, ohne sie zu suchen: gross, weit oben im
-        Abschnitt, und mit den langen Grannen weit ueber den Rand hinaus. */}
-    <Leitmotiv art="gerste" seite="rechts" hoehe={780} drehung={7} />
-    <div class="raster bento">
-      {
-        biere.map((bier, i) => (
-          <article
-            class:list={['bierkarte', 'einblenden', BENTO_SPALTEN[bier.id] ?? 'spalte-4']}
-            style={`--index: ${i}`}
-          >
-            <Etikettenrahmen>
-              <div class="bierkarte-innen">
-                <Bild
-                  quelle={bier.data.bild}
-                  alt={bier.data.bildAlt}
-                  hinweis="Produktfoto folgt"
-                  verhaeltnis="3 / 2"
-                  klasse="bierkarte-bild"
-                />
-                <div class="bierkarte-text">
-                  <h3>{bier.data.name}</h3>
-                  <p>{bier.data.kurz}</p>
-                  {bier.data.saison !== 'ganzjaehrig' && (
-                    <p class="bierkarte-saison">
-                      {bier.data.saison === 'sommer' && 'Nur im Sommer'}
-                      {bier.data.saison === 'winter' && 'Nur im Winter'}
-                      {bier.data.saison === 'herbst' && 'Nur im Herbst'}
-                      {bier.data.saison === 'fruehjahr' && 'Nur im Frühjahr'}
-                    </p>
-                  )}
+  {/* Ab hier begleitet eine Hopfendolde die Abschnitte am linken Rand und
+      purzelt beim Scrollen von einem zum naechsten — auf Wunsch des
+      Betreibers, und sie beginnt unter dem Brauerei-Band. */}
+  <Hopfenbahn>
+    {/* ===== D · DIE BIERE, Bento mit exakter Zellenzahl ===== */}
+    <Abschnitt etikett="Fünf Biere" titel="Was bei uns im Tank liegt." klasse="abschnitt-motiv">
+      {/* Die Aehre soll man finden, ohne sie zu suchen: gross, weit oben im
+          Abschnitt, und mit den langen Grannen weit ueber den Rand hinaus. */}
+      <Leitmotiv art="gerste" seite="rechts" hoehe={780} drehung={7} />
+      <div class="raster bento">
+        {
+          biere.map((bier, i) => (
+            <article
+              class:list={['bierkarte', 'einblenden', BENTO_SPALTEN[bier.id] ?? 'spalte-4']}
+              style={`--index: ${i}`}
+            >
+              <Etikettenrahmen>
+                <div class="bierkarte-innen">
+                  <Bild
+                    quelle={bier.data.bild}
+                    alt={bier.data.bildAlt}
+                    hinweis="Produktfoto folgt"
+                    verhaeltnis="3 / 2"
+                    klasse="bierkarte-bild"
+                  />
+                  <div class="bierkarte-text">
+                    <h3>{bier.data.name}</h3>
+                    <p>{bier.data.kurz}</p>
+                    {bier.data.saison !== 'ganzjaehrig' && (
+                      <p class="bierkarte-saison">
+                        {bier.data.saison === 'sommer' && 'Nur im Sommer'}
+                        {bier.data.saison === 'winter' && 'Nur im Winter'}
+                        {bier.data.saison === 'herbst' && 'Nur im Herbst'}
+                        {bier.data.saison === 'fruehjahr' && 'Nur im Frühjahr'}
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </Etikettenrahmen>
-          </article>
-        ))
-      }
-    </div>
-
-    <p class="bento-nachsatz">
-      Dazu Bierbrand, Likör und Malzgelee. <a href="/biere/">Alle Produkte</a>
-    </p>
-  </Abschnitt>
-
-  <Wegstrecke />
-
-  {/* ===== D · BRAUSEMINARE, Zwei-Spalten-Wechsel ===== */}
-  <Abschnitt titel="Eure Gäste werden Brauer.">
-    <div class="seminar">
-      <article class="seminar-halb einblenden">
-        <Bild
-          quelle={seminarBrauerei}
-          alt="Teilnehmer beim Brauseminar in der Brauscheune"
-        />
-        <h3>In der Brauerei</h3>
-        <p>
-          Fünf bis sechs Stunden, mindestens fünf Leute, Brotzeit ist dabei.
-          Jeder bekommt eine Aufgabe. Euer Bier holt Ihr nach fünf bis sechs
-          Wochen ab.
-        </p>
-      </article>
-
-      <div class="seminar-weiche" aria-hidden="true"><Wagen breite={72} /></div>
-
-      <article class="seminar-halb einblenden" style="--index: 1">
-        <Bild
-          quelle={seminarMobil}
-          alt="Brauseminar mit der mobilen Anlage bei einem Kunden zu Hause"
-        />
-        <h3>Oder bei Euch daheim</h3>
-        <p>
-          Wir brauchen 32&nbsp;Ampere Kraftstrom, Wasser, Abfluss und rund
-          15&nbsp;m² ebene Fläche. Drinnen oder draußen. Den Rest bringen wir mit.
-        </p>
-      </article>
-    </div>
-
-    <p class="seminar-knopf">
-      <Knopf href="/brauseminare/">Seminar anfragen</Knopf>
-    </p>
-  </Abschnitt>
-
-  {/* ===== E · ZITATBAND, der einzige dunkle Abschnitt ===== */}
-  <Zitatband
-    zitat="Man sieht, was drinsteckt. An Grundstoffen und an Arbeit."
-    quelle="Ein Teilnehmer beim Brauseminar"
-  />
-
-  {/* ===== F · EVENTS & VERLEIH, Karten-Raster ===== */}
-  <Abschnitt titel="Ihr feiert. Wir liefern.">
-    <div class="doppelkarten">
-      <article class="karte einblenden">
-        <Bild
-          quelle={zirkuszelt}
-          alt="Das Zirkuszelt mit 12 Metern Durchmesser, aufgebaut auf einer Wiese"
-        />
-        <div class="karte-text">
-          <h3>Leihinventar</h3>
-          <p>
-            Zelt mit 12&nbsp;m Durchmesser, Garnituren, Zapfanlage, Grill,
-            Gläser. Wir bringen alles vorbei.
-          </p>
-          <p class="karte-knopf"><Knopf href="/events-verleih/">Verleih anfragen</Knopf></p>
-        </div>
-      </article>
-
-      <article class="karte einblenden" style="--index: 1">
-        <Bild
-          quelle={brauereigarten}
-          alt="Der Brauereigarten mit aufgebautem Festzelt"
-        />
-        <div class="karte-text">
-          <h3>Feiern in der Brauerei</h3>
-          <p>
-            Brauereigarten und Festraum. Externes Catering ist möglich. Für
-            runde Geburtstage, Vereinsausflüge und alles dazwischen.
-          </p>
-          <p class="karte-knopf"><Knopf href="/events-verleih/">Feier anfragen</Knopf></p>
-        </div>
-      </article>
-    </div>
-  </Abschnitt>
-
-  {/* ===== G · FERIENWOHNUNG, Text plus versetztes Hochbild ===== */}
-  <Abschnitt>
-    <div class="raster fewo">
-      <div class="spalte-5 fewo-text einblenden">
-        <h2>Schlafen über der Brauerei.</h2>
-        <p>
-          Landhof Eselblick. Drei Schlafzimmer unter dem alten Sichtdachstuhl,
-          großer Balkon, Blick in die Allgäuer Alpen. Und unten im Hof stehen
-          die Esel.
-        </p>
-        <p><a href="/ferienwohnung/">Zur Ferienwohnung</a></p>
-      </div>
-      <div class="spalte-6 fewo-bild einblenden" style="--index: 1">
-        <Bild
-          quelle={fewoBalkon}
-          alt="Der Balkon der Ferienwohnung mit Blick über die Ostallgäuer Landschaft"
-        />
-      </div>
-    </div>
-  </Abschnitt>
-
-  <Wegstrecke />
-
-  {/* ===== H · VERKAUFSSTELLEN, gruppierte Ortsliste ===== */}
-  <Abschnitt titel="Wo es DEIN BIER gibt" klasse="abschnitt-motiv">
-    <Leitmotiv art="hopfen" seite="rechts" hoehe={520} drehung={14} />
-    <div class="stellen">
-      {
-        stellenGruppen.map((gruppe, i) => (
-          <div class="stellen-gruppe einblenden" style={`--index: ${i}`}>
-            <h3>{gruppe.name}</h3>
-            <ul>
-              {gruppe.eintraege.map((s) => (
-                <li>
-                  {s.data.name}
-                  {s.data.abHof && <span class="stellen-zeit">{BETRIEB.verkaufszeiten}</span>}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))
-      }
-    </div>
-
-    <p class="stellen-nachsatz">
-      <a href="/verkaufsstellen/">Alle Verkaufsstellen mit Adresse</a>
-    </p>
-  </Abschnitt>
-
-  {/* ===== I · NEWS, waagerechter Beitragsstreifen ===== */}
-  {
-    news.length > 0 && (
-      <Abschnitt etikett="Aus der Brauerei">
-        <div class="newsstreifen">
-          {news.map((n, i) => (
-            <article class="newskarte einblenden" style={`--index: ${i}`}>
-              <Bild
-                quelle={n.data.bild}
-                alt={n.data.bildAlt ?? ''}
-                hinweis="Foto folgt"
-                verhaeltnis="16 / 9"
-              />
-              <time datetime={isoDatum(n.data.datum)} class="newskarte-datum">
-                {formatDatum(n.data.datum)}
-              </time>
-              <h3>
-                <a href={`/news/${n.id}/`}>{n.data.titel}</a>
-              </h3>
-              <p>{n.data.anriss}</p>
+              </Etikettenrahmen>
             </article>
-          ))}
-        </div>
+          ))
+        }
+      </div>
 
-        <p class="stellen-nachsatz">
-          <a href="/news/">Alle News</a>
-        </p>
-      </Abschnitt>
-    )
-  }
+      <p class="bento-nachsatz">
+        Dazu Bierbrand, Likör und Malzgelee. <a href="/biere/">Alle Produkte</a>
+      </p>
+    </Abschnitt>
+
+    <Wegstrecke />
+
+    {/* ===== E · BRAUSEMINARE, Zwei-Spalten-Wechsel ===== */}
+    <Abschnitt titel="Eure Gäste werden Brauer.">
+      <div class="seminar">
+        <article class="seminar-halb einblenden">
+          <Bild
+            quelle={seminarBrauerei}
+            alt="Teilnehmer beim Brauseminar in der Brauscheune"
+          />
+          <h3>In der Brauerei</h3>
+          <p>
+            Fünf bis sechs Stunden, mindestens fünf Leute, Brotzeit ist dabei.
+            Jeder bekommt eine Aufgabe. Euer Bier holt Ihr nach fünf bis sechs
+            Wochen ab.
+          </p>
+        </article>
+
+        <div class="seminar-weiche" aria-hidden="true"><Wagen breite={72} /></div>
+
+        <article class="seminar-halb einblenden" style="--index: 1">
+          <Bild
+            quelle={seminarMobil}
+            alt="Brauseminar mit der mobilen Anlage bei einem Kunden zu Hause"
+          />
+          <h3>Oder bei Euch daheim</h3>
+          <p>
+            Wir brauchen 32&nbsp;Ampere Kraftstrom, Wasser, Abfluss und rund
+            15&nbsp;m² ebene Fläche. Drinnen oder draußen. Den Rest bringen wir mit.
+          </p>
+        </article>
+      </div>
+
+      <p class="seminar-knopf">
+        <Knopf href="/brauseminare/">Seminar anfragen</Knopf>
+      </p>
+    </Abschnitt>
+
+    {/* ===== F · ZITATBAND, der einzige dunkle Abschnitt ===== */}
+    <Zitatband
+      zitat="Man sieht, was drinsteckt. An Grundstoffen und an Arbeit."
+      quelle="Ein Teilnehmer beim Brauseminar"
+    />
+
+    {/* ===== G · EVENTS & VERLEIH, Karten-Raster ===== */}
+    <Abschnitt titel="Ihr feiert. Wir liefern.">
+      <div class="doppelkarten">
+        <article class="karte einblenden">
+          <Bild
+            quelle={zirkuszelt}
+            alt="Das Zirkuszelt mit 12 Metern Durchmesser, aufgebaut auf einer Wiese"
+          />
+          <div class="karte-text">
+            <h3>Leihinventar</h3>
+            <p>
+              Zelt mit 12&nbsp;m Durchmesser, Garnituren, Zapfanlage, Grill,
+              Gläser. Wir bringen alles vorbei.
+            </p>
+            <p class="karte-knopf"><Knopf href="/events-verleih/">Verleih anfragen</Knopf></p>
+          </div>
+        </article>
+
+        <article class="karte einblenden" style="--index: 1">
+          <Bild
+            quelle={brauereigarten}
+            alt="Der Brauereigarten mit aufgebautem Festzelt"
+          />
+          <div class="karte-text">
+            <h3>Feiern in der Brauerei</h3>
+            <p>
+              Brauereigarten und Festraum. Externes Catering ist möglich. Für
+              runde Geburtstage, Vereinsausflüge und alles dazwischen.
+            </p>
+            <p class="karte-knopf"><Knopf href="/events-verleih/">Feier anfragen</Knopf></p>
+          </div>
+        </article>
+      </div>
+    </Abschnitt>
+
+    {/* ===== H · FERIENWOHNUNG, Text plus versetztes Hochbild ===== */}
+    <Abschnitt>
+      <div class="raster fewo">
+        <div class="spalte-5 fewo-text einblenden">
+          <h2>Schlafen über der Brauerei.</h2>
+          <p>
+            Landhof Eselblick. Drei Schlafzimmer unter dem alten Sichtdachstuhl,
+            großer Balkon, Blick in die Allgäuer Alpen. Und unten im Hof stehen
+            die Esel.
+          </p>
+          <p><a href="/ferienwohnung/">Zur Ferienwohnung</a></p>
+        </div>
+        <div class="spalte-6 fewo-bild einblenden" style="--index: 1">
+          <Bild
+            quelle={fewoBalkon}
+            alt="Der Balkon der Ferienwohnung mit Blick über die Ostallgäuer Landschaft"
+          />
+        </div>
+      </div>
+    </Abschnitt>
+
+    <Wegstrecke />
+
+    {/* ===== I · VERKAUFSSTELLEN, gruppierte Ortsliste ===== */}
+    <Abschnitt titel="Wo es DEIN BIER gibt" klasse="abschnitt-motiv">
+      <Leitmotiv art="hopfen" seite="rechts" hoehe={520} drehung={14} />
+      <div class="stellen">
+        {
+          stellenGruppen.map((gruppe, i) => (
+            <div class="stellen-gruppe einblenden" style={`--index: ${i}`}>
+              <h3>{gruppe.name}</h3>
+              <ul>
+                {gruppe.eintraege.map((s) => (
+                  <li>
+                    {s.data.name}
+                    {s.data.abHof && <span class="stellen-zeit">{BETRIEB.verkaufszeiten}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="stellen-nachsatz">
+        <a href="/verkaufsstellen/">Alle Verkaufsstellen mit Adresse</a>
+      </p>
+    </Abschnitt>
+
+    {/* ===== J · NEWS, waagerechter Beitragsstreifen ===== */}
+    {
+      news.length > 0 && (
+        <Abschnitt etikett="Aus der Brauerei">
+          <div class="newsstreifen">
+            {news.map((n, i) => (
+              <article class="newskarte einblenden" style={`--index: ${i}`}>
+                <Bild
+                  quelle={n.data.bild}
+                  alt={n.data.bildAlt ?? ''}
+                  hinweis="Foto folgt"
+                  verhaeltnis="16 / 9"
+                />
+                <time datetime={isoDatum(n.data.datum)} class="newskarte-datum">
+                  {formatDatum(n.data.datum)}
+                </time>
+                <h3>
+                  <a href={`/news/${n.id}/`}>{n.data.titel}</a>
+                </h3>
+                <p>{n.data.anriss}</p>
+              </article>
+            ))}
+          </div>
+
+          <p class="stellen-nachsatz">
+            <a href="/news/">Alle News</a>
+          </p>
+        </Abschnitt>
+      )
+    }
+  </Hopfenbahn>
+
 </Basis>
 
 <style>
@@ -398,6 +450,165 @@ const BENTO_SPALTEN: Record<string, string> = {
   }
 
   /* ---------- A · Hero ---------- */
+  /* -------------------------------------------------------------------------
+     A · Auftakt
+     ---------------------------------------------------------------------- */
+
+  .auftakt {
+    position: relative;
+    overflow: hidden;
+    background: var(--db-licht-bernstein);
+    /* Fast der ganze erste Bildschirm, aber gedeckelt: auf einem sehr hohen
+       Fenster soll der Abschnitt nicht ins Leere wachsen. */
+    min-height: min(86svh, 50rem);
+    display: flex;
+    align-items: center;
+    padding-block: var(--db-space-2xl) var(--db-space-3xl);
+  }
+
+  .auftakt-raster {
+    align-items: center;
+    row-gap: var(--db-space-2xl);
+  }
+
+  /* Bewusst kleiner als die Hero-Groesse. "Handwerklich" ist zwoelf Zeichen
+     und passte bei --db-text-hero in keine Zeile: der Browser brach das Wort
+     dann ohne Trennstrich mitten durch. Ein Satz, der stimmt, schlaegt eine
+     Punktgroesse, die nicht passt. */
+  .auftakt h1 {
+    font-size: clamp(2.25rem, 4.6vw, 4rem);
+    line-height: var(--db-leading-hero);
+    margin-top: var(--db-space-sm);
+    max-width: 16ch;
+  }
+
+  .auftakt-vorspann {
+    margin-top: var(--db-space-md);
+    max-width: 38ch;
+  }
+
+  .auftakt-knoepfe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--db-space-sm);
+    margin-top: var(--db-space-lg);
+  }
+
+  /* Drei kurze Belege unter den Knoepfen. Sie beantworten die erste stille
+     Frage — "wer ist das?" — ohne dass man scrollen muss. */
+  .auftakt-fakten {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--db-space-2xs) var(--db-space-md);
+    list-style: none;
+    margin: var(--db-space-xl) 0 0;
+    padding: 0;
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+  }
+
+  .auftakt-fakten li {
+    display: flex;
+    align-items: center;
+    gap: var(--db-space-2xs);
+  }
+
+  /* Trennpunkte statt Striche: ruhiger, und sie stehen nicht am Zeilenende
+     allein, wenn die Liste umbricht. */
+  .auftakt-fakten li + li::before {
+    content: '';
+    width: 0.25rem;
+    height: 0.25rem;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+  }
+
+  /* --- Die Buehne: Flasche vor Hopfen und Gerste --- */
+
+  .auftakt-buehne {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 34rem;
+  }
+
+  /* Warmes Licht hinter der Flasche. Ohne das steht sie auf einer flachen
+     Creme und wirkt ausgeschnitten statt aufgestellt. */
+  .auftakt-glanz {
+    position: absolute;
+    inset: 8% 4% 4%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 50% 46%,
+      rgb(232 184 113 / 0.34) 0%,
+      rgb(232 184 113 / 0.16) 42%,
+      rgb(232 184 113 / 0) 70%
+    );
+  }
+
+  .auftakt-buehne :global(.leitmotiv) {
+    position: absolute;
+  }
+
+  .auftakt-buehne :global(.buehne-gerste) {
+    left: 2%;
+    top: 50%;
+    transform: translateY(-52%) rotate(var(--motiv-drehung));
+  }
+
+  .auftakt-buehne :global(.buehne-hopfen) {
+    right: 2%;
+    bottom: 4%;
+    transform: rotate(var(--motiv-drehung));
+  }
+
+  /* Die Flasche liegt vor den Motiven. */
+  .auftakt-flasche {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Ueber die Hoehe gesteuert und am `picture`, nicht am `img`: die Flasche
+     ist schmal und hoch, ueber die Breite waere sie kaum zu treffen — und
+     ein `100 %` am `img` bezoege sich auf einen Kasten, den es selbst erst
+     aufspannt. */
+  .auftakt-flasche :global(picture) {
+    display: block;
+    height: clamp(20rem, 44svh, 30rem);
+  }
+
+  .auftakt-flasche :global(img) {
+    height: 100%;
+    width: auto;
+    /* Ein weicher Schatten, damit sie auf der Flaeche steht statt zu
+       schweben. Die Aufnahme bringt zwar einen mit, der aber beim
+       Freistellen flach geworden ist. */
+    filter: drop-shadow(0 1.25rem 1.5rem rgb(82 56 22 / 0.22));
+  }
+
+  @media (max-width: 767px) {
+    .auftakt,
+    .auftakt-buehne {
+      min-height: 0;
+    }
+
+    .auftakt-flasche :global(picture) {
+      height: clamp(16rem, 46vw, 22rem);
+    }
+
+    /* Auf dem Handy ist die Buehne nur so breit wie die Spalte; die Motive
+       stuenden dort direkt hinter der Flasche statt daneben. */
+    .auftakt-buehne :global(.leitmotiv) {
+      display: none;
+    }
+  }
+
+  /* -------------------------------------------------------------------------
+     B · Die mobile Brauerei
+     ---------------------------------------------------------------------- */
+
   .hero {
     /* Warmes Licht dahinter: radial, nicht der uebliche 45-Grad-Verlauf. */
     background: var(--db-licht-bernstein);
@@ -412,7 +623,9 @@ const BENTO_SPALTEN: Record<string, string> = {
     margin-bottom: var(--db-space-sm);
   }
 
-  .hero h1 {
+  /* Frueher eine h1, seit der Auftakt oben steht eine h2. Die Groesse
+     bleibt: es ist weiter der zweitwichtigste Einstieg der Seite. */
+  .hero-titel {
     font-size: var(--db-text-hero);
     line-height: var(--db-leading-hero);
   }

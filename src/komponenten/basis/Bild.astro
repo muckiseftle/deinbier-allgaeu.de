@@ -20,6 +20,17 @@ interface Props {
   hinweis?: string;
   /** Seitenverhaeltnis des Platzhalters, etwa "3 / 2" oder "4 / 5". */
   verhaeltnis?: string;
+  /**
+   * Format der Rueckfallebene. Ohne Angabe waehlt Astro das Format der
+   * Quelle — bei einem PNG also PNG, und das ist fuer eine Fotoaufnahme
+   * katastrophal: die freigestellte Flasche wog als PNG 1,8 MB, als AVIF
+   * 26 KB. Geladen wird der Rueckfall zwar nur ohne AVIF- und
+   * WebP-Unterstuetzung, ausgeliefert wird er aber immer.
+   *
+   * `webp` ist seit 2020 in allen Browsern verfuegbar und deshalb hier ein
+   * sicherer Rueckfall.
+   */
+  rueckfall?: 'png' | 'jpeg' | 'webp';
   klasse?: string;
 }
 
@@ -31,6 +42,7 @@ const {
   laden = 'lazy',
   hinweis,
   verhaeltnis = '3 / 2',
+  rueckfall,
   klasse,
 } = Astro.props;
 ---
@@ -41,10 +53,15 @@ const {
       class:list={['bild', klasse]}
       src={quelle}
       formats={['avif', 'webp']}
+      fallbackFormat={rueckfall}
       widths={breiten}
       sizes={sizes}
       alt={alt}
       loading={laden}
+      /* Ein Bild, das sofort geladen wird, ist in aller Regel auch das
+         groesste sichtbare Element. Ohne diesen Hinweis reiht der Browser es
+         hinter Schriften und Stylesheets ein. */
+      fetchpriority={laden === 'eager' ? 'high' : undefined}
       decoding="async"
     />
   ) : (
