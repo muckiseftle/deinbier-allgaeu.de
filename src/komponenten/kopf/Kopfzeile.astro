@@ -153,6 +153,14 @@ function istAktiv(pfad: string): boolean {
     cursor: pointer;
     padding: var(--db-space-2xs);
     color: var(--db-text-ueberschrift);
+    transition: transform var(--db-dauer-sofort) var(--db-easing-standard);
+  }
+
+  /* Auf dem Handy ist das das meistgedrueckte Element der Seite, und es gab
+     bisher gar keine Rueckmeldung. Kraeftiger als bei den Knoepfen, weil die
+     Flaeche klein ist. */
+  .kopfzeile-menueknopf:active {
+    transform: scale(0.92);
   }
 
   /* Umbruch bei 1100 px, nicht 1024: die deutschen Labels sind lang
@@ -180,10 +188,21 @@ function istAktiv(pfad: string): boolean {
     z-index: var(--db-ebene-ueberlagerung);
     padding: var(--db-space-xl) var(--db-rand);
     overflow-y: auto;
+    opacity: 1;
+    transition: opacity var(--db-dauer-schnell) var(--db-easing-standard);
   }
 
   .mobiles-menue[hidden] {
     display: none;
+  }
+
+  /* Ausblenden statt schlagartigem Verschwinden. Ein bildschirmfuellendes
+     Feld, das ohne Uebergang weg ist, liest sich als Fehler.
+     Der Austritt ist mit 180 ms schneller als der gestaffelte Eintritt:
+     langsam beim Entscheiden, schnell beim Antworten. */
+  .mobiles-menue[data-schliesst] {
+    opacity: 0;
+    pointer-events: none;
   }
 
   .mobiles-menue ul {
@@ -241,14 +260,56 @@ function istAktiv(pfad: string): boolean {
   const beschriftung = document.querySelector<HTMLElement>('[data-menue-beschriftung]');
 
   if (knopf && menue) {
+    const wenigerBewegung = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const schliessen = () => {
+      knopf.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      if (beschriftung) beschriftung.textContent = 'Menü öffnen';
+
+      if (wenigerBewegung.matches) {
+        menue.hidden = true;
+        return;
+      }
+
+      /* Erst ausblenden, dann aus dem Baum nehmen. Ohne das Warten waere
+         der Uebergang nicht sichtbar, weil hidden sofort greift. */
+      menue.setAttribute('data-schliesst', '');
+
+      let erledigt = false;
+      const fertig = () => {
+        if (erledigt) return;
+        erledigt = true;
+        menue.hidden = true;
+        menue.removeAttribute('data-schliesst');
+        menue.removeEventListener('transitionend', aufUebergang);
+      };
+
+      /* transitionend blubbert: jede Bewegung eines Kindelements wuerde
+         sonst das Menue sofort schliessen. Deshalb auf das Menue selbst
+         und auf opacity einschraenken. */
+      const aufUebergang = (e: TransitionEvent) => {
+        if (e.target !== menue || e.propertyName !== 'opacity') return;
+        fertig();
+      };
+
+      menue.addEventListener('transitionend', aufUebergang);
+      // Sicherheitsnetz, falls das Ereignis ausbleibt (Tab im Hintergrund).
+      window.setTimeout(fertig, 500);
+    };
+
+    const oeffnen = () => {
+      knopf.setAttribute('aria-expanded', 'true');
+      menue.removeAttribute('data-schliesst');
+      menue.hidden = false;
+      document.body.style.overflow = 'hidden';
+      if (beschriftung) beschriftung.textContent = 'Menü schließen';
+    };
+
     const umschalten = () => {
       const offen = knopf.getAttribute('aria-expanded') === 'true';
-      knopf.setAttribute('aria-expanded', String(!offen));
-      menue.hidden = offen;
-      document.body.style.overflow = offen ? '' : 'hidden';
-      if (beschriftung) {
-        beschriftung.textContent = offen ? 'Menü öffnen' : 'Menü schließen';
-      }
+      if (offen) schliessen();
+      else oeffnen();
     };
 
     knopf.addEventListener('click', umschalten);

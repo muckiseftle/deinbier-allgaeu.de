@@ -47,12 +47,40 @@
     display: grid;
     place-items: center;
     padding: var(--db-rand);
+    opacity: 1;
     /* Bewusst ohne Einblendbewegung: der Dialog darf nicht aufflackern,
-       wenn die Antwort bereits gespeichert ist. */
+       wenn die Antwort bereits gespeichert ist. Das AUSblenden dagegen
+       ist der erste Eindruck der Seite und darf nicht schlagartig sein. */
+    transition: opacity var(--db-dauer-normal) var(--db-easing-standard);
   }
 
   .altersabfrage[hidden] {
     display: none;
+  }
+
+  .altersabfrage[data-schliesst] {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Der Kasten faehrt beim Ausblenden leicht mit nach oben. Ohne das wirkt
+     das reine Ausblenden flach. */
+  .altersabfrage[data-schliesst] .altersabfrage-kasten {
+    transform: translateY(-8px);
+  }
+
+  .altersabfrage-kasten {
+    transition: transform var(--db-dauer-normal) var(--db-easing-standard);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .altersabfrage,
+    .altersabfrage-kasten {
+      transition: none;
+    }
+    .altersabfrage[data-schliesst] .altersabfrage-kasten {
+      transform: none;
+    }
   }
 
   .altersabfrage-kasten {
@@ -131,8 +159,39 @@
       } catch {
         // Speicher gesperrt: dann eben bei jedem Aufruf erneut fragen.
       }
-      dialog.hidden = true;
+
       document.body.style.overflow = '';
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        dialog.hidden = true;
+        return;
+      }
+
+      /* Erst ausblenden, dann aus dem Baum nehmen. Das ist der erste
+         Eindruck der Seite; schlagartiges Verschwinden wirkt hart. */
+      dialog.setAttribute('data-schliesst', '');
+
+      let erledigt = false;
+      const fertig = () => {
+        if (erledigt) return;
+        erledigt = true;
+        dialog.hidden = true;
+        dialog.removeAttribute('data-schliesst');
+        dialog.removeEventListener('transitionend', aufUebergang);
+      };
+
+      /* transitionend blubbert. Ohne diese Pruefung schliesst der Dialog
+         sofort, weil der geklickte Knopf beim Loslassen seine eigene
+         :active-Skalierung zurueckfaehrt und dieses Ereignis nach oben
+         durchreicht. */
+      const aufUebergang = (e: TransitionEvent) => {
+        if (e.target !== dialog || e.propertyName !== 'opacity') return;
+        fertig();
+      };
+
+      dialog.addEventListener('transitionend', aufUebergang);
+      // Sicherheitsnetz, falls das Ereignis ausbleibt (Tab im Hintergrund).
+      window.setTimeout(fertig, 600);
     });
   }
 </script>

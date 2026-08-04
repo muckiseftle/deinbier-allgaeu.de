@@ -249,12 +249,24 @@ const ANFRAGEN = [
     }
   }
 
+  /* Rueckmeldung beim Druecken. Die Karte ist vollflaechig anklickbar und
+     hob sich bisher nur beim Ueberfahren; beim Druck passierte nichts.
+     Auf dem Handy gab es damit gar keine Rueckmeldung, weil es dort kein
+     Hover gibt. Bewusst sehr fein: 0,985 statt der 0,98 der Knoepfe, weil
+     eine grosse Flaeche staerker wirkt als ein kleiner Knopf. */
+  .anfrage:active {
+    transform: scale(0.985);
+    transition-duration: var(--db-dauer-sofort);
+    box-shadow: none;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .anfrage,
     .anfrage-pfeil {
       transition: none;
     }
-    .anfrage:hover {
+    .anfrage:hover,
+    .anfrage:active {
       transform: none;
     }
   }

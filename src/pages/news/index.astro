@@ -232,6 +232,32 @@ const jahre = [...new Set(uebrige.map((n) => jahrAus(n.data.datum)))].sort((a, b
     text-underline-offset: var(--link-abstand);
   }
 
+
+  /* Gleiche Reaktion wie bei den Bierkarten: das Bild skaliert, die Karte
+     bleibt stehen. Beide sind anklickbar, also muessen sie sich auch gleich
+     anfuehlen. Bewegt wird nur das Bild, sonst zittert das Raster. */
+  .beitrag-bild :global(img),
+  .aufmacher-bild :global(img) {
+    transition: transform var(--db-dauer-normal) var(--db-easing-standard);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .beitrag-bild:hover :global(img),
+    .aufmacher-bild:hover :global(img) {
+      transform: scale(var(--bierkarte-bild-skalierung-hover));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .beitrag-bild :global(img),
+    .aufmacher-bild :global(img) {
+      transition: none;
+    }
+    .beitrag-bild:hover :global(img),
+    .aufmacher-bild:hover :global(img) {
+      transform: none;
+    }
+  }
   .weiterlesen {
     margin-top: var(--db-space-md) !important;
   }
