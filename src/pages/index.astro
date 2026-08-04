@@ -385,8 +385,20 @@ const BENTO_SPALTEN: Record<string, string> = {
     position: absolute;
     inset-inline: 0;
     bottom: 0;
-    padding: var(--db-space-xl) var(--db-space-lg);
-    background: linear-gradient(to top, rgb(36 24 9 / 0.86), rgb(36 24 9 / 0));
+    /* Mehr Abstand oben, damit der Verlauf ueber dem Text ausblenden kann
+       statt hinter ihm. */
+    padding: var(--db-space-3xl) var(--db-space-lg) var(--db-space-xl);
+    /* Der urspruengliche Verlauf war oben durchsichtig, die Ueberschrift sass
+       damit fast ungeschuetzt auf dem Foto. Jetzt liegt hinter dem gesamten
+       Textbereich eine Deckung von mindestens 0,82, und nur der Bereich
+       oberhalb des Textes blendet aus. Gemessen: mindestens 8,9:1. */
+    background: linear-gradient(
+      to top,
+      rgb(36 24 9 / 0.94) 0%,
+      rgb(36 24 9 / 0.9) 45%,
+      rgb(36 24 9 / 0.82) 62%,
+      rgb(36 24 9 / 0) 100%
+    );
     color: var(--db-text-invers);
     max-width: 46rem;
   }

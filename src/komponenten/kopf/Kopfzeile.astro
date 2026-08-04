@@ -2,6 +2,13 @@
 import { NAVIGATION } from '../../daten/navigation';
 import { BETRIEB } from '../../daten/betrieb';
 import { Icon } from 'astro-icon/components';
+import { Picture } from 'astro:assets';
+
+/* Das Logo laeuft durch die Bildpipeline, nicht ueber public/.
+   Als PNG in public/ wurden bei jedem Seitenaufruf 101 KB geladen und dann
+   auf 44 bis 64 px gezeichnet: der groesste einzelne Download der ganzen
+   Seite. Ueber die Pipeline sind es wenige KB in AVIF mit PNG-Rueckfall. */
+import logo from '../../bilder/logo.png';
 
 const aktuell = Astro.url.pathname;
 
@@ -14,9 +21,17 @@ function istAktiv(pfad: string): boolean {
 <header class="kopfzeile" data-kopfzeile>
   <div class="container kopfzeile-innen">
     <a class="kopfzeile-marke" href="/" aria-label={`${BETRIEB.kurzname}, zur Startseite`}>
-      {/* PLATZHALTER: 300-px-PNG. Wird durch logo.svg ersetzt, sobald die
-          Vektordatei vorliegt (OFFENE-FRAGEN Nr. 16). Blockiert den Livegang. */}
-      <img src="/logo.png" alt="" width="64" height="64" fetchpriority="high" />
+      {/* PLATZHALTER: 300-px-PNG. Wird durch die Vektordatei ersetzt, sobald
+          diese vorliegt (OFFENE-FRAGEN Nr. 16). Blockiert den Livegang. */}
+      <Picture
+        src={logo}
+        formats={['avif', 'webp']}
+        widths={[64, 128]}
+        sizes="64px"
+        alt=""
+        loading="eager"
+        fetchpriority="high"
+      />
     </a>
 
     <nav class="kopfzeile-navi" aria-label="Hauptnavigation">

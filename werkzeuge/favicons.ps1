@@ -13,7 +13,7 @@ $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Drawing
 Set-Location (Split-Path $PSScriptRoot -Parent)
 
-$quelle = 'public\logo.png'
+$quelle = 'src\bilder\logo.png'
 $ziel = 'public'
 
 function Skaliere([string]$quellPfad, [int]$kante, [string]$hintergrund, [double]$anteil) {

@@ -14,6 +14,13 @@ h4 {
   line-height: var(--db-leading-ueberschrift);
   letter-spacing: var(--db-tracking-ueberschrift);
   text-wrap: balance;
+
+  /* Deutsche Komposita sind lang. "Datenschutzerklaerung" als h1 misst bei
+     360 px Fensterbreite rund 375 px und schiebt die ganze Seite zur Seite.
+     hyphens: auto trennt zusammen mit lang="de" an den richtigen Stellen,
+     overflow-wrap greift als Notbremse fuer Woerter ohne Trennstelle. */
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
 h1 {

@@ -1,4 +1,10 @@
 ---
+import { Picture } from 'astro:assets';
+
+/* Ueber die Bildpipeline statt aus public/: dort waeren es 101 KB fuer eine
+   Darstellung mit 96 px Kantenlaenge. */
+import logo from '../bilder/logo.png';
+
 /**
  * Altersabfrage ohne Cookie.
  *
@@ -24,7 +30,13 @@
   data-altersabfrage
 >
   <div class="altersabfrage-kasten">
-    <img src="/logo.png" alt="" width="96" height="96" />
+    <Picture
+      src={logo}
+      formats={['avif', 'webp']}
+      widths={[96, 192]}
+      sizes="96px"
+      alt=""
+    />
 
     <h2 id="alter-titel">Seid Ihr schon 16?</h2>
     <p id="alter-text">Wir schenken Bier aus. Deshalb fragen wir kurz nach.</p>
@@ -94,7 +106,7 @@
     justify-items: center;
   }
 
-  .altersabfrage-kasten img {
+  .altersabfrage-kasten :global(img) {
     width: var(--alter-logo);
     height: auto;
   }

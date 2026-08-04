@@ -50,7 +50,13 @@ const jahre = [...new Set(uebrige.map((n) => jahrAus(n.data.datum)))].sort((a, b
             </h2>
             <p>{neuester.data.anriss}</p>
             <p class="weiterlesen">
-              <a href={`/news/${neuester.id}/`}>Weiterlesen</a>
+              {/* Der sichtbare Text bleibt "Weiterlesen" (ein Wortlaut je
+                  Absicht, DESIGN.md 15.1). Der unsichtbare Zusatz macht das
+                  Ziel eindeutig, damit der Link auch ohne den umgebenden
+                  Text verstaendlich ist. */}
+              <a href={`/news/${neuester.id}/`}>
+                Weiterlesen<span class="sr-only"> zu „{neuester.data.titel}“</span>
+              </a>
             </p>
           </div>
         </article>
