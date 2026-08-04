@@ -2,6 +2,8 @@
 titel: "Termine öffentliche Brauseminare, 1. Halbjahr 2024"
 datum: "2024-02-17"
 anriss: "Vier Termine von März bis Juni, Beginn jeweils 11 Uhr. Auch für Gutscheine."
+bild: ../../bilder/malzsack.jpg
+bildAlt: "Blick in einen offenen Malzsack"
 veraltet: true
 ---
 

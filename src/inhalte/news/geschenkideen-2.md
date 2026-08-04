@@ -2,6 +2,8 @@
 titel: "Geschenkideen"
 datum: "2024-11-15"
 anriss: "Geschenkkörbe, Glühbi und Winterzicke in der Ein-Liter-Flasche, Bierlikör und Bruier Fuier."
+bild: ../../bilder/geschenkkorb.png
+bildAlt: "Ein Geschenkkorb mit Bier, Likör und Malzgelee"
 veraltet: true
 ---
 

@@ -2,6 +2,8 @@
 titel: "Letztes öffentliches Brauseminar 2025"
 datum: "2025-10-19"
 anriss: "Am 25. Oktober um 11 Uhr, Anmeldung bis Donnerstag. Gutscheine können eingelöst werden."
+bild: ../../bilder/maische-sudkessel.jpg
+bildAlt: "Fertige Maische im Sudkessel"
 veraltet: true
 ---
 

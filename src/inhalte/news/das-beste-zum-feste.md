@@ -2,6 +2,8 @@
 titel: "Das Beste zum Feste"
 datum: "2025-12-11"
 anriss: "Noch ein besonderes Weihnachtsgeschenk gesucht? Liebe geht bekanntlich durch den Magen."
+bild: ../../bilder/geschenkkorb.png
+bildAlt: "Ein Geschenkkorb mit Bier, Likör und Malzgelee"
 veraltet: true
 ---
 

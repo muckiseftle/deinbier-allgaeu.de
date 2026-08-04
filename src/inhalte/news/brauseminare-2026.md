@@ -2,6 +2,8 @@
 titel: "Brauseminare für 2026 sichern"
 datum: "2025-11-07"
 anriss: "Gruppen von 5 bis 10 Personen können ihren eigenen Termin für 2026 ausmachen."
+bild: ../../bilder/brauseminar-hopfen.jpg
+bildAlt: "Die Hopfengabe beim Brauseminar"
 veraltet: true
 ---
 

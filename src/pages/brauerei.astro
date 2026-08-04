@@ -12,6 +12,7 @@ import malzOffen from '../bilder/malz-geschrotet.jpg';
 import brausud from '../bilder/brausud.jpg';
 import hopfen from '../bilder/hopfengabe.jpg';
 import tanks from '../bilder/lagertanks.jpg';
+import scheuneAussen from '../bilder/brauscheune-aussen.jpg';
 
 const ZAHLEN = [
   { zahl: '2016', text: 'Brauereigebäude eröffnet' },
@@ -171,12 +172,29 @@ const ZAHLEN = [
   />
 
   <Abschnitt titel="Die Brauscheune">
-    <Bild
-      quelle={tanks}
-      alt="Die Gär- und Lagertanks in der Brauscheune"
-      sizes="100vw"
-      breiten={[800, 1200, 1600, 1920]}
-    />
+    <div class="scheune">
+      {/* Aussen und innen als Paar. Das Aussenfoto ist nur 800 px breit und
+          bekommt deshalb die kleinere der beiden Spalten. */}
+      <figure class="scheune-aussen einblenden">
+        <Bild
+          quelle={scheuneAussen}
+          alt="Die Brauscheune in Hausen von außen"
+          sizes="(max-width: 767px) 100vw, 33vw"
+          breiten={[400, 800]}
+        />
+        <figcaption>Von außen eine Scheune.</figcaption>
+      </figure>
+
+      <figure class="scheune-innen einblenden" style="--index: 1">
+        <Bild
+          quelle={tanks}
+          alt="Die Gär- und Lagertanks in der Brauscheune"
+          sizes="(max-width: 767px) 100vw, 66vw"
+          breiten={[800, 1200, 1600]}
+        />
+        <figcaption>Von innen eine Brauwerkstatt.</figcaption>
+      </figure>
+    </div>
   </Abschnitt>
 </Themenseite>
 
@@ -192,6 +210,29 @@ const ZAHLEN = [
     color: var(--db-linie-zier);
     padding-right: 0.08em;
     padding-top: 0.06em;
+  }
+
+  .scheune {
+    display: grid;
+    grid-template-columns: 4fr 8fr;
+    gap: var(--db-space-lg);
+    align-items: end;
+  }
+
+  .scheune figcaption {
+    margin-top: var(--db-space-2xs);
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
+  }
+
+  .scheune figure {
+    margin: 0;
+  }
+
+  @media (max-width: 767px) {
+    .scheune {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   .macher-zweiter {

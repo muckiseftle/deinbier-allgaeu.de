@@ -2,6 +2,8 @@
 titel: "Neu im Sortiment: die 5-Liter-Partydose"
 datum: "2024-06-18"
 anriss: "Gut gekühlt kann das Zapfen sofort beginnen. Bitte immer vorbestellen."
+bild: ../../bilder/kleines-faesschen.jpg
+bildAlt: "Die 5-Liter-Dose Helles"
 veraltet: true
 ---
 

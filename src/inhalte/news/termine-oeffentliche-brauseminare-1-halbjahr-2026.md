@@ -2,6 +2,8 @@
 titel: "Termine öffentliche Brauseminare, 1. Halbjahr 2026"
 datum: "2026-02-27"
 anriss: "Zwei Termine im ersten Halbjahr, Beginn jeweils 11 Uhr, mit Getränken und Brotzeit."
+bild: ../../bilder/malz-geschrotet.jpg
+bildAlt: "Geschrotetes Malz vor dem Ansetzen des Suds"
 veraltet: true
 ---
 

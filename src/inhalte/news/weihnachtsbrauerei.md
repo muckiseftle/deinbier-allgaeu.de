@@ -2,6 +2,8 @@
 titel: "In der Weihnachtsbrauerei"
 datum: "2022-11-07"
 anriss: "Zimt, Nelke, Anis und Vanille: Glühbi, Winterzicke, Bierlikör und Malzgelee sind wieder da."
+bild: ../../bilder/winterzicke.png
+bildAlt: "Die Ein-Liter-Flasche Winterzicke"
 veraltet: true
 ---
 

@@ -2,6 +2,8 @@
 titel: "Warum wir die Preise halten"
 datum: "2024-02-17"
 anriss: "Ein offenes Wort über Einkaufspreise, Ertragsspannen und warum eine kleine Brauerei anders rechnet."
+bild: ../../bilder/gaertanks.jpg
+bildAlt: "Die Gär- und Lagertanks in der Brauscheune"
 veraltet: true
 ---
 

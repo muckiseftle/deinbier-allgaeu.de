@@ -2,6 +2,8 @@
 titel: "Neue Probiergrößen"
 datum: "2023-11-12"
 anriss: "Bruier Fuier und Bierlikör in der Probierflasche, Malzgelee in Minigläsern, dazu zwei Geschenksets."
+bild: ../../bilder/malzgelee.png
+bildAlt: "Ein Glas DEIN BIER Malzgelee"
 veraltet: true
 ---
 

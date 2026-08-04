@@ -2,6 +2,8 @@
 titel: "Wieder eigenes Bier brauen lernen"
 datum: "2022-07-11"
 anriss: "Öffentliches Brauseminar am 23. Juli, Beginn 11 Uhr in der Brauscheune Hausen."
+bild: ../../bilder/maische-ruehren.jpg
+bildAlt: "Die Maische wird im Sudkessel gerührt"
 veraltet: true
 ---
 

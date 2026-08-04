@@ -2,6 +2,8 @@
 titel: "Adventsmärkte"
 datum: "2022-11-07"
 anriss: "Auf vier Märkten im Advent unterwegs: St. Severin, Hirschzell, Mauerstetten und Frankenried."
+bild: ../../bilder/gluehbi.png
+bildAlt: "Eine Flasche Glühbi"
 veraltet: true
 ---
 

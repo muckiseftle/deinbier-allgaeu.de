@@ -2,6 +2,8 @@
 titel: "Adventmärkte"
 datum: "2023-11-12"
 anriss: "Glühbi, Punsch und warmer Bierlikör auf den Adventmärkten in Mauerstetten, Frankenried und St. Severin."
+bild: ../../bilder/gluehbi.png
+bildAlt: "Eine Flasche Glühbi"
 veraltet: true
 ---
 

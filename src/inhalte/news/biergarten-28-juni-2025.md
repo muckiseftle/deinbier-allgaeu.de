@@ -2,6 +2,8 @@
 titel: "Biergarten am 28. Juni"
 datum: "2025-06-22"
 anriss: "Biergarten vor der Brauerei mit frisch gezapftem Bier und zum ersten Mal alkoholfreiem Bier aus eigener Herstellung."
+bild: ../../bilder/brauereigarten-festzelt.jpg
+bildAlt: "Der Brauereigarten mit aufgebautem Festzelt"
 veraltet: true
 ---
 

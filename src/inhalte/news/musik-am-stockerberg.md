@@ -2,6 +2,8 @@
 titel: "Musik am Stockerberg"
 datum: "2023-09-12"
 anriss: "Open-Air-Konzert am 16. September ab 19 Uhr in Mauerstetten. Im Ausschank unsere Bierspezialitäten."
+bild: ../../bilder/bierkruege.jpg
+bildAlt: "Gefüllte Bierkrüge auf einem Tisch"
 veraltet: true
 ---
 

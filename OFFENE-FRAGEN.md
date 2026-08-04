@@ -261,6 +261,30 @@ also existiert womöglich etwas.
 Falls Material vorhanden ist: gerne liefern, ich binde es ein. Falls nicht,
 bleibt es dabei, und die Seite kommt gut ohne aus.
 
+### 33. 🟡 Sechs Fotos fehlen noch konkret
+Nach dem Einbau aller verfügbaren Bilder von der Altseite stehen **noch genau
+sechs Stellen** auf `/events-verleih/` ohne Foto. Für diese Gegenstände gab es
+auf der Altseite schlicht keine Aufnahme:
+
+| # | Motiv | Wo es fehlt |
+|---|---|---|
+| 1 | Großer Sonnenschirm mit Standfuß | Leihinventar, Überdachung |
+| 2 | Kleiner Sonnenschirm an einer Bierzeltgarnitur | Leihinventar, Überdachung |
+| 3 | Partyfass mit Zapfhahn | Leihinventar, Ausschank |
+| 4 | Profi-Gläserspülmaschine | Leihinventar, Ausschank |
+| 5 | Tischschürze an einem Garniturentisch | Leihinventar, Ausschank |
+| 6 | Spanngurte | Leihinventar, Ausschank |
+
+**Das eilt nicht.** An diesen Stellen steht ein gestalteter Platzhalter, keine
+kaputte Fläche. Aber sechs Handyfotos beim nächsten Aufbau würden die Seite
+merklich vollständiger machen. Querformat genügt, ab etwa 1600&nbsp;px Breite.
+
+Zwei weitere Motive wären ein Gewinn, sind aber kein Muss:
+**der Anhänger im Einsatz bei einem Fest** (das vorhandene Foto ist nur
+800&nbsp;× 450&nbsp;px) und **die Brauscheune von außen bei Abendlicht**
+(vorhanden nur 800&nbsp;× 600&nbsp;px). Beide sind eingebaut, aber klein
+gehalten, weil sie größer unscharf würden.
+
 ### 32. 🟡 Favicon-Set ist noch behelfsmäßig
 Das Symbolset (`favicon.ico`, `apple-touch-icon.png`, `icon-192`, `icon-512`,
 `icon-512-maskable`) ist aus dem 300-px-PNG erzeugt. Die Größen ab 192&nbsp;px

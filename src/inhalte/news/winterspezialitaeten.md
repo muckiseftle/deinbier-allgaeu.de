@@ -2,6 +2,8 @@
 titel: "Winterspezialitäten sind da"
 datum: "2024-11-12"
 anriss: "Glühbi, Winterzicke, Festbier und Bierlikör sind wieder erhältlich. Verkosten ist möglich."
+bild: ../../bilder/winterzicke.png
+bildAlt: "Die Ein-Liter-Flasche Winterzicke"
 veraltet: true
 ---
 

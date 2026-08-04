@@ -2,6 +2,8 @@
 titel: "Bierstacheln für zu Hause"
 datum: "2022-01-31"
 anriss: "Mit der Bierstachel-Station und frisch abgefülltem Bock ein neues Geschmackserlebnis zu Hause."
+bild: ../../bilder/kiste-bock.png
+bildAlt: "Ein Holzträger DEIN BIER Bock"
 veraltet: true
 ---
 

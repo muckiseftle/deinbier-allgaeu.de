@@ -2,6 +2,8 @@
 titel: "Brauseminare für Gruppen"
 datum: "2024-06-11"
 anriss: "Eigenes Rezept, eigenes Bier: Hochzeitsbier, Mondscheinbier oder das Event für den runden Geburtstag."
+bild: ../../bilder/brauseminar-gruppe.jpg
+bildAlt: "Eine Gruppe beim gemeinsamen Bierbrauen"
 veraltet: true
 ---
 

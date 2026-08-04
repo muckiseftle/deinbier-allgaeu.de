@@ -2,6 +2,8 @@
 titel: "Öffentliches Brauseminar am 8. Oktober"
 datum: "2022-09-06"
 anriss: "Beginn um 11 Uhr in der Brauscheune. Um telefonische Anmeldung wird gebeten."
+bild: ../../bilder/brauseminar-ruehren.jpg
+bildAlt: "Teilnehmer rühren die Maische im Sudkessel"
 veraltet: true
 ---
 

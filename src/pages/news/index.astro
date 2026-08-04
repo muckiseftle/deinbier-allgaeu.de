@@ -112,10 +112,24 @@ const jahre = [...new Set(uebrige.map((n) => jahrAus(n.data.datum)))].sort((a, b
     align-items: center;
   }
 
+  /* Feste Bildformate im Kartenraster.
+     Ohne sie reissen die hochformatigen Produktfotos (Gluehbi, Winterzicke)
+     einzelne Karten auf die doppelte Hoehe, und das Raster wird unruhig. */
   .aufmacher-bild {
     display: block;
     border-radius: var(--db-radius-lg);
     overflow: hidden;
+    aspect-ratio: 16 / 9;
+  }
+
+  .aufmacher-bild :global(img) {
+    width: 100%;
+    height: 100%;
+    /* contain statt cover: die Produktfotos sind hochformatig und wuerden
+       beim Beschneiden zu einem Streifen. So stehen sie vollstaendig und
+       mittig auf getoenter Flaeche, wie eine Produktkachel. */
+    object-fit: contain;
+    background: var(--db-flaeche-ruhig);
   }
 
   .aufmacher-text h2 {
@@ -156,6 +170,24 @@ const jahre = [...new Set(uebrige.map((n) => jahrAus(n.data.datum)))].sort((a, b
     display: block;
     border-radius: var(--db-radius-md);
     overflow: hidden;
+    aspect-ratio: 16 / 9;
+  }
+
+  .beitrag-bild :global(img),
+  .beitrag-bild :global(.bild-platzhalter) {
+    width: 100%;
+    height: 100%;
+    /* contain statt cover: die Produktfotos sind hochformatig und wuerden
+       beim Beschneiden zu einem Streifen. So stehen sie vollstaendig und
+       mittig auf getoenter Flaeche, wie eine Produktkachel. */
+    object-fit: contain;
+    background: var(--db-flaeche-ruhig);
+  }
+
+  /* Karten gleich hoch, damit Datum und Titel auf einer Linie sitzen. */
+  .beitrag {
+    display: flex;
+    flex-direction: column;
   }
 
   .beitrag h3 {

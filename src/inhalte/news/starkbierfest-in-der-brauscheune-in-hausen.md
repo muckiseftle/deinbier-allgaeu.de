@@ -2,6 +2,8 @@
 titel: "Starkbierfest in der Brauscheune"
 datum: "2026-02-27"
 anriss: "Am 20. März ab 18 Uhr unser traditionelles Starkbierfest in Hausen."
+bild: ../../bilder/festraum.jpg
+bildAlt: "Der Festraum der Brauerei mit gedeckten Tischen"
 veraltet: true
 ---
 

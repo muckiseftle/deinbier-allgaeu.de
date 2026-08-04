@@ -2,6 +2,8 @@
 titel: "Nächstes Brauseminar am 13. Oktober"
 datum: "2023-09-12"
 anriss: "Freitag, 13. Oktober um 15 Uhr. Mit Verkostung und deftiger Brotzeit."
+bild: ../../bilder/hopfenpellets.jpg
+bildAlt: "Hopfenpellets vor der Zugabe in den Sud"
 veraltet: true
 ---
 

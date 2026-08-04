@@ -19,6 +19,7 @@ import treber from '../bilder/treber.jpg';
 import etikettBartaxt from '../bilder/etikett-bartaxt.jpg';
 import etikettKraftstoff from '../bilder/etikett-kraftstoff.jpg';
 import etikettPhysio from '../bilder/etikett-physio.jpg';
+import anhaenger from '../bilder/brauerei-mobil.jpg';
 
 const ABLAUF = [
   {
@@ -96,6 +97,21 @@ const ABLAUF = [
         </ul>
       </article>
     </div>
+
+    {/* Der Anhänger selbst. Das ist das Motiv, das den USP erklärt, und es
+        gehört genau hierhin: direkt unter die Angabe der 15 m². */}
+    <figure class="anhaenger einblenden">
+      <Bild
+        quelle={anhaenger}
+        alt="Die Brauanlage aufgebaut auf ihrem Anhänger"
+        sizes="(max-width: 767px) 100vw, 50vw"
+        breiten={[480, 800]}
+      />
+      <figcaption>
+        Die ganze Brauerei passt auf einen mittleren Anhänger. Deshalb kommt
+        sie fast überall hin.
+      </figcaption>
+    </figure>
   </Abschnitt>
 
   {/* ---------- Ablauf ---------- */}
@@ -210,6 +226,20 @@ const ABLAUF = [
     align-self: center;
     color: var(--wagen-farbe);
     opacity: 0.55;
+  }
+
+  /* Das Foto ist nur 800 px breit, deshalb bewusst nicht ueber die halbe
+     Spaltenbreite hinaus einsetzen. Lieber klein und scharf als gross und
+     weich. */
+  .anhaenger {
+    margin: var(--db-space-2xl) 0 0;
+    max-width: 34rem;
+  }
+
+  .anhaenger figcaption {
+    margin-top: var(--db-space-2xs);
+    font-size: var(--db-text-sm);
+    color: var(--db-text-leise);
   }
 
   @media (max-width: 767px) {

@@ -2,6 +2,8 @@
 titel: "Alles für die Party"
 datum: "2024-06-11"
 anriss: "Neu im Programm: die 5-Liter-Partydose. Dazu das beliebte 10-Liter-Partyfass."
+bild: ../../bilder/kleines-faesschen.jpg
+bildAlt: "Die 5-Liter-Dose Helles"
 veraltet: true
 ---
 

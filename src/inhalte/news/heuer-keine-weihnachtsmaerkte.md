@@ -2,6 +2,8 @@
 titel: "Dieses Jahr keine Weihnachtsmärkte"
 datum: "2024-11-12"
 anriss: "Aus persönlichen Gründen sind wir auf keinem Markt. Alle Produkte gibt es in der Brauerei."
+bild: ../../bilder/geschenkkorb.png
+bildAlt: "Ein Geschenkkorb mit Bier, Likör und Malzgelee"
 veraltet: true
 ---
 

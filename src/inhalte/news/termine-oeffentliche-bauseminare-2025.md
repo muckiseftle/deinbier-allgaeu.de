@@ -2,6 +2,8 @@
 titel: "Termine öffentliche Brauseminare 2025"
 datum: "2025-01-02"
 anriss: "Sechs Termine von Februar bis Oktober, Beginn jeweils 11 Uhr."
+bild: ../../bilder/brauseminar-gruppe.jpg
+bildAlt: "Eine Gruppe beim gemeinsamen Bierbrauen"
 veraltet: true
 ---
 

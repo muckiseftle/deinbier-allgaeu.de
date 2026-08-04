@@ -2,6 +2,8 @@
 titel: "Regionaler Adventskalender 2025"
 datum: "2025-11-07"
 anriss: "24 regionale Genüsse aus dem Allgäu. Ab sofort bestellbar, solange der Vorrat reicht."
+bild: ../../bilder/malzgelee.png
+bildAlt: "Ein Glas DEIN BIER Malzgelee"
 veraltet: true
 ---
 

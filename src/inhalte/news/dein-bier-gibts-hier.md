@@ -2,6 +2,8 @@
 titel: "DEIN BIER gibt es jetzt auch im VINO"
 datum: "2025-03-13"
 anriss: "Unser Helles ist ab sofort im VINO in Kaufbeuren zu haben."
+bild: ../../bilder/kiste-helles.png
+bildAlt: "Ein Holzträger DEIN BIER Helles"
 veraltet: true
 ---
 

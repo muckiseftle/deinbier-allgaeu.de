@@ -2,6 +2,8 @@
 titel: "DEIN BIER Hell, jetzt auch alkoholfrei"
 datum: "2025-06-22"
 anriss: "Nach eigener Rezeptur eingebraut, mit angenehmer Hopfennote. Probiert es und sagt uns Eure Meinung."
+bild: ../../bilder/rund-helles.png
+bildAlt: "Das runde Etikett des DEIN BIER Helles"
 veraltet: true
 ---
 

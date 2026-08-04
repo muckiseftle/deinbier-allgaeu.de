@@ -2,6 +2,8 @@
 titel: "Winterzeit ist Glühbi-Zeit"
 datum: "2025-11-07"
 anriss: "Die Winterklassiker sind eingetroffen. Verkosten vor Ort ist möglich."
+bild: ../../bilder/gluehbi.png
+bildAlt: "Eine Flasche Glühbi"
 veraltet: true
 ---
 

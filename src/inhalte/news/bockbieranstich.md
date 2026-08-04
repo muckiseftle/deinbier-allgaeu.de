@@ -2,6 +2,8 @@
 titel: "Bockbieranstich"
 datum: "2025-03-25"
 anriss: "Am 28. März ab 18 Uhr Bockbieranstich in der Brauerei, mit Fastenrede und Kleinigkeiten zum Essen."
+bild: ../../bilder/feier-brauereigarten.jpg
+bildAlt: "Der Brauereihof bei einer Veranstaltung"
 veraltet: true
 ---
 

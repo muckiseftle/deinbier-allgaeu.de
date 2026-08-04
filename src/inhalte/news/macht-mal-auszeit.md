@@ -2,6 +2,8 @@
 titel: "Macht mal Auszeit"
 datum: "2023-05-14"
 anriss: "Ein paar Tage raus aus dem Alltag: Ferienwohnung, Eselspaziergang und Braukurs im Ostallgäu."
+bild: ../../bilder/fewo-aussicht.jpg
+bildAlt: "Blick von der Ferienwohnung über die Ostallgäuer Landschaft"
 veraltet: true
 ---
 

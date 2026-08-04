@@ -2,6 +2,8 @@
 titel: "Danke an alle Teilnehmer"
 datum: "2024-06-11"
 anriss: "Ein Dankeschön an alle, die im ersten Halbjahr bei einem Brauseminar dabei waren."
+bild: ../../bilder/brauseminar-runde.jpg
+bildAlt: "Teilnehmer eines Brauseminars mit ihren Diplomen"
 veraltet: true
 ---
 

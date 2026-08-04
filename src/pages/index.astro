@@ -630,6 +630,26 @@ const BENTO_SPALTEN: Record<string, string> = {
     gap: var(--db-space-lg);
   }
 
+  /* Festes Bildformat, sonst reissen hochformatige Produktfotos einzelne
+     Karten auf und der Streifen wird unruhig. */
+  .newskarte :global(picture),
+  .newskarte :global(.bild-platzhalter) {
+    display: block;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--db-radius-md);
+    overflow: hidden;
+  }
+
+  .newskarte :global(img) {
+    width: 100%;
+    height: 100%;
+    /* contain statt cover: die Produktfotos sind hochformatig und wuerden
+       beim Beschneiden zu einem Streifen. So stehen sie vollstaendig und
+       mittig auf getoenter Flaeche, wie eine Produktkachel. */
+    object-fit: contain;
+    background: var(--db-flaeche-ruhig);
+  }
+
   .newskarte-datum {
     display: block;
     margin-top: var(--db-space-sm);

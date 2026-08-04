@@ -2,6 +2,8 @@
 titel: "Glühbi und Winterzicke sind zurück"
 datum: "2023-11-12"
 anriss: "Ab dem 17. November wieder erhältlich. Vorbestellung per E-Mail möglich."
+bild: ../../bilder/gluehbi.png
+bildAlt: "Eine Flasche Glühbi"
 veraltet: true
 ---
 
