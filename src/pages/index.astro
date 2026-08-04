@@ -71,11 +71,14 @@ const BENTO_SPALTEN: Record<string, string> = {
 >
   {/* ===== A · HERO, asymmetrisch 7/5 ===== */}
   <section class="hero">
-    {/* Ganz oben auf der Seite, gross und sichtbar. Ein erster Versuch legte
-        die Dolde in das Hero-Foto: dort war sie zu klein und ging in den
-        Bilddetails unter. Auf der ruhigen Cremeflaeche daneben traegt die
-        Form. Sie steht hinter dem Foto und schaut rechts daran vorbei. */}
-    <Leitmotiv art="hopfen" seite="rechts" hoehe={640} drehung={8} ueberstand={0.12} />
+    {/* Ganz oben auf der Seite, gross und sichtbar. Hopfen und Gerste stehen
+        nebeneinander: die beiden Zutaten, aus denen das Bier kommt.
+        Am Fuss ausgerichtet und nicht mittig — zwei Pflanzen wachsen aus
+        einem Boden, sie schweben nicht auf gleicher Hoehe. */}
+    <div class="motiv-paar">
+      <Leitmotiv art="gerste" seite="frei" hoehe={520} drehung={-7} />
+      <Leitmotiv art="hopfen" seite="frei" hoehe={400} drehung={11} />
+    </div>
     <div class="container raster hero-raster">
       <div class="spalte-7 hero-text">
         <p class="etikettenzeile hero-etikett">{BETRIEB.signatur}</p>
@@ -341,6 +344,31 @@ const BENTO_SPALTEN: Record<string, string> = {
   :global(.abschnitt-motiv) {
     position: relative;
     overflow: hidden;
+  }
+
+  /* Das Paar sitzt rechts unten und wird vom Hero angeschnitten. Am Fuss
+     ausgerichtet, mit negativem Abstand: die beiden Pflanzen sollen sich
+     ueberschneiden wie in einem Strauss, nicht wie zwei Symbole in einer
+     Reihe stehen. */
+  .motiv-paar {
+    position: absolute;
+    right: 3rem;
+    bottom: -1rem;
+    z-index: 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    margin-inline-start: -2.5rem;
+  }
+
+  .motiv-paar > :global(.leitmotiv + .leitmotiv) {
+    margin-inline-start: -3.5rem;
+  }
+
+  @media (max-width: 899px) {
+    .motiv-paar {
+      display: none;
+    }
   }
 
   /* Inhalt ueber das Motiv legen, damit es nicht ueber Text und Bildern

@@ -72,8 +72,8 @@ Startseite mobil 98 / Desktop 100, LCP 2,3 s mobil und 0,5 s Desktop, CLS 0,
 Blockierzeit 0 ms — alles unverändert. Die vier Prüfläufe (`qa-statisch`,
 `qa-browser`, `qa-bildpunkte`, `bewegung-pruefen`) liefen ohne Fehler durch.
 
-Das HTML der Startseite ist durch die Pfaddaten der drei Motive von 55,5 auf
-79,4 KB gewachsen. Übertragen werden davon **10,2 KB**: die Pfade wiederholen
+Das HTML der Startseite ist durch die Pfaddaten der vier Motive von 55,5 auf
+86,5 KB gewachsen. Übertragen werden davon **10,2 KB**: die Pfade wiederholen
 sich, und genau das komprimiert sehr gut.
 
 Der Lichteffekt ist objektiv nachgemessen, indem goldene Bildpunkte im
@@ -86,7 +86,7 @@ Abschwächung lag die Ähre bei 38034 unter dem Zeiger.
 
 ## 3 · Was die Prüfung gefunden hat
 
-Sechs echte Fehler, alle behoben. Sie stehen hier vollständig, weil eine
+Sieben echte Fehler, alle behoben. Sie stehen hier vollständig, weil eine
 QA-Dokumentation ohne Fundstellen wertlos ist.
 
 ### 3.1 Text auf dem Foto war zu kontrastarm
@@ -174,6 +174,40 @@ den Überstand. Beide beziehen sich auf die tatsächliche Größe des Elements.
 **Nachgemessen:** 197 × 279 px Umriss bei 11° Drehung — das passt zu 151 × 255
 px unrotiert.
 
+### 3.7 Das mobile Menü war 390 × 96 px statt bildschirmfüllend
+
+**Der schwerwiegendste Fund der ganzen Abnahme**, und er hat alle bisherigen
+Prüfungen überstanden.
+
+Das Menü lag innerhalb der Kopfzeile. Deren `backdrop-filter: blur(12px)`
+macht sie — genau wie `filter` und `transform` — zum **Bezugsrahmen für
+`position: fixed`**. Das `inset: var(--kopf-hoehe) 0 0 0` bezog sich damit
+nicht auf das Fenster, sondern auf die 73 px hohe Leiste. Ergebnis: ein
+Streifen von **390 × 96 px** direkt unter dem Logo, durch den die Startseite
+hindurchschien.
+
+Warum es niemand gefunden hat: `isVisible()` war die ganze Zeit wahr,
+`aria-expanded` stimmte, das Ein- und Ausblenden funktionierte, und der
+**geschlossene** Zustand sah auf jedem Bildschirmfoto richtig aus. Die
+Bewegungsprüfung testete den Zustand, nicht die Geometrie. Gefunden wurde es
+erst, als der Betreiber „der Header mit dem Menü passt auch noch nicht"
+schrieb und ich die Kästen nachgemessen habe.
+
+**Behoben:** Das Menü liegt außerhalb der Kopfzeile und deckt mit `inset: 0`
+das ganze Fenster ab. Seine Ebene liegt eine Stufe unter der Kopfzeile, damit
+Siegel und Menüknopf bedienbar bleiben.
+
+**Regressionstest ergänzt** in `bewegung-pruefen.mjs`: das offene Menü muss
+mindestens 95 % der Fensterfläche einnehmen. Gemessen vorher 12 %, jetzt
+100 %. Dazu zwei weitere Prüfungen: der Menüknopf bleibt erreichbar und zeigt
+das Schließkreuz.
+
+**Die Lehre:** „sichtbar" ist keine brauchbare Zusage. Eine Prüfung, die
+Zustände abfragt statt Geometrie zu messen, übersieht genau die Fehler, die
+ein Bildschirmfoto auch übersieht.
+
+---
+
 ## 4 · Was die Prüfwerkzeuge selbst falsch gemacht haben
 
 Drei Fehlalarme. Sie stehen hier, weil ein Prüfwerkzeug, dem man blind glaubt,
@@ -243,7 +277,7 @@ Platzhalter, keine kaputte Fläche.
 
 | | Altseite | Neu |
 |---|---|---|
-| HTML der Startseite | 281 KB | **79,4 KB** (10,2 KB komprimiert) |
+| HTML der Startseite | 281 KB | **86,5 KB** (10,2 KB komprimiert) |
 | Externe Requests | Google reCAPTCHA, Facebook, Instagram | **0** |
 | Cookies | reCAPTCHA + Consent-Speicher | **0** |
 | Einwilligungsbanner | nötig | **nicht nötig** |

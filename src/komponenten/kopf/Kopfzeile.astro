@@ -16,28 +16,54 @@ function istAktiv(pfad: string): boolean {
   if (pfad === '/') return aktuell === '/';
   return aktuell.startsWith(pfad);
 }
+
+/* Die sieben Punkte werden auf die beiden Seiten des Siegels verteilt.
+   Vier links, drei rechts: rechts steht zusaetzlich der Kontaktknopf, sodass
+   beide Seiten am Ende etwa gleich breit sind. */
+const NAVI_LINKS = NAVIGATION.slice(0, 4);
+const NAVI_RECHTS = NAVIGATION.slice(4);
 ---
 
 <header class="kopfzeile" data-kopfzeile>
-  <div class="container kopfzeile-innen">
-    <a class="kopfzeile-marke" href="/" aria-label={`${BETRIEB.kurzname}, zur Startseite`}>
-      {/* PLATZHALTER: 300-px-PNG. Wird durch die Vektordatei ersetzt, sobald
-          diese vorliegt (OFFENE-FRAGEN Nr. 16). Blockiert den Livegang. */}
-      <Picture
-        src={logo}
-        formats={['avif', 'webp']}
-        widths={[64, 128]}
-        sizes="64px"
-        alt=""
-        loading="eager"
-        fetchpriority="high"
-      />
-    </a>
+  {/* Ein einziges `nav` um alles: zwei Listen mit demselben Namen waeren
+      fuer die Sprachausgabe zwei gleich benannte Bereiche. Der Logo-Link
+      gehoert inhaltlich dazu, er fuehrt zur Startseite. */}
+  <nav class="container kopfzeile-innen" aria-label="Hauptnavigation">
+    <ul class="kopfzeile-liste kopfzeile-liste-links">
+      {
+        NAVI_LINKS.map((punkt) => (
+          <li>
+            <a href={punkt.pfad} aria-current={istAktiv(punkt.pfad) ? 'page' : undefined}>
+              {punkt.name}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
 
-    <nav class="kopfzeile-navi" aria-label="Hauptnavigation">
-      <ul>
+    {/* Die Mitte ist ein Platzhalter in genau Siegelbreite. Beide Seiten
+        daneben sind `flex: 1`, damit sitzt das Siegel exakt mittig — ohne
+        eine einzige ausgerechnete Zahl. */}
+    <div class="kopfzeile-mitte">
+      <a class="kopfzeile-marke" href="/" aria-label={`${BETRIEB.kurzname}, zur Startseite`}>
+        {/* PLATZHALTER: 300-px-PNG. Wird durch die Vektordatei ersetzt, sobald
+            diese vorliegt (OFFENE-FRAGEN Nr. 16). Blockiert den Livegang. */}
+        <Picture
+          src={logo}
+          formats={['avif', 'webp']}
+          widths={[64, 128, 192]}
+          sizes="76px"
+          alt=""
+          loading="eager"
+          fetchpriority="high"
+        />
+      </a>
+    </div>
+
+    <div class="kopfzeile-rechts">
+      <ul class="kopfzeile-liste">
         {
-          NAVIGATION.map((punkt) => (
+          NAVI_RECHTS.map((punkt) => (
             <li>
               <a href={punkt.pfad} aria-current={istAktiv(punkt.pfad) ? 'page' : undefined}>
                 {punkt.name}
@@ -46,41 +72,52 @@ function istAktiv(pfad: string): boolean {
           ))
         }
       </ul>
-    </nav>
 
-    <a class="kopfzeile-kontakt" href="/kontakt/">Kontakt</a>
+      <a class="kopfzeile-kontakt" href="/kontakt/">Kontakt</a>
 
-    <button
-      class="kopfzeile-menueknopf"
-      type="button"
-      aria-expanded="false"
-      aria-controls="mobiles-menue"
-      data-menueknopf
-    >
-      <span class="sr-only" data-menue-beschriftung>Menü öffnen</span>
-      <Icon name="ph:list" width="28" height="28" aria-hidden="true" />
-    </button>
-  </div>
-
-  <div class="mobiles-menue" id="mobiles-menue" hidden data-mobiles-menue>
-    <nav aria-label="Hauptnavigation">
-      <ul>
-        {
-          NAVIGATION.map((punkt, i) => (
-            <li style={`--index: ${i}`}>
-              <a href={punkt.pfad} aria-current={istAktiv(punkt.pfad) ? 'page' : undefined}>
-                {punkt.name}
-              </a>
-            </li>
-          ))
-        }
-        <li style={`--index: ${NAVIGATION.length}`}>
-          <a href="/kontakt/">Kontakt</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
+      <button
+        class="kopfzeile-menueknopf"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobiles-menue"
+        data-menueknopf
+      >
+        <span class="sr-only" data-menue-beschriftung>Menü öffnen</span>
+        {/* Sichtbarer Zustandswechsel. Bleibt der Knopf ein Burger, waehrend
+            das Menue offen ist, fehlt der offensichtliche Weg zurueck — und
+            das Menue liegt bildschirmfuellend davor. */}
+        <Icon name="ph:list" class="symbol-auf" width="28" height="28" aria-hidden="true" />
+        <Icon name="ph:x" class="symbol-zu" width="28" height="28" aria-hidden="true" />
+      </button>
+    </div>
+  </nav>
 </header>
+
+{/* Bewusst AUSSERHALB der Kopfzeile.
+    `backdrop-filter` an der Kopfzeile macht sie zum Bezugsrahmen fuer
+    `position: fixed` — genau wie `filter` und `transform`. Solange das Menue
+    darin lag, bezog sich sein `inset` auf die Leiste statt auf das Fenster:
+    es war 390 x 96 px gross statt bildschirmfuellend und liess die Seite
+    durchscheinen. Auf einem Bildschirmfoto sah der geschlossene Zustand
+    richtig aus, deshalb ist der Fehler lange nicht aufgefallen. */}
+<div class="mobiles-menue" id="mobiles-menue" hidden data-mobiles-menue>
+  <nav aria-label="Menü">
+    <ul>
+      {
+        NAVIGATION.map((punkt, i) => (
+          <li style={`--index: ${i}`}>
+            <a href={punkt.pfad} aria-current={istAktiv(punkt.pfad) ? 'page' : undefined}>
+              {punkt.name}
+            </a>
+          </li>
+        ))
+      }
+      <li style={`--index: ${NAVIGATION.length}`}>
+        <a href="/kontakt/">Kontakt</a>
+      </li>
+    </ul>
+  </nav>
+</div>
 
 <style>
   .kopfzeile {
@@ -103,29 +140,74 @@ function istAktiv(pfad: string): boolean {
   .kopfzeile-innen {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: var(--db-space-md);
     min-height: var(--kopf-hoehe);
   }
 
+  /* -------------------------------------------------------------------------
+     Das Siegel
+     ---------------------------------------------------------------------- */
+
+  .kopfzeile-mitte {
+    position: relative;
+    align-self: stretch;
+    flex: 0 0 var(--kopf-siegel);
+  }
+
   .kopfzeile-marke {
-    flex-shrink: 0;
+    position: absolute;
+    left: 50%;
+    /* Haengt um den eingestellten Anteil unter der Leiste heraus. */
+    top: calc(
+      var(--kopf-hoehe) - var(--kopf-siegel) +
+        var(--kopf-siegel) * var(--kopf-siegel-ueberstand)
+    );
+    width: var(--kopf-siegel);
+    height: var(--kopf-siegel);
+    transform: translateX(-50%);
+    display: grid;
+    place-items: center;
+    /* Deckend, damit die Unterkante der Leiste hinter dem Siegel verschwindet
+       statt mitten hindurchzulaufen. */
+    background: var(--kopf-siegel-flaeche);
+    border: 1px solid var(--kopf-linie);
+    border-radius: 50%;
+    box-shadow: var(--kopf-siegel-schatten);
     line-height: 0;
+    z-index: 1;
   }
 
   .kopfzeile-marke img {
-    width: var(--kopf-logo);
+    width: calc(var(--kopf-siegel) * 0.74);
     height: auto;
   }
 
-  .kopfzeile-navi ul {
+  /* -------------------------------------------------------------------------
+     Die beiden Haelften
+     ---------------------------------------------------------------------- */
+
+  /* Gleiches Wachstum links wie rechts: nur so bleibt die Mitte die Mitte. */
+  .kopfzeile-liste-links,
+  .kopfzeile-rechts {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .kopfzeile-rechts {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--db-space-md);
+  }
+
+  .kopfzeile-liste {
     display: flex;
     gap: var(--db-space-md);
     list-style: none;
     margin: 0;
   }
 
-  .kopfzeile-navi a {
+  .kopfzeile-liste a {
     display: block;
     font-size: var(--db-text-sm);
     font-weight: var(--db-weight-medium);
@@ -136,7 +218,7 @@ function istAktiv(pfad: string): boolean {
     white-space: nowrap;
   }
 
-  .kopfzeile-navi a[aria-current='page'] {
+  .kopfzeile-liste a[aria-current='page'] {
     font-family: var(--db-font-display);
     font-weight: var(--db-weight-semibold);
     border-bottom-color: var(--kopf-aktiv-linie);
@@ -178,11 +260,23 @@ function istAktiv(pfad: string): boolean {
     transform: scale(0.92);
   }
 
-  /* Umbruch bei 1100 px, nicht 1024: die deutschen Labels sind lang
-     ("Verkaufsstellen", "Events & Verleih"), und eine zweizeilige
-     Navigation ist ein Baufehler. */
-  @media (max-width: 1099px) {
-    .kopfzeile-navi,
+  .kopfzeile-menueknopf .symbol-zu,
+  .kopfzeile-menueknopf[aria-expanded='true'] .symbol-auf {
+    display: none;
+  }
+
+  .kopfzeile-menueknopf[aria-expanded='true'] .symbol-zu {
+    display: block;
+  }
+
+  /* Umbruch bei 1150 px, nicht 1024: die deutschen Labels sind lang
+     ("Verkaufsstellen", "Events & Verleih"), das Siegel braucht in der Mitte
+     zusaetzlich Platz, und eine zweizeilige Navigation ist ein Baufehler. */
+  @media (max-width: 1149px) {
+    /* Nicht die Listen selbst ausblenden, sondern nur ihre Punkte: die leeren
+       Listen bleiben als gleich grosse Haelften stehen und halten das Siegel
+       weiter in der Mitte. */
+    .kopfzeile-liste li,
     .kopfzeile-kontakt {
       display: none;
     }
@@ -191,17 +285,35 @@ function istAktiv(pfad: string): boolean {
       display: block;
     }
 
+    .kopfzeile-mitte {
+      flex-basis: var(--kopf-siegel-mobil);
+    }
+
+    .kopfzeile-marke {
+      width: var(--kopf-siegel-mobil);
+      height: var(--kopf-siegel-mobil);
+      top: calc(
+        var(--kopf-hoehe) - var(--kopf-siegel-mobil) +
+          var(--kopf-siegel-mobil) * var(--kopf-siegel-ueberstand)
+      );
+    }
+
     .kopfzeile-marke img {
-      width: var(--kopf-logo-mobil);
+      width: calc(var(--kopf-siegel-mobil) * 0.74);
     }
   }
 
+  /* Das Menue deckt das ganze Fenster ab, liegt aber UNTER der Kopfzeile:
+     so bleiben Siegel und Menueknopf sichtbar und bedienbar, waehrend es
+     offen ist. Der obere Innenabstand haelt den ersten Punkt frei vom
+     Siegel, das unter die Leiste ragt. */
   .mobiles-menue {
     position: fixed;
-    inset: var(--kopf-hoehe) 0 0 0;
+    inset: 0;
     background: var(--db-flaeche);
-    z-index: var(--db-ebene-ueberlagerung);
-    padding: var(--db-space-xl) var(--db-rand);
+    z-index: calc(var(--db-ebene-klebend) - 1);
+    padding: calc(var(--kopf-hoehe) + var(--db-space-2xl)) var(--db-rand)
+      var(--db-space-xl);
     overflow-y: auto;
     opacity: 1;
     transition: opacity var(--db-dauer-schnell) var(--db-easing-standard);

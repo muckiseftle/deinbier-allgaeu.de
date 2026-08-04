@@ -1226,31 +1226,31 @@ dunklere Wert bleibt, obwohl das Muster weg ist — er ist schlicht der bessere 
 
 ### 16.2 Umgesetzt: einzelne, sehr große Motive
 
-Statt vieler kleiner Kacheln stehen auf der Startseite drei einzelne Motive,
-jedes am Rand angeschnitten:
+Statt vieler kleiner Kacheln stehen auf der Startseite große Motive, jedes am
+Rand angeschnitten:
 
 | Abschnitt | Motiv | Lage | Größe |
 |---|---|---|---|
-| Hero, **ganz oben** | Hopfendolde | rechts, hinter dem Foto | 640 px, Überstand 12 % |
+| Hero, **ganz oben** | Gerstenähre **und** Hopfendolde nebeneinander | rechts unten, hinter dem Foto | 520 px / 400 px |
 | Die Biere | Gerstenähre | rechts | 780 px |
 | Verkaufsstellen | Hopfendolde | rechts | 520 px |
 
 Vier Entscheidungen dahinter:
 
-**Die Dolde steht ganz oben, auf der Cremefläche.** Ein Zwischenschritt legte
-sie in das Hero-Foto: helle Linie, Schlagschatten, von der Etikettenfassung
-angeschnitten. Technisch sauber, aber sie ging in den Bilddetails unter — der
-Betreiber hat sie schlicht nicht gefunden. Auf der ruhigen Fläche daneben trägt
-die Form. Sie steht jetzt hinter dem Foto und schaut rechts daran vorbei.
-Den hellen Ton für Motive auf Fotos gibt es nicht mehr: seit die Deckblätter
-sich gegenseitig verdecken, ist ihre Füllung die Farbe der Seitenfläche, und
-die stimmt auf einem Foto nicht. Ein Motiv gehört damit ohnehin auf eine
-ruhige Fläche.
+**Oben stehen beide Pflanzen, nebeneinander.** Auf Wunsch des Betreibers.
+Gerste und Hopfen sind die zwei Zutaten, aus denen das Bier kommt; sie
+zusammen zu zeigen ist inhaltlich richtiger als eine allein. Sie sind **am Fuß
+ausgerichtet und überschneiden sich leicht** — zwei Pflanzen wachsen aus einem
+Boden, sie schweben nicht auf gleicher Höhe nebeneinander. Ein Zwischenschritt
+legte die Dolde in das Hero-Foto: technisch sauber, aber sie ging in den
+Bilddetails unter, und der Betreiber hat sie schlicht nicht gefunden. Auf der
+ruhigen Fläche trägt die Form.
 
 **Angeschnitten, nicht vollständig.** Ein Motiv, das über den Rand hinausragt,
 wirkt wie ein Ausschnitt aus etwas Größerem. Ein vollständig sichtbares wirkt
 wie ein aufgeklebtes Bild. Wie weit, steuert `ueberstand` — voreingestellt
-26 % der eigenen Breite.
+26 % der eigenen Breite. Für Paare gibt es `seite="frei"`: dann positioniert
+sich die Komponente gar nicht selbst, das übernimmt die Seite.
 
 **Nur die Startseite.** Auf Unterseiten würde dasselbe Mittel zur Manier. Die
 Startseite darf großzügig sein, eine Rechtstextseite nicht.
@@ -1266,10 +1266,10 @@ benannt — „sieht nicht gut aus", dann „sieht aus wie eine Karotte" — und
 Vorlage ein Strichsymbol geschickt. Drei Einsichten daraus, in der
 Reihenfolge, in der sie aufgefallen sind:
 
-**Eine Dolde hat keine glatte Außenlinie.** Das war der eigentliche Fehler.
+**Eine Dolde hat keine glatte Außenlinie.** Das war der erste Fehler.
 Zeichnet man erst ein Ei und legt dann Schuppen hinein, kommt eine Karotte
-heraus — der Umriss stammt dann vom Ei und nicht von der Pflanze. Richtig ist:
-nur Deckblätter zeichnen. Der Umriss entsteht aus den äußersten von ihnen.
+heraus — der Umriss stammt dann vom Ei und nicht von der Pflanze. Der Umriss
+muss aus den äußersten Deckblättern selbst entstehen.
 
 **Die vorderen Blätter müssen die hinteren verdecken.** Ohne Verdeckung
 kreuzen sich alle Umrisse und es wird ein Liniengitter. Die Blätter sind
@@ -1278,11 +1278,14 @@ vorn gezeichnet. Das ist auch der Grund, warum ein Motiv auf eine ruhige
 Fläche gehört und nicht auf ein Foto: die Füllung müsste sonst die Farbe des
 Fotos haben.
 
-**Spitze Blätter allein ergeben ein Lilienornament.** Es braucht zweierlei
-Formen: an beiden Enden spitze Blätter für Stiel, Schultern und Spitze, und
-breite, gerundete Schuppen für den Körper. Die oberste Schuppenlage sitzt
-enger und schmaler als die darunter — das wölbt den Kopf. Beginnt man gleich
-mit der breitesten Lage, sieht die Dolde oben abgeschnitten aus.
+**Wenige und große Deckblätter.** Das war der letzte und entscheidende Punkt.
+Frühere Fassungen hatten sechs Lagen mit bis zu drei kleinen Schuppen — eine
+Struktur, die man erst beim Heranzoomen liest und die aus der Entfernung ein
+Muster ergibt statt einer Pflanze. Die Vorlage des Betreibers zeigt fünf Lagen
+mit höchstens zwei Blättern, jedes fast so breit wie die halbe Dolde, dazu ein
+einzelnes Kopfblatt über die volle Breite und einen geschwungenen Stiel. Das
+Profil läuft von oben rund nach unten spitz; gleichmäßig schmaler werdende
+Lagen ergeben dagegen einen Tannenzapfen.
 
 **Die Ähre lebt von den Grannen.** Ohne die langen Borsten sieht sie aus wie
 ein Grashalm. Sieben Kornpaare, jedes mit einer Granne, die etwa doppelt so
@@ -1364,3 +1367,54 @@ nicht für Prozente: ein Prozentwert in einer Breitenangabe bezieht sich auf die
 eine Breite von 328 px heraus, wo 151 px richtig gewesen wären. Jetzt liefert
 `aspect-ratio` die Breite, und der Überstand kommt aus `translateX` mit einem
 Prozentwert — der bezieht sich auf die eigene Breite des Elements.
+
+---
+
+## 17 · Nachtrag: Kopfzeile (04.08.2026)
+
+Ebenfalls nachträglich, auf Wunsch des Betreibers. Er hat zwei Dinge benannt:
+der Kopf auf dem Handy passe nicht, und auf dem Desktop solle das Logo mittig
+stehen und leicht aus der Leiste herausragen.
+
+### 17.1 Das Siegel
+
+Das Logo sitzt jetzt in einem runden Siegel, mittig, und hängt zu **30 %
+seiner Höhe** unter der Leiste heraus. Drei Punkte dazu:
+
+**Die Fläche des Siegels ist deckend**, anders als die der Leiste (die ist zu
+92 % deckend mit Weichzeichner dahinter). Nur so verschwindet die Unterkante
+der Leiste hinter dem Siegel, statt mitten hindurchzulaufen.
+
+**Die Mitte ist wirklich die Mitte**, ohne eine einzige ausgerechnete Zahl:
+zwischen den beiden Navigationshälften steht ein Platzhalter in genau
+Siegelbreite, und beide Hälften sind `flex: 1`. Damit sitzt das Siegel exakt
+mittig, egal wie lang die Beschriftungen sind.
+
+**Die sieben Punkte teilen sich vier links und drei rechts.** Rechts steht
+zusätzlich der Kontaktknopf, dadurch sind beide Seiten am Ende etwa gleich
+breit.
+
+Der Umbruch zur Handyfassung liegt jetzt bei 1150 px statt 1100: die
+deutschen Beschriftungen sind lang und das Siegel braucht in der Mitte
+zusätzlich Platz.
+
+Auf dem Handy bleibt derselbe Aufbau — Siegel mittig, Menüknopf rechts —, nur
+kleiner. Die Listenpunkte werden dort ausgeblendet, **nicht die Listen
+selbst**: die leeren Hälften bleiben als gleich große Platzhalter stehen und
+halten das Siegel weiter in der Mitte.
+
+### 17.2 Das Menü lag im falschen Bezugsrahmen
+
+Ein echter Fehler, siehe QA.md 3.7. Das Menü lag innerhalb der Kopfzeile.
+Deren `backdrop-filter` macht sie — wie `filter` und `transform` — zum
+Bezugsrahmen für `position: fixed`. Das `inset: var(--kopf-hoehe) 0 0 0`
+bezog sich damit auf die Leiste statt auf das Fenster: das Menü war
+**390 × 96 px** groß statt bildschirmfüllend.
+
+Es liegt jetzt außerhalb der Kopfzeile und deckt mit `inset: 0` das ganze
+Fenster ab. Seine Ebene liegt **eine Stufe unter** der Kopfzeile, damit Siegel
+und Menüknopf sichtbar und bedienbar bleiben, während es offen ist.
+
+Dazu wechselt der Knopf sein Symbol: Burger zu Kreuz. Bleibt er ein Burger,
+während ein bildschirmfüllendes Menü davorliegt, fehlt der offensichtliche Weg
+zurück.

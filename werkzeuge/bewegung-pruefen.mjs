@@ -79,6 +79,32 @@ function pruefe(name, bedingung, zusatz = '') {
     (await knopf.getAttribute('aria-expanded')) === 'true',
   );
 
+  /* Nicht nur "sichtbar", sondern "deckt wirklich ab".
+     Das Menue lag lange innerhalb der Kopfzeile. Deren `backdrop-filter`
+     macht sie — wie `filter` und `transform` — zum Bezugsrahmen fuer
+     `position: fixed`, also bezog sich das `inset` des Menues auf die Leiste
+     statt auf das Fenster: es war 390 x 96 px gross und liess die Seite
+     durchscheinen. `isVisible()` war dabei die ganze Zeit wahr. */
+  const abdeckung = await menue.evaluate((el) => {
+    const k = el.getBoundingClientRect();
+    return (k.width * k.height) / (window.innerWidth * window.innerHeight);
+  });
+  pruefe(
+    'Menue deckt das Fenster ab',
+    abdeckung >= 0.95,
+    `${Math.round(abdeckung * 100)} % der Fensterflaeche`,
+  );
+
+  /* Der Knopf muss waehrend des offenen Menues sichtbar und anklickbar
+     bleiben, sonst gibt es keinen Weg zurueck. */
+  pruefe('Menueknopf bleibt erreichbar', await knopf.isVisible());
+  pruefe(
+    'Menueknopf zeigt das Schliesskreuz',
+    await knopf.evaluate(
+      (el) => getComputedStyle(el.querySelector('.symbol-zu')).display !== 'none',
+    ),
+  );
+
   await knopf.click();
   await seite.waitForTimeout(80);
   pruefe(

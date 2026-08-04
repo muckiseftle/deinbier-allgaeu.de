@@ -19,8 +19,12 @@
  */
 interface Props {
   art: 'hopfen' | 'gerste';
-  /** Position: an welcher Seite das Motiv aus dem Rand ragt. */
-  seite?: 'links' | 'rechts';
+  /**
+   * An welcher Seite das Motiv aus dem Rand ragt. `frei` heisst: die
+   * Komponente positioniert sich gar nicht selbst, sondern laesst sich von
+   * aussen setzen — gebraucht, sobald zwei Motive nebeneinander stehen.
+   */
+  seite?: 'links' | 'rechts' | 'frei';
   /**
    * Hoehe als CSS-Laenge. Zahlen gelten als Pixel; gedacht sind 380 bis 780.
    * Ein Prozentwert bezieht sich auf den umgebenden Bezugsrahmen — im
@@ -88,11 +92,9 @@ function deckblatt(cx: number, cy: number, b: number, h: number, grad: number) {
  * Eine Schuppe des Doldenkoerpers: oben breit gerundet, nach unten zur
  * Spitze zulaufend.
  *
- * Der Unterschied zum Deckblatt oben ist entscheidend fuer den Gesamteindruck.
- * Lauter beidseitig spitze Blaetter ergeben ein Lilienornament, das nach
- * aussen aussticht. Erst breite, gerundete Schuppen, die sich stark
- * ueberlappen, schliessen die Form zu einem Koerper — und genau daraus
- * entsteht der Umriss der Dolde.
+ * Zwei Formen sind noetig. Lauter beidseitig spitze Blaetter ergeben ein
+ * Lilienornament, das nach aussen aussticht; erst breite, gerundete
+ * Schuppen, die sich stark ueberlappen, schliessen die Form zu einem Koerper.
  */
 function schuppe(cx: number, cy: number, b: number, h: number) {
   return (
@@ -103,23 +105,29 @@ function schuppe(cx: number, cy: number, b: number, h: number) {
   );
 }
 
-/* Der Koerper: vier Lagen Schuppen, jede folgende schmaler und tiefer, die
-   Lagen gegeneinander versetzt. Der seitliche Versatz plus die halbe
-   Schuppenbreite ergibt den Umriss — es gibt keine eigene Aussenlinie. */
+/* Der Koerper, nachgebaut nach der Vorlage des Betreibers.
+   Entscheidend ist die Groesse der Deckblaetter: WENIGE und GROSSE. Frueher
+   waren es sechs Lagen mit bis zu drei kleinen Schuppen — das ergibt eine
+   Struktur, die man erst beim Heranzoomen liest, und aus der Entfernung ein
+   Muster statt einer Pflanze. In der Vorlage sind es fuenf Lagen mit hoechstens
+   zwei Blaettern, jedes fast so breit wie die halbe Dolde.
+
+   Das Profil laeuft von oben rund nach unten spitz. Zwei fruehere Fassungen
+   sind an genau diesem Punkt gescheitert: gleichmaessig schmaler werdende
+   Lagen ergeben einen Tannenzapfen, ein glatter Umriss mit Schuppen darin
+   eine Karotte. Richtig ist ein runder Kopf, dann Auslauf. */
 const HOPFEN_LAGEN: Array<{ y: number; b: number; h: number; x: number[] }> = [
-  /* Die oberste Lage sitzt eng zusammen und ist schmaler als die darunter.
-     Das woelbt den Kopf. Beginnt man gleich mit der breitesten Lage, bekommt
-     die Dolde oben eine gerade Kante und sieht abgeschnitten aus. */
-  { y: 48, b: 26, h: 56, x: [-17, 17] },
-  { y: 78, b: 31, h: 64, x: [-32, 0, 32] },
-  { y: 110, b: 31, h: 60, x: [-25, 25] },
-  { y: 140, b: 27, h: 54, x: [-21, 0, 21] },
-  { y: 166, b: 21, h: 44, x: [-13, 13] },
+  /* Das Kopfblatt: eines statt zweier, und so breit wie die ganze Dolde.
+     Es macht die Rundung oben. */
+  { y: 44, b: 54, h: 100, x: [0] },
+  { y: 92, b: 40, h: 82, x: [-24, 24] },
+  { y: 132, b: 34, h: 70, x: [-17, 17] },
+  { y: 168, b: 27, h: 56, x: [-10, 10] },
+  { y: 196, b: 18, h: 40, x: [0] },
 ];
 
-/* Von oben nach unten, damit die tiefer sitzenden Lagen vorn liegen.
-   `rand` markiert, was den Umriss bildet: nur die aeusserste Schuppe jeder
-   Lage. Sie leuchtet kraeftig, was dazwischen sitzt bleibt zurueck. */
+/* `rand` markiert, was den Umriss bildet: die aeusserste Schuppe jeder Lage.
+   Sie leuchtet kraeftig, was dazwischen sitzt bleibt zurueck. */
 const hopfenPfade = HOPFEN_LAGEN.flatMap(({ y, b, h, x }) =>
   x.map((dx, i) => ({
     d: schuppe(dx, y, b, h),
@@ -133,20 +141,13 @@ const HOPFEN = {
      kommt, liegt vorn und verdeckt das Dahinterliegende. Ohne diese
      Verdeckung kreuzen sich alle Umrisse und die Dolde wird zum Gitter. */
   pfade: [
-    { d: deckblatt(0, -28, 7, 44, 0), rand: true, voll: true },
-    /* Die beiden Schulterblaetter. Sie stehen weiter oben als der Koerper und
-       werden von dessen oberster Lage unten verdeckt — dadurch wachsen sie
-       aus der Dolde heraus, statt seitlich angeklebt zu wirken. */
-    { d: deckblatt(-29, 20, 17, 66, -58), rand: true, voll: true },
-    { d: deckblatt(29, 20, 17, 66, 58), rand: true, voll: true },
-    /* Das aufrechte Blatt zwischen den Schultern, mit Mittelrippe. */
-    { d: deckblatt(0, 12, 14, 56, 0), rand: false, voll: true },
-    { d: 'M0-6V32', rand: false, voll: false },
+    /* Der Stiel schwingt aus dem Kopf heraus, statt gerade abzustehen. Er ist
+       eine offene Linie und keine Flaeche — in der Vorlage ist er ein Strich
+       derselben Staerke wie die Umrisse. */
+    { d: 'M4-16C26-42 56-58 82-66', rand: true, voll: false },
     ...hopfenPfade,
-    /* Die Spitze unten. */
-    { d: deckblatt(0, 184, 14, 42, 0), rand: true, voll: true },
   ],
-  box: '-80 -58 160 272',
+  box: '-70 -76 162 300',
 };
 
 /* ---------------------------------------------------------------------------
@@ -310,6 +311,14 @@ const verhaeltnis = `${boxB} / ${boxH}`;
   .leitmotiv-links {
     left: 0;
     --motiv-versatz: calc(var(--motiv-ueberstand) * -1);
+  }
+
+  /* Fuer Paare: kein eigener Bezug, kein Ueberstand, keine Zentrierung —
+     nur die Groesse und die Drehung bleiben. Die Anordnung macht die Seite. */
+  .leitmotiv-frei {
+    position: relative;
+    top: auto;
+    transform: rotate(var(--motiv-drehung));
   }
 
   .leitmotiv svg {

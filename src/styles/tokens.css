@@ -349,6 +349,15 @@
   --kopf-linie: var(--db-linie);
   --kopf-logo: 64px;
   --kopf-logo-mobil: 44px;
+  /* Das Siegel mit dem Logo: mittig, haengt unten aus der Leiste heraus.
+     Die Flaeche ist bewusst deckend und nicht wie die Leiste durchscheinend —
+     das Siegel muss die Unterkante der Leiste verdecken, sonst laeuft eine
+     Linie mitten hindurch. */
+  --kopf-siegel: 92px;
+  --kopf-siegel-mobil: 64px;
+  --kopf-siegel-ueberstand: 0.3; /* Anteil, der unter der Leiste heraussteht */
+  --kopf-siegel-flaeche: var(--db-creme-50);
+  --kopf-siegel-schatten: 0 2px 6px rgb(82 56 22 / 0.08);
   --kopf-umbruch: 1100px;         /* darunter Menueknopf: deutsche Labels sind lang */
   --kopf-aktiv-linie: var(--db-hopfen-700);
 
