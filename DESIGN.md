@@ -1573,9 +1573,31 @@ Der Wert im Web-Manifest ist auf die Cremefläche angeglichen, damit ein zum
 Startbildschirm hinzugefügtes Symbol nicht doch wieder einen dunklen Balken
 über einer hellen Leiste zeigt.
 
-**Nachgewiesen** mit `werkzeuge/qa-sicherbereich.mjs`: über dunklem Inhalt
-wird der Streifen von rgb(250,246,235) auf rgb(230,227,216) abgedunkelt —
-Unterschied 58. Er scheint also durch.
+### 20.3a Zwei Fehler auf dem Weg dahin
+
+**`env()` in einer eigenen Eigenschaft.** Ein Zwischenstand führte den Wert
+über `--kopf-sicher: env(safe-area-inset-top)`. Das ließ sich bequem im Test
+nachstellen — war aber genau die Stelle, an der Safari aussteigt: fällt die
+Ersetzung aus, ist der ganze Wert ungültig, der Innenabstand wird 0, und die
+Leiste beginnt erst **unterhalb** der Insel. Genau so wurde es gemeldet. Die
+Prüfung war grün, weil sie die Variable selbst setzte — sie hat den Weg
+begradigt, den sie prüfen sollte.
+
+Jetzt steht `env()` direkt in der Regel, und der Test stellt das **Ergebnis**
+nach (einen Innenabstand von 59 px), nicht den Weg dorthin.
+
+**92 % Deckung sind keine Transparenz.** Die Leiste war praktisch
+undurchsichtig; der Weichzeichner dahinter war Aufwand ohne Wirkung. Jetzt
+74 % mit 18 px Weichzeichnung und leichter Sättigung.
+
+Wie weit das gehen darf, entscheidet nicht der Geschmack, sondern der
+Kontrast: `qa-sicherbereich.mjs` legt eine **schwarze Fläche** hinter die
+ganze Leiste und misst den Menüknopf davor. **5,27 : 1** bei nötigen 3 für
+Bedienelemente.
+
+**Nachgewiesen:** über dunklem Inhalt wird der Streifen von rgb(250,246,234)
+auf rgb(185,182,174) abgedunkelt — Unterschied 189 (vorher 58). Er scheint
+also bis ganz nach oben durch.
 
 ### 20.4 Zurückholen per Tipp
 

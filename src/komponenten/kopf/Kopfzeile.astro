@@ -149,10 +149,16 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
     /* Platz fuer Dynamic Island, Notch oder Statusleiste. Auf Geraeten ohne
        so etwas ist der Wert 0 und es aendert sich nichts.
 
-       Der Wert steht in tokens.css an der Wurzel, nicht hier: der
-       Tippstreifen zum Zurueckholen liegt ausserhalb der Kopfzeile und wuerde
-       sonst nichts davon erben. */
-    padding-top: var(--kopf-sicher);
+       `env()` steht hier DIREKT und nicht ueber eine eigene Eigenschaft.
+       Ein Zwischenschritt wie `--x: env(...)` ist genau die Stelle, an der
+       Safari aussteigt: faellt die Ersetzung aus, ist der ganze Wert
+       ungueltig, der Innenabstand wird 0 — und die Leiste beginnt erst
+       unterhalb der Insel statt am oberen Bildschirmrand. Genau so ist es
+       gemeldet worden.
+
+       Die Pruefung stellt den Fall stattdessen ueber einen eingefuegten
+       Innenabstand nach, nicht ueber eine Variable. */
+    padding-top: env(safe-area-inset-top, 0px);
     transition: transform var(--db-dauer-normal) var(--db-easing-standard);
   }
 
@@ -418,7 +424,7 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
     right: 0;
     /* Der Sicherheitsbereich plus ein schmaler Streifen darunter. Mehr nicht:
        jede zusaetzliche Hoehe wuerde Tipper auf dem Seiteninhalt abfangen. */
-    height: calc(var(--kopf-sicher) + 1.35rem);
+    height: calc(env(safe-area-inset-top, 0px) + 1.35rem);
     z-index: var(--db-ebene-klebend);
     display: flex;
     align-items: flex-end;

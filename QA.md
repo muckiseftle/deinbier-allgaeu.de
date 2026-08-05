@@ -318,7 +318,16 @@ prueft drei Dinge:
 | Kein `theme-color` im Dokument | ✅ keins |
 | Kopfzeile beginnt bei y = 0 | ✅ oben 0, unten 132 |
 | Inhalt beginnt unter dem Bereich | ✅ ab 59 px |
-| Streifen ist durchscheinend | ✅ rgb(250,246,235) über hellem, rgb(230,227,216) über dunklem Inhalt — Unterschied 58 |
+| Streifen ist durchscheinend | ✅ rgb(250,246,234) über hellem, rgb(185,182,174) über dunklem Inhalt — Unterschied 189 |
+| Menüknopf lesbar, schwarze Fläche darunter | ✅ 5,27 : 1 (nötig 3) |
+
+**Ein zweiter Fehler, gemeldet vom Betreiber:** Ein Zwischenstand führte den
+Wert über `--kopf-sicher: env(safe-area-inset-top)`. Das ließ sich bequem
+nachstellen — war aber die Stelle, an der Safari aussteigt: fällt die
+Ersetzung aus, wird der Innenabstand 0 und die Leiste beginnt erst unterhalb
+der Insel. **Die Prüfung war grün, weil sie die Variable selbst setzte** und
+damit genau den Weg begradigte, den sie prüfen sollte. Jetzt steht `env()`
+direkt in der Regel, und der Test stellt das Ergebnis nach.
 
 **Ein verworfener erster Ansatz** steht im Werkzeug als Kommentar: Er scrollte
 zu einem dunklen Abschnitt, statt gezielt eine dunkle Fläche hinter die

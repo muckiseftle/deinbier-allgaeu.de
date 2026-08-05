@@ -54,6 +54,12 @@ const { titel, beschreibung, bildPfad, nichtIndexieren, jsonLdZusatz } = Astro.p
         ist der Tausch, den es hier gibt — deckend gefaerbt ODER
         durchscheinend, beides geht nicht. */}
 
+    {/* Fuer den Fall, dass jemand die Seite zum Startbildschirm hinzufuegt:
+        dann laeuft sie ohne Browserleiste, und die Statusleiste wird
+        durchsichtig ueber dem Inhalt gezeichnet. Im normalen Browser hat die
+        Angabe keine Wirkung. */}
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
     <Meta
       titel={titel}
       beschreibung={beschreibung}

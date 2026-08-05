@@ -347,17 +347,14 @@
   /* --- Kopfzeile: nicht dauerhaft klebend, kommt beim Aufwaertsscrollen zurueck.
          Der Weichzeichner liegt auf einem festen Element, nie auf scrollendem
          Inhalt (GPU-Kosten). */
-  /* Der Sicherheitsbereich am oberen Rand: Dynamic Island, Notch oder
-     Statusleiste. Auf Geraeten ohne so etwas ist der Wert 0.
-
-     Ueber eine eigene Eigenschaft und nicht direkt ueber `env()`: so laesst
-     sich der Fall im Test nachstellen. Kein Emulator hier liefert echte
-     Werte, und ohne Nachstellen waere die Regel nur behauptet, nicht
-     geprueft. */
-  --kopf-sicher: env(safe-area-inset-top, 0px);
   --kopf-hoehe: 72px;
-  --kopf-flaeche: rgb(251 247 236 / 0.92);
-  --kopf-weichzeichner: blur(12px);
+  /* Deutlich durchlaessiger als zuvor (0,92). Bei 92 % war die Leiste
+     praktisch deckend: der Weichzeichner dahinter war Aufwand ohne Wirkung,
+     und ueber der Insel sah der Streifen aus wie ein fester Balken. Wie weit
+     das gehen darf, entscheidet der Kontrast der Menuepunkte im
+     unguenstigsten Fall — gemessen mit qa-sicherbereich.mjs. */
+  --kopf-flaeche: rgb(251 247 236 / 0.74);
+  --kopf-weichzeichner: blur(18px) saturate(1.4);
   --kopf-linie: var(--db-linie);
   --kopf-logo: 64px;
   --kopf-logo-mobil: 44px;

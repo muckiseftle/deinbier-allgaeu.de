@@ -3,10 +3,17 @@
  * Dynamic Island, der Notch oder der Statusleiste.
  *
  * Kein Emulator hier liefert echte Werte fuer `env(safe-area-inset-top)`.
- * Deshalb liest die Kopfzeile den Wert nicht direkt aus `env()`, sondern aus
- * `--kopf-sicher` — und dieser Test setzt die Eigenschaft auf die 59 px eines
- * iPhone mit Dynamic Island. Ohne dieses Nachstellen waere die Regel nur
- * behauptet und nie geprueft.
+ * Dieser Test stellt deshalb das ERGEBNIS nach: er setzt den Innenabstand der
+ * Kopfzeile auf die 59 px eines iPhone mit Dynamic Island. Ohne dieses
+ * Nachstellen waere die Regel nur behauptet und nie geprueft.
+ *
+ * Bewusst nicht ueber eine eigene Eigenschaft: ein frueherer Stand fuehrte
+ * den Wert ueber `--kopf-sicher: env(...)`. Das liess sich bequem
+ * nachstellen, war aber genau die Stelle, an der Safari aussteigt — faellt
+ * die Ersetzung aus, wird der Innenabstand 0 und die Leiste beginnt erst
+ * unterhalb der Insel. Die Pruefung war gruen, das Geraet zeigte etwas
+ * anderes. Ein Test darf den Weg, den er pruefen soll, nicht selbst
+ * begradigen.
  *
  * Geprueft wird dreierlei:
  * 1. Die Flaeche der Kopfzeile reicht bis an den oberen Bildschirmrand.
@@ -57,7 +64,20 @@ pruefe(
 );
 
 /* --- Sicherheitsbereich nachstellen --- */
-await seite.addStyleTag({ content: `:root { --kopf-sicher: ${INSEL}px; }` });
+/* Nachgestellt wird der INNENABSTAND, nicht eine Variable.
+
+   Ein frueherer Stand fuehrte den Wert ueber `--kopf-sicher: env(...)`. Das
+   liess sich zwar bequem nachstellen, war aber genau die Stelle, an der
+   Safari aussteigt: faellt die Ersetzung aus, ist der ganze Wert ungueltig
+   und der Innenabstand wird 0 — die Leiste beginnt dann erst unterhalb der
+   Insel. Die Pruefung war gruen, das Geraet zeigte etwas anderes.
+
+   Jetzt steht `env()` direkt in der Regel, und hier wird nur das Ergebnis
+   nachgestellt. */
+await seite.addStyleTag({
+  content: `.kopfzeile { padding-top: ${INSEL}px !important; }
+            .kopf-holen { height: ${INSEL + 22}px !important; }`,
+});
 await seite.waitForTimeout(300);
 
 /* --- 2 · Flaeche reicht bis ganz oben --- */
@@ -114,6 +134,55 @@ pruefe(
   'Streifen ist durchscheinend',
   unterschied > 12,
   `rgb(${hell}) ueber hellem, rgb(${dunkel}) ueber dunklem Inhalt — Unterschied ${unterschied}`,
+);
+
+/* --- 4 · Traegt der Text die Durchlaessigkeit? ---
+
+   Je durchlaessiger die Leiste, desto mehr schlaegt dunkler Inhalt darunter
+   durch — und desto knapper wird der Kontrast der Bedienelemente. Gemessen
+   wird deshalb der unguenstigste Fall: eine schwarze Flaeche hinter der
+   ganzen Leiste. Ohne diese Messung waere jede Erhoehung der Durchlaessigkeit
+   ein Blindflug. */
+await seite.evaluate(() => {
+  document.querySelector('#probe-dunkel').style.height = '160px';
+});
+await seite.waitForTimeout(300);
+
+const leuchtdichte = (r, g, b) => {
+  const f = (c) => {
+    const v = c / 255;
+    return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+  };
+  return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+};
+
+const knopf = seite.locator('[data-menueknopf]');
+const kk = await knopf.boundingBox();
+
+/* Die Flaeche hinter dem Knopf fotografieren: dafuer den Knopf unsichtbar
+   schalten, sonst misst man ihn selbst. */
+await knopf.evaluate((e) => (e.style.visibility = 'hidden'));
+const hinter = PNG.sync.read(
+  await seite.screenshot({ clip: { x: kk.x, y: kk.y, width: kk.width, height: kk.height } }),
+);
+await knopf.evaluate((e) => (e.style.visibility = ''));
+
+let dunkelste = 1;
+for (let i = 0; i < hinter.data.length; i += 4) {
+  const ld = leuchtdichte(hinter.data[i], hinter.data[i + 1], hinter.data[i + 2]);
+  if (ld < dunkelste) dunkelste = ld;
+}
+
+const farbe = await knopf.evaluate((e) => getComputedStyle(e).color);
+const teile = farbe.match(/\d+/g).map(Number);
+const textLd = leuchtdichte(teile[0], teile[1], teile[2]);
+const kontrast =
+  (Math.max(textLd, dunkelste) + 0.05) / (Math.min(textLd, dunkelste) + 0.05);
+
+pruefe(
+  'Menueknopf bleibt lesbar, auch mit schwarzer Flaeche darunter',
+  kontrast >= 3,
+  `${kontrast.toFixed(2)}:1 (noetig 3 fuer Bedienelemente)`,
 );
 
 await browser.close();
