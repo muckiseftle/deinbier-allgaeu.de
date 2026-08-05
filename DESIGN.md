@@ -1613,3 +1613,24 @@ Zwei Vorsichtsmaßnahmen:
   gelten.
 - **Nur unter 1150 px.** Auf dem Desktop holt schon das Hochscrollen die
   Leiste zurück.
+
+---
+
+## 21 · Nachtrag: Herstellerpräfixe (05.08.2026)
+
+`backdrop-filter` gibt es auf iOS Safari erst ab Version 18 ohne Präfix.
+Davor wirkt nur `-webkit-backdrop-filter`. Das fehlte — und als es
+geschrieben war, **entfernte der Bauvorgang es wieder**: ohne Zielangabe
+löscht er Präfixe, die er für seine modernen Zielbrowser nicht mehr braucht.
+
+Behoben über `vite.build.cssTarget: ['safari14', 'chrome87', 'firefox78',
+'edge88']`. Damit bleiben geschriebene Präfixe stehen, und esbuild ergänzt
+sogar fehlende — bei `mask-image` von 14 auf 30 Vorkommen.
+
+**Warum das keine Prüfung gefunden hat:** Alle Prüfwerkzeuge hier laufen in
+Chromium, und Chromium kennt jede betroffene Eigenschaft ohne Präfix. Im
+Emulator sah alles richtig aus, auf dem Gerät fehlte der Effekt ersatzlos.
+
+`qa-statisch.mjs` prüft das jetzt am **gebauten CSS**: für `backdrop-filter`,
+`mask-image`, `mask-size` und `mask-repeat` muss es mindestens so viele
+präfixierte wie unpräfixierte Vorkommen geben. Siehe QA.md § 4f.

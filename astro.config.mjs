@@ -44,6 +44,23 @@ export default defineConfig({
     inlineStylesheets: 'auto',
   },
 
+  vite: {
+    build: {
+      /* Zielbrowser fuer die CSS-Verarbeitung.
+         Ohne Angabe entfernt der Bauvorgang Herstellerpraefixe, die er fuer
+         seine Zielbrowser nicht mehr braucht — darunter
+         `-webkit-backdrop-filter`. Auf iOS Safari vor Version 18 wirkt aber
+         nur die praefixierte Form: das Milchglas der Kopfzeile fiel dort
+         ersatzlos aus. Im Emulator hier faellt das nicht auf, weil Chromium
+         die Eigenschaft ohne Praefix kennt.
+
+         Mit dieser Angabe bleiben die geschriebenen Praefixe stehen, und
+         esbuild ergaenzt sogar fehlende. Geprueft wird das am gebauten CSS
+         von `qa-statisch.mjs`, Abschnitt 9. */
+      cssTarget: ['safari14', 'chrome87', 'firefox78', 'edge88'],
+    },
+  },
+
   image: {
     // Sharp ist Standard; explizit setzen, damit es nicht still wechselt.
     service: { entrypoint: 'astro/assets/services/sharp' },

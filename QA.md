@@ -341,6 +341,40 @@ zur Verfügung.
 
 ---
 
+## 4f · Der Bauvorgang entfernte die Herstellerpraefixe
+
+**Der Grund, warum das Milchglas auf dem iPhone nicht wirkte** — und ein
+Fehler, den keine der bisherigen Pruefungen finden konnte, weil sie alle in
+Chromium laufen.
+
+`backdrop-filter` gibt es auf iOS Safari erst ab Version 18 ohne Praefix.
+Davor wirkt nur `-webkit-backdrop-filter`. Das stand nicht im Quelltext — und
+als es dort stand, **entfernte der Bauvorgang es wieder**: ohne Zielangabe
+loescht er Praefixe, die er fuer seine (modernen) Zielbrowser nicht mehr
+braucht.
+
+Chromium kennt alle betroffenen Eigenschaften ohne Praefix. Im Emulator hier
+sah deshalb alles richtig aus, auf dem Geraet fehlte der Effekt ersatzlos.
+
+**Behoben:** `vite.build.cssTarget` auf `safari14` und Zeitgenossen. Damit
+bleiben geschriebene Praefixe stehen, und esbuild ergaenzt sogar fehlende.
+
+**Gemessen am gebauten CSS** (`qa-statisch.mjs`, Abschnitt 9 — neu):
+
+| Eigenschaft | vorher | jetzt |
+|---|---|---|
+| `backdrop-filter` | 1x ohne, **0x** praefixiert | 1x praefixiert |
+| `mask-image` | 16x ohne, 14x praefixiert | **30x** praefixiert |
+| `mask-size` | 8x ohne, **0x** praefixiert | 8x praefixiert |
+| `mask-repeat` | 8x ohne, **0x** praefixiert | 8x praefixiert |
+
+**Die Lehre:** Was im Quelltext steht, muss nicht im Ergebnis stehen. Das ist
+jetzt der dritte Fall in diesem Projekt, in dem der Bauvorgang stillschweigend
+etwas entfernt hat — nach `animation-timeline` (zweimal). Die Pruefung liest
+deshalb ab jetzt das **gebaute CSS**, nicht die Quelle.
+
+---
+
 ## 5 · Bewusste Abweichungen von den Vorgaben
 
 Drei Stellen weichen von PROJEKT.md ab. Alle sind hier festgehalten, keine

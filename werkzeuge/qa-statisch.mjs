@@ -269,7 +269,54 @@ console.log('\n8 · Weiterleitungen alter Adressen');
 }
 
 // ---------------------------------------------------------------------------
-console.log('\n9 · Groesse');
+console.log('\n9 · Herstellerpraefixe im gebauten CSS');
+{
+  /* Der Bauvorgang setzt KEINE Praefixe automatisch. Was hier fehlt, fehlt
+     auf dem Geraet — und zwar still: Chromium kennt alle drei Eigenschaften
+     ohne Praefix, im Emulator faellt also nichts auf.
+
+     Aufgefallen ist das erst, als der Betreiber meldete, das Milchglas der
+     Kopfzeile wirke auf seinem iPhone nicht. `-webkit-backdrop-filter` war
+     schlicht nie geschrieben worden. */
+  const BRAUCHT_PRAEFIX = [
+    { eigenschaft: 'backdrop-filter', warum: 'iOS Safari vor 18' },
+    { eigenschaft: 'mask-image', warum: 'iOS Safari vor 15.4' },
+    { eigenschaft: 'mask-size', warum: 'iOS Safari vor 15.4' },
+    { eigenschaft: 'mask-repeat', warum: 'iOS Safari vor 15.4' },
+  ];
+
+  /* Zusammengefasst ueber alle Stylesheets und die eingebetteten Bloecke. */
+  const cssOrdner = join(DIST, '_astro');
+  const cssDateien = existsSync(cssOrdner)
+    ? readdirSync(cssOrdner)
+        .filter((f) => f.endsWith('.css'))
+        .map((f) => readFileSync(join(cssOrdner, f), 'utf8'))
+    : [];
+  const htmlStile = alleHtml
+    .map((p) => readFileSync(p, 'utf8'))
+    .flatMap((h) => [...h.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]));
+  const allesCss = [...cssDateien, ...htmlStile].join('\n');
+
+  for (const { eigenschaft, warum } of BRAUCHT_PRAEFIX) {
+    /* Vorkommen ohne fuehrendes `-webkit-` zaehlen. */
+    const ohne = [...allesCss.matchAll(new RegExp(`(^|[;{\\s])${eigenschaft}\\s*:`, 'g'))].length;
+    const mit = [...allesCss.matchAll(new RegExp(`-webkit-${eigenschaft}\\s*:`, 'g'))].length;
+
+    if (ohne === 0) {
+      ok(`${eigenschaft} wird nicht benutzt`, '');
+    } else if (mit >= ohne) {
+      ok(`${eigenschaft} auch mit -webkit-`, `${mit}x praefixiert, ${ohne}x ohne`);
+    } else {
+      fehl(
+        `${eigenschaft} ohne -webkit-`,
+        `${ohne}x ohne, nur ${mit}x praefixiert — wirkt nicht auf ${warum}`,
+      );
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+console.log('\n10 · Groesse');
 {
   const start = statSync(join(DIST, 'index.html')).size;
   ok('HTML der Startseite', `${(start / 1024).toFixed(1)} KB (Altseite: 281 KB)`);

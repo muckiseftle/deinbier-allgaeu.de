@@ -144,6 +144,16 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
     top: 0;
     z-index: var(--db-ebene-klebend);
     background: var(--kopf-flaeche);
+    /* Beide Schreibweisen, und die praefixierte zuerst.
+
+       Der Bauvorgang setzt KEINE Praefixe automatisch — im ganzen Ergebnis
+       stehen nur die, die von Hand geschrieben wurden. Ohne
+       `-webkit-backdrop-filter` gibt es auf iOS Safari vor Version 18
+       ueberhaupt kein Milchglas: die Leiste ist dort einfach eine
+       durchscheinende Flaeche ohne Weichzeichnung. Genau das ist gemeldet
+       worden, und im Emulator hier faellt es nicht auf, weil Chromium die
+       Eigenschaft ohne Praefix kennt. */
+    -webkit-backdrop-filter: var(--kopf-weichzeichner);
     backdrop-filter: var(--kopf-weichzeichner);
     border-bottom: 1px solid var(--kopf-linie);
     /* Platz fuer Dynamic Island, Notch oder Statusleiste. Auf Geraeten ohne
