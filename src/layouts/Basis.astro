@@ -30,7 +30,13 @@ const { titel, beschreibung, bildPfad, nichtIndexieren, jsonLdZusatz } = Astro.p
     <meta charset="utf-8" />
     {/* Kein maximum-scale, kein user-scalable=no: das sperrt den Zoom und
         verstoesst gegen WCAG 1.4.4. Die Altseite macht genau diesen Fehler. */}
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* `viewport-fit=cover` ist Voraussetzung dafuer, dass `env(safe-area-*)`
+        ueberhaupt Werte liefert. Ohne die Angabe bleibt der Wert 0, und die
+        Kopfzeile laege auf iPhones unter der Dynamic Island. */}
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
     <meta name="theme-color" content="#523816" />
 
     <Meta

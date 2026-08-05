@@ -448,12 +448,18 @@
 
 @property --licht-x {
   syntax: '<length-percentage>';
-  inherits: false;
+  /* MUSS vererben. Gesetzt wird der Wert am Motiv, gelesen wird er eine Ebene
+     tiefer in der Maske der Goldlage. Mit `inherits: false` bekam die
+     Goldlage nur den Anfangswert — dadurch stand der Lichtpunkt fest in der
+     Mitte: auf dem Desktop reagierte er nicht mehr auf den Zeiger, auf dem
+     Handy nicht auf das Scrollen. Vor der Anmeldung mit `@property` hatte
+     die Eigenschaft immer geerbt, deshalb fiel es erst nachtraeglich auf. */
+  inherits: true;
   initial-value: 50%;
 }
 
 @property --licht-y {
   syntax: '<length-percentage>';
-  inherits: false;
+  inherits: true;
   initial-value: 45%;
 }

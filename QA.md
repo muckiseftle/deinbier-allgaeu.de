@@ -275,6 +275,36 @@ Maus trifft man auch 27 px sicher.
 
 ---
 
+## 4d · Der Lichtpunkt war tot, die Messung gruen
+
+**Der lehrreichste Fund der ganzen Arbeit.**
+
+Um den Lichtpunkt beim Scrollen wandern zu lassen, muss seine Position eine
+berechenbare Groesse sein — dafuer wird sie mit `@property` angemeldet. Dabei
+stand `inherits: false`.
+
+Gesetzt wird die Position aber am **Motiv**, gelesen wird sie eine Ebene
+tiefer in der **Maske der Goldlage**. Ohne Vererbung bekam die Goldlage nur
+den Anfangswert. Der Punkt stand fest in der Mitte: auf dem Desktop reagierte
+er nicht mehr auf den Zeiger, auf dem Handy nicht auf das Scrollen.
+
+**Warum das durchrutschte:** Die Pruefung las `--licht-y` am Motiv aus. Dort
+wanderte der Wert sauber von 53 auf 92 Prozent — Messung gruen, Effekt tot.
+Gemeldet hat es der Betreiber, nicht das Werkzeug.
+
+**Behoben:** `inherits: true`.
+
+**Werkzeug ergaenzt:** `werkzeuge/qa-licht.mjs` liest jetzt den Mittelpunkt
+aus der **berechneten Maske der Goldlage** — also genau dort, wo der Effekt
+entsteht, nicht eine Ebene darueber. Zwei Faelle: mit Zeiger (folgt dem
+Ueberfahren) und ohne Zeiger (wandert beim Scrollen).
+
+**Die Lehre:** Eine Eigenschaft am Elternelement zu messen beweist nicht,
+dass das Kind sie sieht. Immer an der Stelle messen, an der die Wirkung
+entsteht.
+
+---
+
 ## 5 · Bewusste Abweichungen von den Vorgaben
 
 Drei Stellen weichen von PROJEKT.md ab. Alle sind hier festgehalten, keine

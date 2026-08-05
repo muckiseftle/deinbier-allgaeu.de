@@ -278,6 +278,10 @@ const hoeheKleinCss = alsLaenge(hoeheKlein ?? hoehe);
   @media (max-width: 767px) {
     .leitmotiv {
       height: var(--motiv-hoehe-klein);
+      /* Kleinerer Lichtkreis. Mit 240 px war er auf einem 390 px breiten
+         Bildschirm groesser als das Motiv — dann leuchtete alles gleich und
+         man sah keinen wandernden Punkt mehr, sondern eine goldene Flaeche. */
+      --licht-radius: 130px;
     }
   }
 

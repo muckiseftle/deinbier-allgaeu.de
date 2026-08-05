@@ -107,7 +107,7 @@ const BENTO_SPALTEN: Record<string, string> = {
           art="gerste"
           seite="frei"
           hoehe={520}
-          hoeheKlein={230}
+          hoeheKlein={300}
           drehung={-9}
           klasse="buehne-gerste"
         />
@@ -115,7 +115,7 @@ const BENTO_SPALTEN: Record<string, string> = {
           art="hopfen"
           seite="frei"
           hoehe={330}
-          hoeheKlein={155}
+          hoeheKlein={215}
           drehung={13}
           klasse="buehne-hopfen"
         />
@@ -617,13 +617,10 @@ const BENTO_SPALTEN: Record<string, string> = {
       row-gap: var(--db-space-lg);
     }
 
-    /* Die Flasche kommt VOR den Text. Untereinander gestellt stand sie sonst
-       erst im zweiten Bildschirm und schwebte dort allein in einer leeren
-       Flaeche — auf einer Landingpage soll das Produkt das Erste sein, was
-       man sieht. Die Reihenfolge im Quelltext bleibt unveraendert: die
-       Ueberschrift steht dort weiter vorn. */
+    /* Reihenfolge wie im Quelltext: erst der Text, dann das Bild darunter.
+       Eine Zwischenfassung stellte die Flasche nach oben; auf Wunsch des
+       Betreibers steht sie wieder unter der Ueberschrift. */
     .auftakt-buehne {
-      order: -1;
       min-height: 0;
     }
 
@@ -648,13 +645,24 @@ const BENTO_SPALTEN: Record<string, string> = {
       display: block;
     }
 
+    /* Hinter der Flasche, nicht daneben. Beide sitzen mittig und
+       ueberschneiden sich mit ihr; nur ein kleiner Versatz nach links und
+       rechts haelt sie auseinander. Nebeneinander gestellt wirkten sie wie
+       zwei Beigaben, dahinter wie ein Hintergrund. */
+    .auftakt-buehne :global(.buehne-gerste),
+    .auftakt-buehne :global(.buehne-hopfen) {
+      left: 50%;
+      right: auto;
+      top: 50%;
+      bottom: auto;
+    }
+
     .auftakt-buehne :global(.buehne-gerste) {
-      left: -4%;
+      transform: translate(-72%, -52%) rotate(var(--motiv-drehung));
     }
 
     .auftakt-buehne :global(.buehne-hopfen) {
-      right: -2%;
-      bottom: 8%;
+      transform: translate(-6%, -42%) rotate(var(--motiv-drehung));
     }
 
     .auftakt-glanz {

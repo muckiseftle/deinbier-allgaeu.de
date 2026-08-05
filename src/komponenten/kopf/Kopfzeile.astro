@@ -99,6 +99,19 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
   </nav>
 </header>
 
+{/* Tippflaeche am oberen Rand, um die Leiste zurueckzuholen.
+
+    Sie liegt genau ueber dem Sicherheitsbereich — auf einem iPhone also unter
+    der Dynamic Island, auf Android unter der Statusleiste. Wer oben tippt,
+    bekommt die Leiste zurueck, egal wie weit unten er steht.
+
+    Aktiv ist sie nur, solange die Leiste weggefahren ist: sonst laege eine
+    unsichtbare Flaeche ueber dem Seitenanfang und finge dort Tipper ab. */}
+<button class="kopf-holen" type="button" data-kopf-holen hidden>
+  <span class="sr-only">Menüleiste einblenden</span>
+  <span class="kopf-holen-griff" aria-hidden="true"></span>
+</button>
+
 {/* Bewusst AUSSERHALB der Kopfzeile.
     `backdrop-filter` an der Kopfzeile macht sie zum Bezugsrahmen fuer
     `position: fixed` — genau wie `filter` und `transform`. Solange das Menue
@@ -133,14 +146,39 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
     background: var(--kopf-flaeche);
     backdrop-filter: var(--kopf-weichzeichner);
     border-bottom: 1px solid var(--kopf-linie);
+    /* Platz fuer Dynamic Island, Notch oder Statusleiste. Auf Geraeten ohne
+       so etwas ist der Wert 0 und es aendert sich nichts. */
+    padding-top: env(safe-area-inset-top, 0px);
     transition: transform var(--db-dauer-normal) var(--db-easing-standard);
   }
 
   /* Beim Abwaertsscrollen weg, beim Aufwaertsscrollen zurueck. Auf einem
      Handy im Hochformat frisst eine dauerhaft sichtbare Leiste ein Zehntel
-     der Flaeche, und dies ist eine Seite zum Lesen. */
+     der Flaeche, und dies ist eine Seite zum Lesen.
+
+     Die Leiste faehrt um ihre volle Hoehe PLUS den Ueberstand des Siegels
+     nach oben. Vorher waren es nur 100 %, und das Siegel haengt unten heraus:
+     beim Wegfahren blieb genau dieser Teil stehen und man sah ein halb
+     abgeschnittenes Logo mitten am oberen Rand. */
   .kopfzeile[data-versteckt] {
-    transform: translateY(-100%);
+    transform: translateY(
+      calc(-100% - var(--kopf-siegel) * var(--kopf-siegel-ueberstand))
+    );
+  }
+
+  /* Und das Siegel schrumpft dabei nach oben weg, statt einfach mitzufahren.
+     Auf einem iPhone laeuft es damit genau dort hinein, wo die Dynamic Island
+     sitzt — es sieht aus, als verschwaende es dahinter. Auf allen anderen
+     Geraeten ist es schlicht ein sauberes Wegblenden. */
+  .kopfzeile-marke {
+    transition:
+      transform var(--db-dauer-normal) var(--db-easing-standard),
+      opacity var(--db-dauer-schnell) var(--db-easing-standard);
+  }
+
+  .kopfzeile[data-versteckt] .kopfzeile-marke {
+    transform: translateX(-50%) translateY(-45%) scale(0.4);
+    opacity: 0;
   }
 
   .kopfzeile-innen {
@@ -365,6 +403,63 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
     }
   }
 
+  /* -------------------------------------------------------------------------
+     Tippflaeche zum Zurueckholen der Leiste
+     ---------------------------------------------------------------------- */
+
+  .kopf-holen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    /* Der Sicherheitsbereich plus ein schmaler Streifen darunter. Mehr nicht:
+       jede zusaetzliche Hoehe wuerde Tipper auf dem Seiteninhalt abfangen. */
+    height: calc(env(safe-area-inset-top, 0px) + 1.35rem);
+    z-index: var(--db-ebene-klebend);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 0.2rem;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  .kopf-holen[hidden] {
+    display: none;
+  }
+
+  /* Nur dort, wo die Leiste auch als Menue dient. Auf dem Desktop holt sie
+     schon das Hochscrollen zurueck, und ein unsichtbarer Streifen ueber dem
+     oberen Seitenrand finge dort Klicks ab, die dem Inhalt gelten. */
+  @media (min-width: 1150px) {
+    .kopf-holen {
+      display: none;
+    }
+  }
+
+  /* Ein kleiner Griff als Hinweis, dass hier etwas passiert. Bewusst
+     unauffaellig: er darf den Blick nicht vom Inhalt wegziehen. */
+  .kopf-holen-griff {
+    width: 2.25rem;
+    height: 0.25rem;
+    border-radius: 999px;
+    background: var(--db-malz-700);
+    opacity: 0.28;
+    transition: opacity var(--db-dauer-schnell) var(--db-easing-standard);
+  }
+
+  .kopf-holen:active .kopf-holen-griff {
+    opacity: 0.55;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kopfzeile-marke,
+    .kopf-holen-griff {
+      transition: none;
+    }
+  }
+
   /* Das Menue deckt das ganze Fenster ab, liegt aber UNTER der Kopfzeile:
      so bleiben Siegel und Menueknopf sichtbar und bedienbar, waehrend es
      offen ist. Der obere Innenabstand haelt den ersten Punkt frei vom
@@ -444,6 +539,7 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
 
 <script>
   const kopf = document.querySelector<HTMLElement>('[data-kopfzeile]');
+  const holen = document.querySelector<HTMLButtonElement>('[data-kopf-holen]');
   const knopf = document.querySelector<HTMLButtonElement>('[data-menueknopf]');
   const menue = document.querySelector<HTMLElement>('[data-mobiles-menue]');
   const beschriftung = document.querySelector<HTMLElement>('[data-menue-beschriftung]');
@@ -516,6 +612,8 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
      erzwingt dauerndes Nachrechnen. Stattdessen ein IntersectionObserver auf
      einen unsichtbaren Wachposten am Seitenanfang. */
   if (kopf) {
+    let zuletztVersteckt = false;
+
     const wachposten = document.createElement('div');
     wachposten.setAttribute('aria-hidden', 'true');
     wachposten.style.cssText = 'position:absolute;top:0;left:0;height:1px;width:1px;';
@@ -523,10 +621,26 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
 
     let obenSichtbar = true;
 
+    /* Die Tippflaeche gibt es nur, solange die Leiste weg ist. Sonst laege
+       eine unsichtbare Flaeche ueber dem Seitenanfang und finge dort Tipper
+       ab, die dem Inhalt gelten. */
+    const verstecken = (ja: boolean) => {
+      if (ja) kopf.setAttribute('data-versteckt', '');
+      else kopf.removeAttribute('data-versteckt');
+      if (holen) holen.hidden = !ja;
+    };
+
+    holen?.addEventListener('click', () => {
+      verstecken(false);
+      /* Ohne das Zuruecksetzen wuerde der naechste Beobachterlauf die Leiste
+         sofort wieder wegschicken, weil er den Zustand von vorher kennt. */
+      zuletztVersteckt = false;
+    });
+
     const beobachter = new IntersectionObserver(
       ([eintrag]) => {
         obenSichtbar = eintrag.isIntersecting;
-        if (obenSichtbar) kopf.removeAttribute('data-versteckt');
+        if (obenSichtbar) verstecken(false);
       },
       { threshold: 0 },
     );
@@ -542,11 +656,8 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
     const folgerBeobachter = new IntersectionObserver(
       ([eintrag]) => {
         if (obenSichtbar) return;
-        if (!eintrag.isIntersecting) {
-          kopf.setAttribute('data-versteckt', '');
-        } else {
-          kopf.removeAttribute('data-versteckt');
-        }
+        zuletztVersteckt = !eintrag.isIntersecting;
+        verstecken(zuletztVersteckt);
       },
       { threshold: 0 },
     );

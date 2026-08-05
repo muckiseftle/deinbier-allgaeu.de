@@ -1523,3 +1523,46 @@ Das warme Licht dahinter stellt sie ausreichend auf die Fläche.
 Die scrollende Dolde am linken Rand ab „Was bei uns im Tank liegt." ist auf
 Wunsch des Betreibers wieder raus. Die Komponente bleibt im Projekt
 (`Hopfenbahn.astro`), falls sie an anderer Stelle noch gebraucht wird.
+
+---
+
+## 20 · Nachtrag: Kopfzeile und Dynamic Island (05.08.2026)
+
+### 20.1 Der Sicherheitsbereich
+
+Die Kopfzeile bekommt `padding-top: env(safe-area-inset-top)`. Voraussetzung
+dafür ist `viewport-fit=cover` in der Viewport-Angabe — ohne sie liefert
+`env()` schlicht 0, und die Leiste läge auf einem iPhone unter der Dynamic
+Island. Auf Geräten ohne Insel oder Kerbe ist der Wert 0 und es ändert sich
+nichts.
+
+### 20.2 Das Siegel verschwindet nach oben
+
+Beim Wegfahren der Leiste blieb bisher genau der Teil des Siegels stehen, der
+unten heraushängt — ein halb abgeschnittenes Logo mitten am oberen Rand. Zwei
+Änderungen:
+
+- Die Leiste fährt um ihre **volle Höhe plus den Überstand des Siegels** nach
+  oben, nicht nur um 100 %.
+- Das Siegel schrumpft dabei nach oben weg (`scale(0.4)`, Deckkraft 0). Auf
+  einem iPhone läuft es damit genau dorthin, wo die Dynamic Island sitzt — es
+  sieht aus, als verschwände es dahinter. Auf allen anderen Geräten ist es
+  ein sauberes Wegblenden.
+
+Gemessen: Unterkante des Siegels im versteckten Zustand −57 px (Handy) und
+−70 px (Desktop), Deckkraft 0. Vorher ragte es sichtbar ins Bild.
+
+### 20.3 Zurückholen per Tipp
+
+Ein Streifen am oberen Rand, genau über dem Sicherheitsbereich — auf einem
+iPhone also unter der Dynamic Island, auf Android unter der Statusleiste. Ein
+Tipp holt die Leiste zurück, egal wie weit unten man steht. Ein kleiner Griff
+zeigt an, dass dort etwas passiert.
+
+Zwei Vorsichtsmaßnahmen:
+
+- **Nur vorhanden, solange die Leiste weg ist.** Sonst läge eine unsichtbare
+  Fläche über dem Seitenanfang und finge dort Tipper ab, die dem Inhalt
+  gelten.
+- **Nur unter 1150 px.** Auf dem Desktop holt schon das Hochscrollen die
+  Leiste zurück.
