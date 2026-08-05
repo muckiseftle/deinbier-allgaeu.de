@@ -1552,7 +1552,32 @@ unten heraushängt — ein halb abgeschnittenes Logo mitten am oberen Rand. Zwei
 Gemessen: Unterkante des Siegels im versteckten Zustand −57 px (Handy) und
 −70 px (Desktop), Deckkraft 0. Vorher ragte es sichtbar ins Bild.
 
-### 20.3 Zurückholen per Tipp
+### 20.3 Kein `theme-color` mehr
+
+Mit einer `theme-color`-Angabe malt Safari den Bereich um die Dynamic Island
+und Chrome die Statusleiste in dieser Farbe — **deckend**. Zusammen mit
+`viewport-fit=cover` sah das aus wie ein fester Balken über der
+durchscheinenden Kopfzeile: die Leiste war leicht transparent, der Streifen
+darüber nicht.
+
+Ohne die Angabe nimmt der Browser den Seiteninhalt selbst. Die Kopfzeile
+reicht mit ihrem Innenabstand bis unter die Insel, ihre Fläche ist dort zu
+92 % deckend und weichgezeichnet — der Inhalt scrollt sichtbar darunter
+durch, bis ganz nach oben.
+
+**Der Preis:** Die Browserleiste trägt nicht mehr die Markenfarbe. Diesen
+Tausch gibt es hier nicht zu umgehen — deckend gefärbt **oder**
+durchscheinend, beides geht nicht.
+
+Der Wert im Web-Manifest ist auf die Cremefläche angeglichen, damit ein zum
+Startbildschirm hinzugefügtes Symbol nicht doch wieder einen dunklen Balken
+über einer hellen Leiste zeigt.
+
+**Nachgewiesen** mit `werkzeuge/qa-sicherbereich.mjs`: über dunklem Inhalt
+wird der Streifen von rgb(250,246,235) auf rgb(230,227,216) abgedunkelt —
+Unterschied 58. Er scheint also durch.
+
+### 20.4 Zurückholen per Tipp
 
 Ein Streifen am oberen Rand, genau über dem Sicherheitsbereich — auf einem
 iPhone also unter der Dynamic Island, auf Android unter der Statusleiste. Ein

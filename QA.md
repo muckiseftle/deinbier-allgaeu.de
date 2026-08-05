@@ -305,6 +305,33 @@ entsteht.
 
 ---
 
+## 4e · Der Sicherheitsbereich am oberen Rand
+
+Kein Emulator hier liefert echte Werte fuer `env(safe-area-inset-top)`. Damit
+die Regel nicht nur behauptet, sondern geprueft ist, liest die Kopfzeile den
+Wert aus `--kopf-sicher` statt direkt aus `env()`. `werkzeuge/qa-sicherbereich.mjs`
+setzt die Eigenschaft auf die **59 px** eines iPhone mit Dynamic Island und
+prueft drei Dinge:
+
+| Punkt | Ergebnis |
+|---|---|
+| Kein `theme-color` im Dokument | ✅ keins |
+| Kopfzeile beginnt bei y = 0 | ✅ oben 0, unten 132 |
+| Inhalt beginnt unter dem Bereich | ✅ ab 59 px |
+| Streifen ist durchscheinend | ✅ rgb(250,246,235) über hellem, rgb(230,227,216) über dunklem Inhalt — Unterschied 58 |
+
+**Ein verworfener erster Ansatz** steht im Werkzeug als Kommentar: Er scrollte
+zu einem dunklen Abschnitt, statt gezielt eine dunkle Fläche hinter die
+Leiste zu legen. Das taugte nichts — beim Abwärtsscrollen fährt die Kopfzeile
+weg, und unter dem Streifen lag dann helles Bild statt dunklem Text. Gemessen
+wurde also gar nicht die Durchscheinbarkeit; der Unterschied lag bei 2 statt
+bei 58.
+
+**Nicht geprüft:** wie es auf einem echten iPhone aussieht. Hier steht keines
+zur Verfügung.
+
+---
+
 ## 5 · Bewusste Abweichungen von den Vorgaben
 
 Drei Stellen weichen von PROJEKT.md ab. Alle sind hier festgehalten, keine

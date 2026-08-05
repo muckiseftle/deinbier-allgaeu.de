@@ -37,7 +37,22 @@ const { titel, beschreibung, bildPfad, nichtIndexieren, jsonLdZusatz } = Astro.p
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <meta name="theme-color" content="#523816" />
+    {/* Bewusst KEIN `theme-color`.
+
+        Mit einer Angabe malt Safari den Bereich um die Dynamic Island und
+        Chrome die Statusleiste in dieser Farbe — deckend. Zusammen mit
+        `viewport-fit=cover` sah das aus wie ein fester Balken ueber der
+        durchscheinenden Kopfzeile: die Leiste war leicht transparent, der
+        Streifen darueber nicht.
+
+        Ohne die Angabe nimmt der Browser den Seiteninhalt selbst. Die
+        Kopfzeile reicht mit ihrem Innenabstand bis unter die Insel, ihre
+        Flaeche ist dort zu 92 % deckend und weichgezeichnet — der Inhalt
+        scrollt sichtbar darunter durch, bis ganz nach oben.
+
+        Der Preis: die Browserleiste traegt nicht mehr die Markenfarbe. Das
+        ist der Tausch, den es hier gibt — deckend gefaerbt ODER
+        durchscheinend, beides geht nicht. */}
 
     <Meta
       titel={titel}

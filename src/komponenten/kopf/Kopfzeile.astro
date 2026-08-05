@@ -147,8 +147,12 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
     backdrop-filter: var(--kopf-weichzeichner);
     border-bottom: 1px solid var(--kopf-linie);
     /* Platz fuer Dynamic Island, Notch oder Statusleiste. Auf Geraeten ohne
-       so etwas ist der Wert 0 und es aendert sich nichts. */
-    padding-top: env(safe-area-inset-top, 0px);
+       so etwas ist der Wert 0 und es aendert sich nichts.
+
+       Der Wert steht in tokens.css an der Wurzel, nicht hier: der
+       Tippstreifen zum Zurueckholen liegt ausserhalb der Kopfzeile und wuerde
+       sonst nichts davon erben. */
+    padding-top: var(--kopf-sicher);
     transition: transform var(--db-dauer-normal) var(--db-easing-standard);
   }
 
@@ -414,7 +418,7 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
     right: 0;
     /* Der Sicherheitsbereich plus ein schmaler Streifen darunter. Mehr nicht:
        jede zusaetzliche Hoehe wuerde Tipper auf dem Seiteninhalt abfangen. */
-    height: calc(env(safe-area-inset-top, 0px) + 1.35rem);
+    height: calc(var(--kopf-sicher) + 1.35rem);
     z-index: var(--db-ebene-klebend);
     display: flex;
     align-items: flex-end;
