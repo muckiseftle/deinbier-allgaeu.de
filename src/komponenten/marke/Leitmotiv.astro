@@ -49,6 +49,17 @@ interface Props {
    * mitwaechst statt bei jeder Fensterbreite anders zu sitzen.
    */
   hoehe?: number | string;
+  /**
+   * Hoehe auf schmalen Bildschirmen (unter 768 px). Ohne Angabe gilt
+   * `hoehe`.
+   *
+   * Warum als Eigenschaft und nicht per CSS von aussen: die Komponente setzt
+   * die Hoehe als Inline-Stil, und ein Inline-Stil schlaegt jede Regel aus
+   * einem Stylesheet. Ein Ueberschreiben von aussen bliebe wirkungslos —
+   * genau das ist einmal passiert, mit einem Motiv, das auf dem Handy so
+   * gross war wie der ganze Bildschirm.
+   */
+  hoeheKlein?: number | string;
   /** Zusaetzliche Drehung in Grad. */
   drehung?: number;
   /**
@@ -65,6 +76,7 @@ const {
   art,
   seite = 'rechts',
   hoehe = 520,
+  hoeheKlein,
   drehung = 0,
   ueberstand = 0.26,
   klasse,
@@ -77,12 +89,14 @@ const r = (n: number) => Math.round(n * 10) / 10;
    daneben; ohne enge Werte waere jede Groessenangabe unberechenbar. */
 const VERHAELTNIS = { hopfen: '313 / 512', gerste: '235 / 512' } as const;
 
-const hoeheCss = typeof hoehe === 'number' ? `${hoehe}px` : hoehe;
+const alsLaenge = (w: number | string) => (typeof w === 'number' ? `${w}px` : w);
+const hoeheCss = alsLaenge(hoehe);
+const hoeheKleinCss = alsLaenge(hoeheKlein ?? hoehe);
 ---
 
 <div
   class:list={['leitmotiv', `leitmotiv-${seite}`, klasse]}
-  style={`--motiv-hoehe: ${hoeheCss}; --motiv-verhaeltnis: ${VERHAELTNIS[art]}; --motiv-drehung: ${drehung}deg; --motiv-ueberstand: ${r(ueberstand * 100)}%; --motiv-form: url("/motive/${art}.svg");`}
+  style={`--motiv-hoehe: ${hoeheCss}; --motiv-hoehe-klein: ${hoeheKleinCss}; --motiv-verhaeltnis: ${VERHAELTNIS[art]}; --motiv-drehung: ${drehung}deg; --motiv-ueberstand: ${r(ueberstand * 100)}%; --motiv-form: url("/motive/${art}.svg");`}
   aria-hidden="true"
 >
   <div class="leitmotiv-grund"></div>
@@ -244,9 +258,19 @@ const hoeheCss = typeof hoehe === 'number' ? `${hoehe}px` : hoehe;
     background: #e5b455;
   }
 
+  /* Eigene Hoehe fuer schmale Bildschirme. Muss hier stehen und nicht in der
+     Seite: die Hoehe kommt als Inline-Stil, und den schlaegt keine Regel von
+     aussen. */
+  @media (max-width: 767px) {
+    .leitmotiv {
+      height: var(--motiv-hoehe-klein);
+    }
+  }
+
   @media (max-width: 899px) {
-    /* Auf schmalen Bildschirmen ist kein Platz fuer ein grosses Motiv am
-       Rand: es laege hinter dem Text statt daneben. */
+    /* Auf schmalen Bildschirmen ist am Rand kein Platz fuer ein grosses
+       Motiv: es laege hinter dem Text statt daneben. Wo es doch passt — etwa
+       hinter der Flasche im Auftakt — schaltet die Seite es wieder ein. */
     .leitmotiv {
       display: none;
     }

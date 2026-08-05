@@ -104,8 +104,22 @@ const BENTO_SPALTEN: Record<string, string> = {
 
       <div class="spalte-5 auftakt-buehne">
         <div class="auftakt-glanz" aria-hidden="true"></div>
-        <Leitmotiv art="gerste" seite="frei" hoehe={520} drehung={-9} klasse="buehne-gerste" />
-        <Leitmotiv art="hopfen" seite="frei" hoehe={330} drehung={13} klasse="buehne-hopfen" />
+        <Leitmotiv
+          art="gerste"
+          seite="frei"
+          hoehe={520}
+          hoeheKlein={230}
+          drehung={-9}
+          klasse="buehne-gerste"
+        />
+        <Leitmotiv
+          art="hopfen"
+          seite="frei"
+          hoehe={330}
+          hoeheKlein={155}
+          drehung={13}
+          klasse="buehne-hopfen"
+        />
         <div class="auftakt-flasche">
           <Bild
             quelle={bierHell}
@@ -589,19 +603,57 @@ const BENTO_SPALTEN: Record<string, string> = {
   }
 
   @media (max-width: 767px) {
-    .auftakt,
+    .auftakt {
+      min-height: 0;
+      padding-block: var(--db-space-lg) var(--db-space-2xl);
+    }
+
+    .auftakt-raster {
+      row-gap: var(--db-space-lg);
+    }
+
+    /* Die Flasche kommt VOR den Text. Untereinander gestellt stand sie sonst
+       erst im zweiten Bildschirm und schwebte dort allein in einer leeren
+       Flaeche — auf einer Landingpage soll das Produkt das Erste sein, was
+       man sieht. Die Reihenfolge im Quelltext bleibt unveraendert: die
+       Ueberschrift steht dort weiter vorn. */
     .auftakt-buehne {
+      order: -1;
       min-height: 0;
     }
 
-    .auftakt-flasche :global(picture) {
-      height: clamp(16rem, 46vw, 22rem);
+    .auftakt-text {
+      padding-top: 0;
     }
 
-    /* Auf dem Handy ist die Buehne nur so breit wie die Spalte; die Motive
-       stuenden dort direkt hinter der Flasche statt daneben. */
-    .auftakt-buehne :global(.leitmotiv) {
-      display: none;
+    .auftakt-flasche :global(picture) {
+      height: clamp(13rem, 36svh, 18rem);
+    }
+
+    /* Hopfen und Gerste bleiben auch hier hinter der Flasche stehen, nur
+       kleiner und enger. Die Groesse kommt aus derselben Eigenschaft, die
+       die Komponente setzt — deshalb genuegt es, sie zu ueberschreiben.
+
+       Das `display` muss ausdruecklich zurueckgesetzt werden: die Komponente
+       blendet Motive unter 900 px aus, weil sie dort ueblicherweise hinter
+       dem Text laegen statt daneben. Hier stehen sie hinter der Flasche und
+       stoeren nichts. */
+    .auftakt-buehne :global(.buehne-gerste),
+    .auftakt-buehne :global(.buehne-hopfen) {
+      display: block;
+    }
+
+    .auftakt-buehne :global(.buehne-gerste) {
+      left: -4%;
+    }
+
+    .auftakt-buehne :global(.buehne-hopfen) {
+      right: -2%;
+      bottom: 8%;
+    }
+
+    .auftakt-glanz {
+      inset: 4% 0 2%;
     }
   }
 

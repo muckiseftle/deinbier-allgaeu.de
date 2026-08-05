@@ -1420,3 +1420,40 @@ und Menüknopf sichtbar und bedienbar bleiben, während es offen ist.
 Dazu wechselt der Knopf sein Symbol: Burger zu Kreuz. Bleibt er ein Burger,
 während ein bildschirmfüllendes Menü davorliegt, fehlt der offensichtliche Weg
 zurück.
+
+---
+
+## 18 · Nachtrag: Handyfassung (05.08.2026)
+
+Auf Wunsch des Betreibers, zusammen mit dem Wunsch, Hopfen und Gerste auch
+auf dem Handy zu sehen.
+
+### 18.1 Die Flasche kommt vor den Text
+
+Untereinander gestellt stand die Flasche erst im zweiten Bildschirm und
+schwebte dort allein in einer leeren Fläche. Auf einer Landingpage soll das
+Produkt das Erste sein, was man sieht — also steht die Bühne unter 768 px per
+`order` vor dem Text. **Die Reihenfolge im Quelltext bleibt unverändert:** die
+Überschrift steht dort weiterhin vorn, für Vorlesewerkzeuge und Suchmaschinen
+ändert sich nichts.
+
+Hopfen und Gerste stehen auch hier hinter der Flasche, nur kleiner. Dafür hat
+die Komponente eine eigene Angabe bekommen (`hoeheKlein`) — **nicht** eine
+Regel von außen: die Höhe kommt als Inline-Stil, und den schlägt keine Regel
+aus einem Stylesheet. Ein erster Versuch, sie per CSS zu überschreiben, blieb
+wirkungslos; das Motiv war auf dem Handy so groß wie der ganze Bildschirm.
+
+### 18.2 Zierde im Kopf
+
+Links und rechts vom Siegel stehen eine kleine Ähre und eine kleine Dolde,
+sehr blass. Nur unter 1150 px: darüber stehen dort die Menüpunkte, und eine
+Zeichnung dazwischen wäre Gedränge. Unter 360 px entfällt sie ebenfalls, dort
+käme sie dem Menüknopf in die Quere.
+
+Dieselben Dateien wie bei den großen Hintergrundmotiven — sie sind ohnehin
+geladen, hier nur klein maskiert.
+
+### 18.3 Zwei gemessene Korrekturen
+
+Beide aus `werkzeuge/qa-mobil.mjs`, siehe QA.md § 4c: die Untergrenze von
+`--db-text-sm` von 14,6 auf 15,2 px, und Tippflächen von 27–31 px auf 44 px.

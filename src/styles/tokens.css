@@ -137,7 +137,11 @@
   /* --- Groessenskala: mobil Faktor 1,25 → Desktop 1,333, stufenlos ueber clamp.
          Basis 17 px, damit Fliesstext auf dem Handy nicht zu klein wird. */
   --db-text-xs: clamp(0.8rem, 0.78rem + 0.10vw, 0.85rem);
-  --db-text-sm: clamp(0.906rem, 0.88rem + 0.13vw, 0.956rem);
+  /* Untergrenze bewusst bei 15,2 px und nicht darunter. Gemessen auf 390 px
+     Fensterbreite lag der alte Wert bei 14,6 px — und diese Groesse traegt
+     auf der Seite viel: Etikettenzeilen, Listen, Saisonhinweise, Fusszeile.
+     Unter 15 px wird das Lesen auf einem Handy muehsam. */
+  --db-text-sm: clamp(0.95rem, 0.92rem + 0.13vw, 1rem);
   --db-text-base: clamp(1.0625rem, 1.03rem + 0.16vw, 1.125rem);
   --db-text-lg: clamp(1.194rem, 1.14rem + 0.27vw, 1.294rem);
   --db-text-xl: clamp(1.331rem, 1.24rem + 0.46vw, 1.5rem);

@@ -247,6 +247,34 @@ vorher gegeben: fünf Durchgänge.
 
 ---
 
+## 4c · Handy-Pruefung
+
+Nachtraeglich ergaenzt, nachdem der Betreiber um eine bessere Handyfassung
+gebeten hat. `werkzeuge/qa-mobil.mjs` misst auf 390 px Breite drei Dinge, die
+sich nur am gerenderten Ergebnis zeigen und die ein Bildschirmfoto leicht
+uebersieht.
+
+**Zwei systematische Befunde, beide behoben:**
+
+| Befund | Gemessen | Jetzt |
+|---|---|---|
+| `--db-text-sm` zu klein | **14,6 px** an 34 Stellen je Seite | **15,2 px** (Untergrenze angehoben) |
+| Ueberschriften-Links zu niedrig | **27–31 px** Tippflaeche | **44 px** |
+| Links bei „Wir sind auch hier" | **28 px** | **44 px** |
+
+Die Schriftgroesse betraf Etikettenzeilen, Listen, Saisonhinweise und die
+ganze Fusszeile — also viel. Ein Wert im Token, eine Wirkung auf jeder Seite.
+
+Die Tippflaechen wachsen ueber einen Innenabstand, den ein gleich grosser
+negativer Aussenabstand im Layout wieder zuruecknimmt: der Satzspiegel bleibt
+unveraendert, nur die Trefferflaeche waechst. Nur unter 768 px — mit einer
+Maus trifft man auch 27 px sicher.
+
+**Nach der Aenderung:** alle sechs geprueften Seiten ohne Befund. Kontraste
+(447 Stellen), Ueberstand (12 Seiten x 5 Breiten) und Lighthouse unveraendert.
+
+---
+
 ## 5 · Bewusste Abweichungen von den Vorgaben
 
 Drei Stellen weichen von PROJEKT.md ab. Alle sind hier festgehalten, keine

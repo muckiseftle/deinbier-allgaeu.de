@@ -290,6 +290,14 @@ const ANFRAGEN = [
     flex-wrap: wrap;
   }
 
+  /* Rund 44 px hoch, damit der Daumen sicher trifft. Gemessen waren es 28 px
+     — die Hoehe einer Textzeile. */
+  .social a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
   .social-hinweis {
     margin-top: var(--db-space-sm);
     max-width: var(--db-mass-text);

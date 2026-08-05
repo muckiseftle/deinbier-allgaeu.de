@@ -45,6 +45,12 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
         daneben sind `flex: 1`, damit sitzt das Siegel exakt mittig — ohne
         eine einzige ausgerechnete Zahl. */}
     <div class="kopfzeile-mitte">
+      {/* Zierde links und rechts vom Siegel. Nur auf schmalen Bildschirmen:
+          dort steht neben dem Siegel nichts, und die leere Flaeche wirkt
+          zufaellig. Auf dem Desktop stehen dort die Menuepunkte — eine
+          Zeichnung dazwischen waere Gedraenge. */}
+      <span class="kopfzeile-zierde zierde-gerste" aria-hidden="true"></span>
+      <span class="kopfzeile-zierde zierde-hopfen" aria-hidden="true"></span>
       <a class="kopfzeile-marke" href="/" aria-label={`${BETRIEB.kurzname}, zur Startseite`}>
         {/* PLATZHALTER: 300-px-PNG. Wird durch die Vektordatei ersetzt, sobald
             diese vorliegt (OFFENE-FRAGEN Nr. 16). Blockiert den Livegang. */}
@@ -183,6 +189,44 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
   }
 
   /* -------------------------------------------------------------------------
+     Zierde neben dem Siegel
+
+     Dieselben Dateien wie bei den grossen Hintergrundmotiven, hier nur klein.
+     Sie sind reine Dekoration, fangen keine Klicks und liegen hinter dem
+     Siegel — es soll das Siegel rahmen, nicht mit ihm konkurrieren.
+     ---------------------------------------------------------------------- */
+
+  .kopfzeile-zierde {
+    display: none;
+    position: absolute;
+    top: 50%;
+    height: 2.1rem;
+    background: var(--db-malz-700);
+    opacity: 0.22;
+    pointer-events: none;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+  }
+
+  .zierde-gerste {
+    right: calc(100% + 0.5rem);
+    aspect-ratio: 235 / 512;
+    transform: translateY(-52%) rotate(-14deg);
+    -webkit-mask-image: url('/motive/gerste.svg');
+    mask-image: url('/motive/gerste.svg');
+  }
+
+  .zierde-hopfen {
+    left: calc(100% + 0.5rem);
+    aspect-ratio: 313 / 512;
+    transform: translateY(-46%) rotate(13deg);
+    -webkit-mask-image: url('/motive/hopfen.svg');
+    mask-image: url('/motive/hopfen.svg');
+  }
+
+  /* -------------------------------------------------------------------------
      Die beiden Haelften
      ---------------------------------------------------------------------- */
 
@@ -300,6 +344,24 @@ const NAVI_RECHTS = NAVIGATION.slice(4);
 
     .kopfzeile-marke img {
       width: calc(var(--kopf-siegel-mobil) * 0.74);
+    }
+
+    /* Erst hier, wo die Menuepunkte weg sind, ist neben dem Siegel Platz. */
+    .kopfzeile-zierde {
+      display: block;
+    }
+  }
+
+  /* Ganz schmale Geraete: dort steht die Zierde dem Menueknopf im Weg. */
+  @media (max-width: 359px) {
+    .kopfzeile-zierde {
+      display: none;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .kopfzeile-zierde {
+      display: none;
     }
   }
 

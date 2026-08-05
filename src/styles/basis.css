@@ -143,3 +143,25 @@ blockquote {
   color: var(--db-text-leise);
   font-size: var(--db-text-sm);
 }
+
+/* -----------------------------------------------------------------------------
+   Tippflaechen auf dem Handy
+
+   Ein Link in einer Ueberschrift ist so hoch wie seine Zeile — gemessen 27
+   bis 31 px. Mit dem Daumen trifft man das schlecht; als Richtwert gelten
+   rund 44 px.
+
+   Der Innenabstand vergroessert die Flaeche, der gleich grosse negative
+   Aussenabstand nimmt den gewonnenen Platz im Layout wieder zurueck. Damit
+   bleibt der Satzspiegel unveraendert und nur die Trefferflaeche waechst.
+   Nur unter 768 px: mit einer Maus trifft man auch 27 px sicher.
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  h2 > a:only-child,
+  h3 > a:only-child {
+    display: inline-block;
+    padding-block: 0.68rem;
+    margin-block: -0.68rem;
+  }
+}
