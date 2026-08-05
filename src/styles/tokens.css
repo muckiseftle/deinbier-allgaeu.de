@@ -433,3 +433,27 @@
     --db-korn-deckkraft: 0;
   }
 }
+
+/* -----------------------------------------------------------------------------
+   Angemeldete eigene Eigenschaften
+
+   Eine eigene Eigenschaft ist fuer den Browser zunaechst nur Text. Zwischen
+   zwei Textwerten laesst sich nicht rechnen, eine Animation springt deshalb
+   in der Mitte um statt weich zu laufen. Erst die Anmeldung mit einem Typ
+   macht sie berechenbar.
+
+   Gebraucht fuer den Lichtpunkt der Leitmotive: auf Geraeten ohne Zeiger
+   wandert er beim Scrollen, und dafuer muss sein Ort zwischenwerte annehmen.
+   -------------------------------------------------------------------------- */
+
+@property --licht-x {
+  syntax: '<length-percentage>';
+  inherits: false;
+  initial-value: 50%;
+}
+
+@property --licht-y {
+  syntax: '<length-percentage>';
+  inherits: false;
+  initial-value: 45%;
+}

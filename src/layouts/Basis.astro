@@ -66,6 +66,49 @@ const { titel, beschreibung, bildPfad, nichtIndexieren, jsonLdZusatz } = Astro.p
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    {/* Scrollgebundene Bewegung des Lichtpunkts an den Leitmotiven, fuer
+        Geraete ohne Zeiger.
+
+        Warum hier und unverarbeitet (`is:inline`) statt in der Komponente:
+        der CSS-Minifizierer entfernt `animation-timeline` ersatzlos, weil es
+        ausserhalb seiner Zielbrowser liegt. In der Komponente stand die Regel
+        richtig da und fehlte im Bauergebnis vollstaendig — aufgefallen ist
+        das erst beim Nachsehen im gebauten CSS, nicht im Quelltext. Zuvor
+        hatte derselbe Minifizierer `animation-timeline` sogar in die
+        Kurzschreibweise `animation` hineingefaltet, wo sie nicht hingehoert.
+
+        Versuche mit `build.cssTarget` und mit eigenen Zielangaben fuer den
+        Minifizierer haben beide nichts geaendert.
+
+        Ohne Unterstuetzung fuer scrollgebundene Animationen steht das Licht
+        still in der Mitte des Motivs — dann ist es ein ruhiger Goldschimmer
+        statt eines wandernden. Kein Fehlbild. */}
+    <style is:inline>
+      @media (hover: none) {
+        .leitmotiv {
+          animation-name: licht-wandern;
+          animation-timing-function: linear;
+          animation-fill-mode: both;
+          animation-timeline: view();
+          animation-range: cover 0% cover 100%;
+        }
+      }
+
+      @keyframes licht-wandern {
+        from {
+          --licht-y: -5%;
+        }
+        to {
+          --licht-y: 105%;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .leitmotiv {
+          animation-name: none;
+        }
+      }
+    </style>
   </head>
 
   <body>

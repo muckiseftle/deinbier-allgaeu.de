@@ -251,11 +251,25 @@ const hoeheKleinCss = alsLaenge(hoeheKlein ?? hoehe);
     background: #e8b871;
   }
 
-  /* Die scharfe Zeichnung darueber. Goldgelb, nicht Creme: eine sehr helle
-     Flaeche liest sich als weiss, sobald ein Schein darum liegt; erst mit
-     Farbe wirkt es wie Metall. */
+  /* Die scharfe Zeichnung darueber.
+
+     Kein einzelner Farbwert, sondern ein Verlauf ueber Hellgold, Bernstein
+     und Braun und wieder zurueck. Eine gleichmaessig eingefaerbte Flaeche
+     wirkt wie Farbe; erst der Wechsel von hell nach dunkel und zurueck liest
+     sich als glaenzende Oberflaeche, weil genau so Licht auf gewoelbtem
+     Metall liegt. Schraeg gestellt, damit der Glanz nicht waagerecht wie ein
+     Streifen wirkt. */
   .licht-scharf {
-    background: #e5b455;
+    background: linear-gradient(
+      152deg,
+      #ffeab4 0%,
+      #e9b75e 18%,
+      #b87a2c 38%,
+      #f6d489 54%,
+      #8d5c23 74%,
+      #f0c877 88%,
+      #ffe6ab 100%
+    );
   }
 
   /* Eigene Hoehe fuer schmale Bildschirme. Muss hier stehen und nicht in der
@@ -273,6 +287,24 @@ const hoeheKleinCss = alsLaenge(hoeheKlein ?? hoehe);
        hinter der Flasche im Auftakt — schaltet die Seite es wieder ein. */
     .leitmotiv {
       display: none;
+    }
+  }
+
+  /* -------------------------------------------------------------------------
+     Geraete ohne Zeiger
+
+     Auf einem Handy gibt es kein Ueberfahren, der Lichtpunkt haette dort also
+     nie ausgeloest. Statt ihn wegzulassen ist er dauerhaft sichtbar und
+     wandert beim Scrollen.
+
+     Die Bewegung selbst steht NICHT hier, sondern unverarbeitet im Layout
+     (`Basis.astro`): der CSS-Minifizierer entfernt `animation-timeline`
+     ersatzlos, weil es ausserhalb seiner Zielbrowser liegt. In der Komponente
+     stand die Regel richtig da und fehlte im Bauergebnis vollstaendig.
+     ---------------------------------------------------------------------- */
+  @media (hover: none) {
+    .leitmotiv-licht {
+      opacity: 1;
     }
   }
 

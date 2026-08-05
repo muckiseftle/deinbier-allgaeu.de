@@ -97,7 +97,12 @@ const {
     /* Bezugsrahmen fuer das Motiv, und es darf nicht seitlich herausragen:
        sonst entsteht ein waagerechter Scrollbalken. */
     position: relative;
-    overflow: hidden;
+    /* `clip` und nicht `hidden`: beides schneidet gleich ab, aber `hidden`
+       macht den Abschnitt zu einem Scroll-Container. Die scrollgebundene
+       Bewegung des Lichtpunkts nimmt dann diesen Abschnitt als Zeitachse
+       statt der Seite — und weil er selbst nie scrollt, stand das Licht
+       still. Gemessen: der Ort blieb ueber jede Scrollstrecke bei 65,07 %. */
+    overflow: clip;
   }
 
   /* Inhalt ueber das Motiv legen. */

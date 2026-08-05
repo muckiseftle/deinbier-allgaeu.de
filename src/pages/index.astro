@@ -10,7 +10,6 @@ import Wegstrecke from '../komponenten/marke/Wegstrecke.astro';
 import Etikettenrahmen from '../komponenten/marke/Etikettenrahmen.astro';
 import Zitatband from '../komponenten/marke/Zitatband.astro';
 import Leitmotiv from '../komponenten/marke/Leitmotiv.astro';
-import Hopfenbahn from '../komponenten/marke/Hopfenbahn.astro';
 
 import { BETRIEB } from '../daten/betrieb';
 import { formatDatum, isoDatum } from '../lib/datum';
@@ -192,215 +191,209 @@ const BENTO_SPALTEN: Record<string, string> = {
     </div>
   </section>
 
-  {/* Ab hier begleitet eine Hopfendolde die Abschnitte am linken Rand und
-      purzelt beim Scrollen von einem zum naechsten — auf Wunsch des
-      Betreibers, und sie beginnt unter dem Brauerei-Band. */}
-  <Hopfenbahn>
-    {/* ===== D · DIE BIERE, Bento mit exakter Zellenzahl ===== */}
-    <Abschnitt etikett="Fünf Biere" titel="Was bei uns im Tank liegt." klasse="abschnitt-motiv">
-      {/* Die Aehre soll man finden, ohne sie zu suchen: gross, weit oben im
-          Abschnitt, und mit den langen Grannen weit ueber den Rand hinaus. */}
-      <Leitmotiv art="gerste" seite="rechts" hoehe={780} drehung={7} />
-      <div class="raster bento">
-        {
-          biere.map((bier, i) => (
-            <article
-              class:list={['bierkarte', 'einblenden', BENTO_SPALTEN[bier.id] ?? 'spalte-4']}
-              style={`--index: ${i}`}
-            >
-              <Etikettenrahmen>
-                <div class="bierkarte-innen">
-                  <Bild
-                    quelle={bier.data.bild}
-                    alt={bier.data.bildAlt}
-                    hinweis="Produktfoto folgt"
-                    verhaeltnis="3 / 2"
-                    klasse="bierkarte-bild"
-                  />
-                  <div class="bierkarte-text">
-                    <h3>{bier.data.name}</h3>
-                    <p>{bier.data.kurz}</p>
-                    {bier.data.saison !== 'ganzjaehrig' && (
-                      <p class="bierkarte-saison">
-                        {bier.data.saison === 'sommer' && 'Nur im Sommer'}
-                        {bier.data.saison === 'winter' && 'Nur im Winter'}
-                        {bier.data.saison === 'herbst' && 'Nur im Herbst'}
-                        {bier.data.saison === 'fruehjahr' && 'Nur im Frühjahr'}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </Etikettenrahmen>
-            </article>
-          ))
-        }
-      </div>
-
-      <p class="bento-nachsatz">
-        Dazu Bierbrand, Likör und Malzgelee. <a href="/biere/">Alle Produkte</a>
-      </p>
-    </Abschnitt>
-
-    <Wegstrecke />
-
-    {/* ===== E · BRAUSEMINARE, Zwei-Spalten-Wechsel ===== */}
-    <Abschnitt titel="Eure Gäste werden Brauer.">
-      <div class="seminar">
-        <article class="seminar-halb einblenden">
-          <Bild
-            quelle={seminarBrauerei}
-            alt="Teilnehmer beim Brauseminar in der Brauscheune"
-          />
-          <h3>In der Brauerei</h3>
-          <p>
-            Fünf bis sechs Stunden, mindestens fünf Leute, Brotzeit ist dabei.
-            Jeder bekommt eine Aufgabe. Euer Bier holt Ihr nach fünf bis sechs
-            Wochen ab.
-          </p>
-        </article>
-
-        <div class="seminar-weiche" aria-hidden="true"><Wagen breite={72} /></div>
-
-        <article class="seminar-halb einblenden" style="--index: 1">
-          <Bild
-            quelle={seminarMobil}
-            alt="Brauseminar mit der mobilen Anlage bei einem Kunden zu Hause"
-          />
-          <h3>Oder bei Euch daheim</h3>
-          <p>
-            Wir brauchen 32&nbsp;Ampere Kraftstrom, Wasser, Abfluss und rund
-            15&nbsp;m² ebene Fläche. Drinnen oder draußen. Den Rest bringen wir mit.
-          </p>
-        </article>
-      </div>
-
-      <p class="seminar-knopf">
-        <Knopf href="/brauseminare/">Seminar anfragen</Knopf>
-      </p>
-    </Abschnitt>
-
-    {/* ===== F · ZITATBAND, der einzige dunkle Abschnitt ===== */}
-    <Zitatband
-      zitat="Man sieht, was drinsteckt. An Grundstoffen und an Arbeit."
-      quelle="Ein Teilnehmer beim Brauseminar"
-    />
-
-    {/* ===== G · EVENTS & VERLEIH, Karten-Raster ===== */}
-    <Abschnitt titel="Ihr feiert. Wir liefern.">
-      <div class="doppelkarten">
-        <article class="karte einblenden">
-          <Bild
-            quelle={zirkuszelt}
-            alt="Das Zirkuszelt mit 12 Metern Durchmesser, aufgebaut auf einer Wiese"
-          />
-          <div class="karte-text">
-            <h3>Leihinventar</h3>
-            <p>
-              Zelt mit 12&nbsp;m Durchmesser, Garnituren, Zapfanlage, Grill,
-              Gläser. Wir bringen alles vorbei.
-            </p>
-            <p class="karte-knopf"><Knopf href="/events-verleih/">Verleih anfragen</Knopf></p>
-          </div>
-        </article>
-
-        <article class="karte einblenden" style="--index: 1">
-          <Bild
-            quelle={brauereigarten}
-            alt="Der Brauereigarten mit aufgebautem Festzelt"
-          />
-          <div class="karte-text">
-            <h3>Feiern in der Brauerei</h3>
-            <p>
-              Brauereigarten und Festraum. Externes Catering ist möglich. Für
-              runde Geburtstage, Vereinsausflüge und alles dazwischen.
-            </p>
-            <p class="karte-knopf"><Knopf href="/events-verleih/">Feier anfragen</Knopf></p>
-          </div>
-        </article>
-      </div>
-    </Abschnitt>
-
-    {/* ===== H · FERIENWOHNUNG, Text plus versetztes Hochbild ===== */}
-    <Abschnitt>
-      <div class="raster fewo">
-        <div class="spalte-5 fewo-text einblenden">
-          <h2>Schlafen über der Brauerei.</h2>
-          <p>
-            Landhof Eselblick. Drei Schlafzimmer unter dem alten Sichtdachstuhl,
-            großer Balkon, Blick in die Allgäuer Alpen. Und unten im Hof stehen
-            die Esel.
-          </p>
-          <p><a href="/ferienwohnung/">Zur Ferienwohnung</a></p>
-        </div>
-        <div class="spalte-6 fewo-bild einblenden" style="--index: 1">
-          <Bild
-            quelle={fewoBalkon}
-            alt="Der Balkon der Ferienwohnung mit Blick über die Ostallgäuer Landschaft"
-          />
-        </div>
-      </div>
-    </Abschnitt>
-
-    <Wegstrecke />
-
-    {/* ===== I · VERKAUFSSTELLEN, gruppierte Ortsliste ===== */}
-    <Abschnitt titel="Wo es DEIN BIER gibt" klasse="abschnitt-motiv">
-      <Leitmotiv art="hopfen" seite="rechts" hoehe={520} drehung={14} />
-      <div class="stellen">
-        {
-          stellenGruppen.map((gruppe, i) => (
-            <div class="stellen-gruppe einblenden" style={`--index: ${i}`}>
-              <h3>{gruppe.name}</h3>
-              <ul>
-                {gruppe.eintraege.map((s) => (
-                  <li>
-                    {s.data.name}
-                    {s.data.abHof && <span class="stellen-zeit">{BETRIEB.verkaufszeiten}</span>}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))
-        }
-      </div>
-
-      <p class="stellen-nachsatz">
-        <a href="/verkaufsstellen/">Alle Verkaufsstellen mit Adresse</a>
-      </p>
-    </Abschnitt>
-
-    {/* ===== J · NEWS, waagerechter Beitragsstreifen ===== */}
-    {
-      news.length > 0 && (
-        <Abschnitt etikett="Aus der Brauerei">
-          <div class="newsstreifen">
-            {news.map((n, i) => (
-              <article class="newskarte einblenden" style={`--index: ${i}`}>
+  {/* ===== D · DIE BIERE, Bento mit exakter Zellenzahl ===== */}
+  <Abschnitt etikett="Fünf Biere" titel="Was bei uns im Tank liegt." klasse="abschnitt-motiv">
+    {/* Die Aehre soll man finden, ohne sie zu suchen: gross, weit oben im
+        Abschnitt, und mit den langen Grannen weit ueber den Rand hinaus. */}
+    <Leitmotiv art="gerste" seite="rechts" hoehe={780} drehung={7} />
+    <div class="raster bento">
+      {
+        biere.map((bier, i) => (
+          <article
+            class:list={['bierkarte', 'einblenden', BENTO_SPALTEN[bier.id] ?? 'spalte-4']}
+            style={`--index: ${i}`}
+          >
+            <Etikettenrahmen>
+              <div class="bierkarte-innen">
                 <Bild
-                  quelle={n.data.bild}
-                  alt={n.data.bildAlt ?? ''}
-                  hinweis="Foto folgt"
-                  verhaeltnis="16 / 9"
+                  quelle={bier.data.bild}
+                  alt={bier.data.bildAlt}
+                  hinweis="Produktfoto folgt"
+                  verhaeltnis="1 / 1"
+                  klasse="bierkarte-bild"
                 />
-                <time datetime={isoDatum(n.data.datum)} class="newskarte-datum">
-                  {formatDatum(n.data.datum)}
-                </time>
-                <h3>
-                  <a href={`/news/${n.id}/`}>{n.data.titel}</a>
-                </h3>
-                <p>{n.data.anriss}</p>
-              </article>
-            ))}
-          </div>
+                <div class="bierkarte-text">
+                  <h3>{bier.data.name}</h3>
+                  <p>{bier.data.kurz}</p>
+                  {bier.data.saison !== 'ganzjaehrig' && (
+                    <p class="bierkarte-saison">
+                      {bier.data.saison === 'sommer' && 'Nur im Sommer'}
+                      {bier.data.saison === 'winter' && 'Nur im Winter'}
+                      {bier.data.saison === 'herbst' && 'Nur im Herbst'}
+                      {bier.data.saison === 'fruehjahr' && 'Nur im Frühjahr'}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </Etikettenrahmen>
+          </article>
+        ))
+      }
+    </div>
 
-          <p class="stellen-nachsatz">
-            <a href="/news/">Alle News</a>
+    <p class="bento-nachsatz">
+      Dazu Bierbrand, Likör und Malzgelee. <a href="/biere/">Alle Produkte</a>
+    </p>
+  </Abschnitt>
+
+  <Wegstrecke />
+
+  {/* ===== E · BRAUSEMINARE, Zwei-Spalten-Wechsel ===== */}
+  <Abschnitt titel="Eure Gäste werden Brauer.">
+    <div class="seminar">
+      <article class="seminar-halb einblenden">
+        <Bild
+          quelle={seminarBrauerei}
+          alt="Teilnehmer beim Brauseminar in der Brauscheune"
+        />
+        <h3>In der Brauerei</h3>
+        <p>
+          Fünf bis sechs Stunden, mindestens fünf Leute, Brotzeit ist dabei.
+          Jeder bekommt eine Aufgabe. Euer Bier holt Ihr nach fünf bis sechs
+          Wochen ab.
+        </p>
+      </article>
+
+      <div class="seminar-weiche" aria-hidden="true"><Wagen breite={72} /></div>
+
+      <article class="seminar-halb einblenden" style="--index: 1">
+        <Bild
+          quelle={seminarMobil}
+          alt="Brauseminar mit der mobilen Anlage bei einem Kunden zu Hause"
+        />
+        <h3>Oder bei Euch daheim</h3>
+        <p>
+          Wir brauchen 32&nbsp;Ampere Kraftstrom, Wasser, Abfluss und rund
+          15&nbsp;m² ebene Fläche. Drinnen oder draußen. Den Rest bringen wir mit.
+        </p>
+      </article>
+    </div>
+
+    <p class="seminar-knopf">
+      <Knopf href="/brauseminare/">Seminar anfragen</Knopf>
+    </p>
+  </Abschnitt>
+
+  {/* ===== F · ZITATBAND, der einzige dunkle Abschnitt ===== */}
+  <Zitatband
+    zitat="Man sieht, was drinsteckt. An Grundstoffen und an Arbeit."
+    quelle="Ein Teilnehmer beim Brauseminar"
+  />
+
+  {/* ===== G · EVENTS & VERLEIH, Karten-Raster ===== */}
+  <Abschnitt titel="Ihr feiert. Wir liefern.">
+    <div class="doppelkarten">
+      <article class="karte einblenden">
+        <Bild
+          quelle={zirkuszelt}
+          alt="Das Zirkuszelt mit 12 Metern Durchmesser, aufgebaut auf einer Wiese"
+        />
+        <div class="karte-text">
+          <h3>Leihinventar</h3>
+          <p>
+            Zelt mit 12&nbsp;m Durchmesser, Garnituren, Zapfanlage, Grill,
+            Gläser. Wir bringen alles vorbei.
           </p>
-        </Abschnitt>
-      )
-    }
-  </Hopfenbahn>
+          <p class="karte-knopf"><Knopf href="/events-verleih/">Verleih anfragen</Knopf></p>
+        </div>
+      </article>
 
+      <article class="karte einblenden" style="--index: 1">
+        <Bild
+          quelle={brauereigarten}
+          alt="Der Brauereigarten mit aufgebautem Festzelt"
+        />
+        <div class="karte-text">
+          <h3>Feiern in der Brauerei</h3>
+          <p>
+            Brauereigarten und Festraum. Externes Catering ist möglich. Für
+            runde Geburtstage, Vereinsausflüge und alles dazwischen.
+          </p>
+          <p class="karte-knopf"><Knopf href="/events-verleih/">Feier anfragen</Knopf></p>
+        </div>
+      </article>
+    </div>
+  </Abschnitt>
+
+  {/* ===== H · FERIENWOHNUNG, Text plus versetztes Hochbild ===== */}
+  <Abschnitt>
+    <div class="raster fewo">
+      <div class="spalte-5 fewo-text einblenden">
+        <h2>Schlafen über der Brauerei.</h2>
+        <p>
+          Landhof Eselblick. Drei Schlafzimmer unter dem alten Sichtdachstuhl,
+          großer Balkon, Blick in die Allgäuer Alpen. Und unten im Hof stehen
+          die Esel.
+        </p>
+        <p><a href="/ferienwohnung/">Zur Ferienwohnung</a></p>
+      </div>
+      <div class="spalte-6 fewo-bild einblenden" style="--index: 1">
+        <Bild
+          quelle={fewoBalkon}
+          alt="Der Balkon der Ferienwohnung mit Blick über die Ostallgäuer Landschaft"
+        />
+      </div>
+    </div>
+  </Abschnitt>
+
+  <Wegstrecke />
+
+  {/* ===== I · VERKAUFSSTELLEN, gruppierte Ortsliste ===== */}
+  <Abschnitt titel="Wo es DEIN BIER gibt" klasse="abschnitt-motiv">
+    <Leitmotiv art="hopfen" seite="rechts" hoehe={520} drehung={14} />
+    <div class="stellen">
+      {
+        stellenGruppen.map((gruppe, i) => (
+          <div class="stellen-gruppe einblenden" style={`--index: ${i}`}>
+            <h3>{gruppe.name}</h3>
+            <ul>
+              {gruppe.eintraege.map((s) => (
+                <li>
+                  {s.data.name}
+                  {s.data.abHof && <span class="stellen-zeit">{BETRIEB.verkaufszeiten}</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="stellen-nachsatz">
+      <a href="/verkaufsstellen/">Alle Verkaufsstellen mit Adresse</a>
+    </p>
+  </Abschnitt>
+
+  {/* ===== J · NEWS, waagerechter Beitragsstreifen ===== */}
+  {
+    news.length > 0 && (
+      <Abschnitt etikett="Aus der Brauerei">
+        <div class="newsstreifen">
+          {news.map((n, i) => (
+            <article class="newskarte einblenden" style={`--index: ${i}`}>
+              <Bild
+                quelle={n.data.bild}
+                alt={n.data.bildAlt ?? ''}
+                hinweis="Foto folgt"
+                verhaeltnis="16 / 9"
+              />
+              <time datetime={isoDatum(n.data.datum)} class="newskarte-datum">
+                {formatDatum(n.data.datum)}
+              </time>
+              <h3>
+                <a href={`/news/${n.id}/`}>{n.data.titel}</a>
+              </h3>
+              <p>{n.data.anriss}</p>
+            </article>
+          ))}
+        </div>
+
+        <p class="stellen-nachsatz">
+          <a href="/news/">Alle News</a>
+        </p>
+      </Abschnitt>
+    )
+  }
 </Basis>
 
 <style>
@@ -409,7 +402,12 @@ const BENTO_SPALTEN: Record<string, string> = {
   .hero,
   :global(.abschnitt-motiv) {
     position: relative;
-    overflow: hidden;
+    /* `clip` und nicht `hidden`: beides schneidet gleich ab, aber `hidden`
+       macht den Abschnitt zu einem Scroll-Container. Die scrollgebundene
+       Bewegung des Lichtpunkts nimmt dann diesen Abschnitt als Zeitachse
+       statt der Seite — und weil er selbst nie scrollt, stand das Licht
+       still. Gemessen: der Ort blieb ueber jede Scrollstrecke bei 65,07 %. */
+    overflow: clip;
   }
 
   /* Das Paar sitzt rechts unten und wird vom Hero angeschnitten. Am Fuss
@@ -470,7 +468,12 @@ const BENTO_SPALTEN: Record<string, string> = {
 
   .auftakt {
     position: relative;
-    overflow: hidden;
+    /* `clip` und nicht `hidden`: beides schneidet gleich ab, aber `hidden`
+       macht den Abschnitt zu einem Scroll-Container. Die scrollgebundene
+       Bewegung des Lichtpunkts nimmt dann diesen Abschnitt als Zeitachse
+       statt der Seite — und weil er selbst nie scrollt, stand das Licht
+       still. Gemessen: der Ort blieb ueber jede Scrollstrecke bei 65,07 %. */
+    overflow: clip;
     background: var(--db-licht-bernstein);
     /* Fast der ganze erste Bildschirm, aber gedeckelt: auf einem sehr hohen
        Fenster soll der Abschnitt nicht ins Leere wachsen. */
@@ -593,13 +596,15 @@ const BENTO_SPALTEN: Record<string, string> = {
     height: clamp(20rem, 44svh, 30rem);
   }
 
+  /* Ohne Schlagschatten. Die Aufnahme brachte selbst einen weichen Schatten
+     mit; nach dem Freistellen endete der abrupt an der Bildkante und sah
+     abgeschnitten aus. Jetzt ist die Datei auf die Flasche selbst beschnitten
+     — der Schatten steckt gar nicht mehr drin, und ein zweiter aus CSS haette
+     dasselbe Problem noch einmal erzeugt. Das warme Licht dahinter stellt sie
+     ausreichend auf die Flaeche. */
   .auftakt-flasche :global(img) {
     height: 100%;
     width: auto;
-    /* Ein weicher Schatten, damit sie auf der Flaeche steht statt zu
-       schweben. Die Aufnahme bringt zwar einen mit, der aber beim
-       Freistellen flach geworden ist. */
-    filter: drop-shadow(0 1.25rem 1.5rem rgb(82 56 22 / 0.22));
   }
 
   @media (max-width: 767px) {
@@ -766,12 +771,47 @@ const BENTO_SPALTEN: Record<string, string> = {
   }
 
   /* ---------- C · Bento ---------- */
+  /* Die Karten fuellen ihre Zeile gleich hoch aus statt oben zu haengen.
+     Vorher endete die schmale Weizenkarte 120 px ueber der breiten
+     Hellen-Karte daneben — die Zeile sah aus, als waere etwas verrutscht. */
   .bento {
-    align-items: start;
+    align-items: stretch;
+  }
+
+  .bierkarte,
+  .bierkarte :global(.etikett-schale),
+  .bierkarte :global(.etikett-kern) {
+    height: 100%;
   }
 
   .bierkarte-innen {
     display: grid;
+    /* Bild oben, Text unten am Kartenfuss. Damit schliessen alle Karten
+       einer Zeile mit derselben Textzeile ab. */
+    grid-template-rows: auto 1fr;
+    height: 100%;
+  }
+
+  /* Alle Etiketten gleich gross, unabhaengig von der Kartenbreite.
+
+     Das war der eigentliche Fehler des Bento: die Karten sind absichtlich
+     verschieden breit (7/5, dann 5/7), und ein Bild, das die Karte ausfuellt,
+     wird dadurch mal 570 und mal 390 px gross. Bei runden Etiketten faellt
+     das sofort auf. Jetzt bestimmt eine feste Flaeche die Groesse, das
+     Etikett steht mittig darin — der Rhythmus der Karten bleibt, die
+     Etiketten sind gleich. */
+  .bierkarte :global(.bierkarte-bild),
+  .bierkarte :global(.bild-platzhalter) {
+    aspect-ratio: 1;
+    width: 100%;
+    max-width: 20rem;
+    margin-inline: auto;
+    object-fit: contain;
+  }
+
+  .bierkarte-quer :global(.bierkarte-bild),
+  .bierkarte-quer :global(.bild-platzhalter) {
+    max-width: 15rem;
   }
 
   /* Die Abschlusskarte laeuft quer: Bild links, Text rechts. Sie bricht den

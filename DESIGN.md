@@ -1457,3 +1457,69 @@ geladen, hier nur klein maskiert.
 
 Beide aus `werkzeuge/qa-mobil.mjs`, siehe QA.md § 4c: die Untergrenze von
 `--db-text-sm` von 14,6 auf 15,2 px, und Tippflächen von 27–31 px auf 44 px.
+
+---
+
+## 19 · Nachtrag: Gold auf Touchgeräten, Bento, Flasche (05.08.2026)
+
+### 19.1 Der Lichtpunkt auf Geräten ohne Zeiger
+
+Auf einem Handy gibt es kein Überfahren — der Effekt wäre dort nie
+ausgelöst worden. Vorschlag des Betreibers, und er ist richtig: der Punkt
+**wandert beim Scrollen**. Zeitachse ist die Sichtbarkeit des Motivs selbst;
+das Licht läuft von oben nach unten durch, während das Motiv durchs Bild
+zieht. Auf Touchgeräten ist die Goldlage dauerhaft sichtbar, sonst sähe man
+nie etwas.
+
+Umgesetzt als scrollgebundene CSS-Animation auf `--licht-y`. Ohne
+Ereignisempfänger und außerhalb des Hauptstrangs.
+
+**Zwei Fallen, beide nur im gebauten Ergebnis sichtbar:**
+
+1. **Der Minifizierer entfernt `animation-timeline`.** Zuerst faltete er die
+   Angabe sogar in die Kurzschreibweise `animation` hinein, wo sie nicht
+   hingehört — das Ergebnis war ungültig und fiel weg. Mit Einzelangaben
+   verschwand die ganze Regel. `build.cssTarget` und eigene Zielangaben für
+   den Minifizierer änderten nichts. Die Regel steht deshalb unverarbeitet
+   im Layout (`<style is:inline>`).
+2. **`overflow: hidden` macht einen Abschnitt zum Scroll-Container.** Die
+   Zeitachse nahm dann diesen Abschnitt statt der Seite — und weil er selbst
+   nie scrollt, stand das Licht still. Gemessen: der Ort blieb über jede
+   Scrollstrecke bei 65,07 %. `overflow: clip` schneidet genauso ab, ohne
+   einen Scroll-Container zu erzeugen. Danach: 53 % → 66 % → 79 % → 92 %.
+
+Beides hätte man am Quelltext nicht gesehen.
+
+### 19.2 Glänzendes Gold statt einer Farbe
+
+Die Goldlage ist kein einzelner Farbwert mehr, sondern ein Verlauf über
+Hellgold, Bernstein und Braun und wieder zurück, schräg gestellt. Eine
+gleichmäßig eingefärbte Fläche wirkt wie Farbe; erst der Wechsel von hell
+nach dunkel und zurück liest sich als glänzende Oberfläche, weil genau so
+Licht auf gewölbtem Metall liegt.
+
+### 19.3 Das Bento: gleiche Etiketten, gleiche Höhe
+
+Die Karten sind absichtlich verschieden breit (7/5, dann gespiegelt). Ein
+Bild, das die Karte ausfüllt, wird dadurch mal 570 und mal 390 px groß — bei
+runden Etiketten fällt das sofort auf, und die Karten endeten außerdem auf
+verschiedenen Höhen.
+
+Jetzt bestimmt eine feste quadratische Fläche die Größe, das Etikett steht
+mittig darin, und die Karten füllen ihre Zeile gleich hoch aus. **Der
+Rhythmus der Karten bleibt, die Etiketten sind gleich.**
+
+### 19.4 Die Flasche ohne Schatten
+
+Die Aufnahme brachte einen weichen Schatten mit. Nach dem Freistellen endete
+der abrupt an der Bildkante und sah abgeschnitten aus. Die Datei ist jetzt
+auf die Flasche selbst beschnitten — gemessen an der Deckkraft: unterhalb von
+y = 1465 lagen nur noch Werte zwischen 42 und 89. Ein zweiter Schatten aus
+CSS hätte dasselbe Problem noch einmal erzeugt und ist ebenfalls entfallen.
+Das warme Licht dahinter stellt sie ausreichend auf die Fläche.
+
+### 19.5 Entfallen: die Hopfenbahn
+
+Die scrollende Dolde am linken Rand ab „Was bei uns im Tank liegt." ist auf
+Wunsch des Betreibers wieder raus. Die Komponente bleibt im Projekt
+(`Hopfenbahn.astro`), falls sie an anderer Stelle noch gebraucht wird.
