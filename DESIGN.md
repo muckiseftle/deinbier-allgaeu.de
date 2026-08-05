@@ -1634,3 +1634,59 @@ Emulator sah alles richtig aus, auf dem Gerät fehlte der Effekt ersatzlos.
 `qa-statisch.mjs` prüft das jetzt am **gebauten CSS**: für `backdrop-filter`,
 `mask-image`, `mask-size` und `mask-repeat` muss es mindestens so viele
 präfixierte wie unpräfixierte Vorkommen geben. Siehe QA.md § 4f.
+
+## 22 · Nachtrag: Weitere Produkte auf /biere/ (05.08.2026)
+
+Der Abschnitt stellte sechs Produkte in einem einspaltigen Stapel dar, jedes
+Bild in voller Spaltenbreite und in seinem natürlichen Hochformat. Gemessen:
+
+| | vorher | nachher |
+| --- | --- | --- |
+| Höhe des Rasters, Handy (390 px) | 5303 px | 1056 px |
+| Höhe des Rasters, Desktop (1440 px) | 1664 px | 932 px |
+| Bildfläche, Handy | 347 × 738 px | 112 × 149 px |
+| Bildfläche, Desktop | 325 × 691 px | 325 × 325 px |
+
+5303 px sind auf einem Handy dreizehn Bildschirme für sechs Produkte. Man
+scrollte an großen Bildern vorbei und sah nie zwei Produkte gleichzeitig.
+
+**Handy: Zeile statt Karte.** Schmale Bildspalte links (7 rem), Name und Text
+rechts. Der Name führt jede Zeile an, das Auge findet das Sortiment.
+
+**Feste Kachel statt natürlicher Bildhöhe.** Desktop quadratisch, Handy im
+Hochformat 3 / 4. Quadratisch wäre auf dem Handy falsch: die Aufnahmen sind
+941 × 2000, in einer quadratischen Kachel bestimmt die Höhe die Größe und eine
+Flasche blieb 45 px breit.
+
+**`contain`, nicht `cover`.** Beschnitten wäre von einer Flasche nur der Bauch
+zu sehen.
+
+**Warum die Produkte unterschiedlich groß erscheinen — und so bleiben.** Alle
+sechs Aufnahmen liegen auf derselben Leinwand von 941 × 2000 und sind darin
+maßstabsgetreu und unten bündig gesetzt: der Likör füllt 46 % der Höhe, die
+Literflasche 99 %. Der erste Reflex war, jedes Bild auf sein eigenes Motiv zu
+beschneiden, damit alle die Kachel füllen. Das hätte den Größenvergleich
+zerstört — die 0,2-l-Flasche wäre so groß wie die Literflasche geworden. Der
+gemeinsame Maßstab ist eine Eigenschaft des Materials und wird nicht angetastet.
+
+Aus demselben Grund wurde ein zwischenzeitlich gesetztes
+`object-position: center bottom` wieder entfernt: bei einem Seitenverhältnis
+von 0,47 in einer Kachel ab 0,75 füllt das Bild die Höhe randlos aus, es gibt
+keinen Spielraum zu verschieben. Die Regel stand im gebauten CSS und bewirkte
+nichts — ein Kommentar, der eine Wirkung behauptet, die es nicht gibt, ist
+schlimmer als keine Regel.
+
+**Zwei Fallen, beide schon bekannt:**
+
+1. `Bild.astro` setzt die Klasse `bild` auf das `<img>`, nicht auf das
+   umgebende `<picture>`. `width: 100%` bezog sich damit auf einen Kasten, den
+   das Bild selbst aufspannt — die Fotos liefen aus ihrer Spalte heraus.
+   Behoben mit `.produkt-bild picture { display: block }`. Dieselbe Falle wie
+   bei der Flasche auf der Startseite (§ 19).
+2. `sizes` blieb zunächst bei `6 rem`, während die Kachel auf `7 rem` wuchs.
+   Auf Geräten mit doppelter Punktdichte hätte der Browser dadurch eine zu
+   kleine Fassung geladen. Nachgemessen: mit `7 rem` wählt er für die
+   112-px-Kachel die 400-px-Fassung, also die richtige.
+
+`breiten={[200, 400, 700]}` statt der Voreinstellung `[480, 800, 1200, 1600]`:
+für eine 112-px-Kachel war die kleinste angebotene Fassung sonst 480 px.

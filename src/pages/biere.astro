@@ -139,16 +139,23 @@ const produktMarkup = biere.map((bier) => ({
       {
         produkte.map((p, i) => (
           <article class="produkt einblenden" style={`--index: ${i}`}>
-            <Bild
-              quelle={p.data.bild}
-              alt={p.data.bildAlt}
-              hinweis="Produktfoto folgt"
-              verhaeltnis="3 / 4"
-              sizes="(max-width: 599px) 100vw, (max-width: 999px) 50vw, 30vw"
-            />
-            <h3>{p.data.name}</h3>
-            <p>{p.data.kurz}</p>
-            {p.data.abAchtzehn && <p class="produkt-hinweis">Abgabe erst ab 18&nbsp;Jahren</p>}
+            {/* Eigener Kasten um das Bild: nur so laesst es sich auf dem
+                Handy als schmale Spalte neben den Text stellen. */}
+            <div class="produkt-bild">
+              <Bild
+                quelle={p.data.bild}
+                alt={p.data.bildAlt}
+                hinweis="Foto folgt"
+                verhaeltnis="4 / 3"
+                breiten={[200, 400, 700]}
+                sizes="(max-width: 599px) 7rem, (max-width: 999px) 45vw, 30vw"
+              />
+            </div>
+            <div class="produkt-text">
+              <h3>{p.data.name}</h3>
+              <p>{p.data.kurz}</p>
+              {p.data.abAchtzehn && <p class="produkt-hinweis">Abgabe erst ab 18&nbsp;Jahren</p>}
+            </div>
           </article>
         ))
       }
@@ -259,6 +266,39 @@ const produktMarkup = biere.map((bier) => ({
     gap: var(--db-space-xl);
   }
 
+  /* Feste quadratische Kachel statt der natuerlichen Bildhoehe.
+
+     Die Aufnahmen sind Hochformate. In voller Spaltenbreite wurden daraus
+     347 x 738 px je Stueck — sechs davon ergaben auf dem Handy einen
+     Abschnitt von 5303 px, also dreizehn Bildschirme fuer sechs Produkte.
+
+     Quadratisch und nicht im Querformat, weil das Sortiment gemischt ist:
+     schmale Flaschen neben einem breiten Geschenkkorb. Ein Querformat
+     schnitte die Flaschen oben und unten ab.
+
+     `contain` statt `cover`: beschnitten waere von einer Flasche nur noch
+     der Bauch zu sehen. Lieber steht sie vollstaendig in einer etwas
+     leereren Kachel.
+
+     Dass die Stuecke dabei unterschiedlich gross erscheinen, ist richtig
+     so: alle sechs Aufnahmen liegen auf derselben Leinwand von 941 x 2000
+     und sind darin massstabsgetreu und unten buendig gesetzt. Der Likoer
+     fuellt 46 % der Hoehe, die Literflasche 99 %. Jedes Bild auf sein
+     eigenes Motiv zu beschneiden wuerde diesen Groessenvergleich
+     zerstoeren — dann waere die 0,2-l-Flasche so gross wie die Literflasche. */
+  .produkt-bild :global(picture) {
+    display: block;
+  }
+
+  .produkt-bild :global(.bild),
+  .produkt-bild :global(.bild-platzhalter) {
+    aspect-ratio: 1;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--db-radius-md);
+  }
+
   .produkt h3 {
     margin-top: var(--db-space-sm);
     font-size: var(--db-text-xl);
@@ -282,8 +322,32 @@ const produktMarkup = biere.map((bier) => ({
   }
 
   @media (max-width: 599px) {
+    /* Auf dem Handy als Zeile: schmales Bild links, Text rechts.
+       Untereinander gestellt scrollt man an sechs grossen Bildern vorbei und
+       sieht nie zwei Produkte gleichzeitig. */
     .produkte {
       grid-template-columns: minmax(0, 1fr);
+      gap: var(--db-space-lg);
+    }
+
+    .produkt {
+      display: grid;
+      grid-template-columns: 7rem minmax(0, 1fr);
+      gap: var(--db-space-md);
+      align-items: start;
+    }
+
+    /* Hochformat statt Quadrat: die Aufnahmen sind schmal (941 x 2000).
+       In einer quadratischen Kachel bestimmt die Hoehe die Groesse, und
+       eine Flasche blieb nur 45 px breit — erkennbar war davon nichts. */
+    .produkt-bild :global(.bild),
+    .produkt-bild :global(.bild-platzhalter) {
+      aspect-ratio: 3 / 4;
+    }
+
+    .produkt h3 {
+      margin-top: 0;
+      font-size: var(--db-text-lg);
     }
   }
 
